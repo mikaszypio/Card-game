@@ -22,7 +22,7 @@
 target/
 
 # Maven wrapper
-!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.jar
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
