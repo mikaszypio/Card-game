@@ -18,7 +18,7 @@ function connect() {
 	stompClient.connect({}, function (frame) {
 		setConnected(true);
 		console.log('Connected: ' + frame);
-		stompClient.subscribe('/chat/table', function (message) {
+		stompClient.subscribe('/chat/1', function (message) {
 			showUsername(JSON.parse(message.body).content);
 		});
 	});
@@ -33,7 +33,7 @@ function disconnect() {
 }
 
 function sendUsername() {
-	stompClient.send("/app/chatterbox", {}, JSON.stringify({'username': $("#username").val()}));
+	stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'username': $("#username").val()}));
 }
 
 function showUsername(message) {
