@@ -15,7 +15,6 @@ public class ChatController {
 	@MessageMapping("/chatterbox/{roomId}")
 	@SendTo("/chat/{roomId}")
 	public ChatMessage message(@DestinationVariable int roomId, User user) throws Exception {
-		return new ChatMessage(roomId, 0, "Hello, " +
-                        HtmlUtils.htmlEscape(user.getUsername()) + "!");
+		return new ChatMessage(HtmlUtils.htmlEscape(user.getUsername()));
 	}
 }
