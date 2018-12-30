@@ -1,13 +1,32 @@
 package cardgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-public class Room {
+@Entity
+@Table(name = "room")
+public class Room implements Serializable {
 
-	private int roomId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long roomId;
+	
+	@Column(nullable = false)
 	private String name;
-	private boolean active;
-	private ArrayList<ChatMessage> chat;
+	
+	@Column(nullable = false)
+	private Boolean active;
+	
+	@OneToMany(mappedBy = "room")
+	private List<User> players;
 	
 	public Room() {
 		
@@ -16,10 +35,10 @@ public class Room {
 	public Room(String name) {
 		this.name = name;
 		active = false;
-		chat = new ArrayList<ChatMessage>();
+		players = new ArrayList<>();
 	}
 	
-	public int getRoomId() {
+	public Long getRoomId() {
 		return roomId;
 	}
 	
@@ -27,16 +46,16 @@ public class Room {
 		return name;
 	}
 	
-	public boolean getActive() {
+	public Boolean getActive() {
 		return active;
 	}
 	
-	public void setRoomId(int roomId) {
+	public void setRoomId(long roomId) {
 		this.roomId = roomId;
 	}
 	
-	public ArrayList<ChatMessage> getChat() {
-		return chat;
+	public List<User> getPlayers() {
+		return players;
 	}
 	
 	public void setName(String name) {
@@ -47,7 +66,7 @@ public class Room {
 		this.active = active;
 	}
 	
-	public void setChat(ArrayList<ChatMessage> chat) {
-		this.chat = chat;
+	public void setPlayers(List<User> players) {
+		this.players = players;
 	}
 }

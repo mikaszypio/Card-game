@@ -1,26 +1,47 @@
 package cardgame.model;
 
-public class User {
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-	private int userId;
+@Entity
+@Table(name = "app_user")
+public class User implements Serializable {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long userId;
+	
+	@Column(nullable = false, unique = true)
 	private String username;
+
+	@Column(nullable = false)
 	private String password;
-	private int score;
+	
+	@Column(nullable = false)
+	private Integer score;
+	
+	@ManyToOne
+	@JoinColumn(name = "room_id")
+	private Room room;
 	
 	public User() {
 		
 	}
 	
-	public User(String username) {
-		this.username = username;
-	}
-	
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
+		score = 0;
 	}
 	
-	public int getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 	
@@ -32,11 +53,15 @@ public class User {
 		return password;
 	}
 	
-	public int getScore() {
+	public Integer getScore() {
 		return score;
 	}
 	
-	public void setUserId(int userId) {
+	public Room getRoom() {
+		return room;
+	}
+	
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 	
@@ -50,5 +75,9 @@ public class User {
 	
 	public void setScore(int score) {
 		this.score = score;
+	}
+	
+	public void setRoom(Room room) {
+		this.room = room;
 	}
 }
