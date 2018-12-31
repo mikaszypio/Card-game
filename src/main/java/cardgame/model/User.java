@@ -25,7 +25,7 @@ public class User implements Serializable {
 	private Integer score;
 	
 	@ManyToOne
-	@JoinColumn(name = "role_idid")
+	@JoinColumn(name = "role_id")
 	private Role role;
 	
 	@ManyToOne
