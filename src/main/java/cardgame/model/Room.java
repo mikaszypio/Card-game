@@ -25,8 +25,11 @@ public class Room implements Serializable {
 	@Column(nullable = false)
 	private Boolean active;
 	
+	@Column(nullable = false)
+	private Byte readiness;
+	
 	@OneToMany(mappedBy = "room")
-	private List<User> players;
+	private List<User> users;
 	
 	public Room() {
 		
@@ -35,7 +38,7 @@ public class Room implements Serializable {
 	public Room(String name) {
 		this.name = name;
 		active = false;
-		players = new ArrayList<>();
+		users = new ArrayList<>();
 	}
 	
 	public Long getRoomId() {
@@ -50,12 +53,16 @@ public class Room implements Serializable {
 		return active;
 	}
 	
-	public void setRoomId(long roomId) {
-		this.roomId = roomId;
+	public Byte getReadiness() {
+		return readiness;
 	}
 	
-	public List<User> getPlayers() {
-		return players;
+	public List<User> getUsers() {
+		return users;
+	}
+	
+	public void setRoomId(long roomId) {
+		this.roomId = roomId;
 	}
 	
 	public void setName(String name) {
@@ -66,7 +73,11 @@ public class Room implements Serializable {
 		this.active = active;
 	}
 	
-	public void setPlayers(List<User> players) {
-		this.players = players;
+	public void setReadiness(byte readiness) {
+		this.readiness = readiness;
+	}
+	
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 }
