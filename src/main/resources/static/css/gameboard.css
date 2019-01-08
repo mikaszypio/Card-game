@@ -1,0 +1,255 @@
+#gameboard {
+	background-color: #061639;
+	height: 600px; width: 800px;
+	position: relative;
+	overflow: hidden;
+}
+
+#gb-timer {
+	color: #fff;
+	font-size: 22px;
+	font-weight: 700;
+	position: absolute;
+	top: 16px; right: 16px;
+}
+
+#gb-players {
+	height: 460px;	width: 100%;
+	position: absolute;
+	left: 0; top: 0;
+	z-index: 1;
+}
+
+.gb-player {
+	background: rgba(0,0,0,.2);
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	position: absolute;
+	margin-left: -84px;
+	width: 168px;
+}
+
+.gb-turn {
+	background: rgba(0,0,0,.8);
+	color: #fff;
+	height: 10px; width: 100%;
+	position: absolute;
+	top: -10px;
+}
+.gb-turn:before {
+	bottom: 2px; left: 50%;
+	content: "Tura";
+	color: #fff;
+	font-size: 14px;
+	margin-left: -20px;
+	position: absolute;
+	text-align: center;
+	width: 40px;
+}
+
+.gb-role {
+	background-size: 100%;
+	left: -16px; top: 32px;
+	height: 32px; width: 32px;
+	position: absolute;
+}
+.gb-r1 { background-image: url("../textures/roles/sheriff.png") }
+
+.gb-portrait {
+	background-size: 100%;
+	height: 48px; width: 48px;
+	flex: 0 0 auto;
+}
+
+.gb-portrait.gb-large {
+	height: 144px; width: 144px;
+	transform: none;
+}
+
+.gb-ch1 { background-image: url("../textures/portraits/1.png"); }
+.gb-ch2 { background-image: url("../textures/portraits/2.png"); }
+.gb-ch3 { background-image: url("../textures/portraits/3.png"); }
+.gb-ch4 { background-image: url("../textures/portraits/4.png"); }
+.gb-ch5 { background-image: url("../textures/portraits/5.png"); }
+.gb-ch6 { background-image: url("../textures/portraits/6.png"); }
+.gb-ch7 { background-image: url("../textures/portraits/7.png"); }
+.gb-ch8 { background-image: url("../textures/portraits/8.png"); }
+.gb-ch9 { background-image: url("../textures/portraits/9.png"); }
+.gb-ch10 { background-image: url("../textures/portraits/10.png"); }
+.gb-ch11 { background-image: url("../textures/portraits/11.png"); }
+.gb-ch12 { background-image: url("../textures/portraits/12.png"); }
+.gb-ch13 { background-image: url("../textures/portraits/13.png"); }
+.gb-ch14 { background-image: url("../textures/portraits/14.png"); }
+.gb-ch15 { background-image: url("../textures/portraits/15.png"); }
+.gb-ch16 { background-image: url("../textures/portraits/16.png"); }
+
+.gb-info {
+	display: flex;
+	flex-direction: column;
+	width: 110px;
+}
+
+.gb-name {
+	font-size: 13px;
+	font-weight: 700;
+	line-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.gb-stats {
+	display: flex;
+	flex-direction: row;
+	height: 28px;
+	margin-bottom: 4px;
+}
+
+.gb-hp, .gb-cards {
+	background-size: 100%;
+	color: #fff;
+	font-size: 16px;
+	font-weight: 700;
+	height: 28px; width: 28px;
+	line-height: 25px;
+	margin-right: 4px;
+	padding-right: 2px;
+	text-align: center;
+	text-shadow: 2px 2px 4px #000;
+}
+.gb-hp { background-image: url("../textures/stats/hp.png"); }
+.gb-cards { background-image: url("../textures/stats/cards.png"); }
+
+.gb-items {
+	display: flex;
+	flex-wrap: wrap;
+	min-height: 22px;
+}
+
+.gb-icon {
+	background-color: #000;
+	background-size: 100%;
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 2px;
+	height: 24px; width: 24px;
+	margin-right: 2px;
+	position: static;
+}
+.gb-icon.gb-barrel 
+{ background-image: url("../textures/card_icon/barrel.png"); }
+.gb-icon.gb-mustang 
+{ background-image: url("../textures/card_icon/mustang.png"); }
+.gb-icon.gb-winchester 
+{ background-image: url("../textures/card_icon/winchester.png"); }
+
+#gb-preview {
+	width: 220px;
+	position: absolute;
+	left: 70px; top: 130px;
+	z-index: 3;
+}
+
+#gb-preview .gb-card {
+	box-shadow: 0px 22px 82px 13px rgba(0,0,0,0.75);
+	left: calc(50% - 63px);
+}
+
+#gb-preview .gb-portrait {
+	box-shadow: 0px 22px 82px 13px rgba(0,0,0,0.75);
+	left: calc(50% - 72px);
+	position: absolute;
+}
+
+.gb-card-desc, .gb-char-desc {
+	box-shadow: 0px 14px 30px -17px rgba(0,0,0,0.75);
+	color: #fff;
+	background-color: rgba(0,0,0,.5);
+	border-radius: 10px;
+	display: block;
+	margin: 0 auto;
+	padding: 8px 4px;
+	position: absolute;
+	text-align: center;
+	left: 0; top: 190px; right: 0;
+	z-index: 1;
+}
+
+.gb-char-desc {
+	top: 159px;
+}
+
+#gb-hand {
+	bottom: 20px; left: 50%;
+	margin-left: -150px;
+	position: absolute;
+	height: 100px; width: 300px;
+}
+
+#gb-stack {
+	background: transparent;
+	border-color: #6e6e6e;
+	border-style: dashed;
+	border-radius: 5px;
+	border-width: 2px;
+	height: 100px; width: 72px;
+	margin-left: -36px; margin-top: -50px;
+	position: absolute;
+	z-index: 2;
+}
+
+.gb-card {
+	background-color: #e5d5c2;
+	background-position: right bottom;
+	border-width: 20px;
+	border-style: solid;
+	border-radius: 20px;
+	display: block;
+	height: 500px; width: 360px;
+	position: absolute;
+	transform-origin: top left;
+	z-index: 1;
+}
+
+.gb-small { transform: scale(.2); }
+.gb-medium { transform: scale(.35); }
+.gb-large { transform: scale(.5); }
+
+.gb-b-orange { border-color: #d4810b; }
+.gb-b-blue { border-color: #1757a6; }
+
+/* card symbol */
+.gb-card-symbol {
+	font-size: 120px;
+	font-weight: 700;
+	height: 110px; width: 120px;
+	line-height: 110px;
+	position: absolute;
+	left: 10px; top: 10px;
+	/* firefox support */
+	-moz-user-select: none;
+	user-select: none;
+	z-index: 2;
+}
+.gb-hearts .gb-card-symbol, 
+.gb-tiles .gb-card-symbol { color: #c21924; }
+.gb-pikes .gb-card-symbol,
+.gb-clovers .gb-card-symbol { color: #000; }
+
+/* card suits */
+.gb-card:after {
+	content: "";
+	display: block;
+	height: 100px; width: 84px;
+	position: absolute;
+	left: 10px; top: 140px;
+	z-index: 2;
+}
+.gb-hearts:after { background-image: url("../textures/suits/hearts.png"); }
+.gb-tiles:after { background-image: url("../textures/suits/tiles.png"); }
+.gb-pikes:after { background-image: url("../textures/suits/pikes.png"); }
+.gb-clovers:after { background-image: url("../textures/suits/clovers.png"); }
+
+/* card pics */
+.gb-bang { background-image: url("../textures/card_img/bang.png"); }
