@@ -38,6 +38,7 @@ public class Room implements Serializable {
 	public Room(String name) {
 		this.name = name;
 		active = false;
+		readiness = -1;
 		users = new ArrayList<>();
 	}
 	
