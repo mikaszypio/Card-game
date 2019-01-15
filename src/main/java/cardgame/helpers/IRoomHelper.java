@@ -5,7 +5,7 @@ import cardgame.model.User;
 
 public interface IRoomHelper {
 
-	public void createRoom(String name);
+	public Room getEmptyRoom(String name);
 	public void joinRoom(User user, Room room);
 	public void leaveRoom(User user);
 }
