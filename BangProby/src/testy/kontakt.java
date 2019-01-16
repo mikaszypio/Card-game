@@ -70,7 +70,23 @@ public class kontakt {
 			if(wynik==0) {
 				return false;
 			}
-			System.out.print("Nie rozmoznano odpowiedzi, spróbuj jeszcze raz. \n");
+			System.out.print("Nie rozpoznano odpowiedzi, spróbuj jeszcze raz. \n");
+		}
+	}
+	
+	public static boolean czyDobracInaczej() {
+		System.out.print("Czy chcesz dobraæ kartê w inny sposób ni¿ z talii (1/0)\n");
+		while(true) {
+			Scanner reader = new Scanner(System.in);
+			int wynik = reader.nextInt();
+			reader.close();
+			if(wynik==1) {
+				return true;
+			}
+			if(wynik==0) {
+				return false;
+			}
+			System.out.print("Nie rozpoznano odpowiedzi, spróbuj jeszcze raz. \n");
 		}
 	}
 }

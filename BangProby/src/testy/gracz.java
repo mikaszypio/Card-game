@@ -2,12 +2,13 @@ package testy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class gracz {
 
 	private postac hero;
 	private String nick;
-	private int rola;		//1=szeryf, 2=pomocnik, 3=-renegat, 4=bandyta
+	private int rola;		//1=szeryf, 2=pomocnik, 3=renegat, 4=bandyta
 	private List<karta> reka;
 	private int hp;
 	private eq bron;
@@ -30,6 +31,18 @@ public class gracz {
 	
 	public postac dajPostac() {
 		return hero;
+	}
+	
+	public void ustawPostac(postac p) {
+		hero=p;
+	}
+	
+	public int dajRole() {
+		return rola;
+	}
+	
+	public void ustawRole(int i) {
+		rola=i;
 	}
 	
 	public String dajNick() {
@@ -150,6 +163,10 @@ public class gracz {
 	
 	public void doReki(karta k) {
 		reka.add(k);
+	}
+	
+	public void zReki(karta k) {
+		reka.remove(k);
 	}
 	
 	//metoda sprawdza, czy masz dan¹ kartê na rêce, jeœli masz to odrzuca. W finalnej wersji powinna jeszcze pytaæ, czy chcesz odrzuciæ, ale... coœ jest nie tak w kontakcie
@@ -284,22 +301,83 @@ public class gracz {
 	
 	public void zran(int ile) {
 		hp=hp-ile;
-		if(hp<1) {
-			//ratowanie ¿ycia piwkiem
-			//zgon
+		if(hero.dajNazwe()=="Bart Cassady") {
+			while(ile>0) {
+				dobiezKarte();
+				ile--;
+			}
+		}
+		while(hp<1) {
+			if(testKarty("Piwko", "Zgon")==true) {
+				hp++;
+			}else {
+				gra.zgon(this);
+			}
 		}
 	}
 	
 	//wywo³ywane na pocz¹tku tury
 	public void wezKarty() {	
-		if(false) {
-			//wersja dla bochatera co inaczej dobiera
-		}else {
-			dobiezKarte();
-			dobiezKarte();
-		}
+		boolean czy;
+		switch(hero.dajNazwe()) {
+			case "Pedro Ramirez":
+				czy = kontakt.czyDobracInaczej();
+				if(czy==true) {
+					karta k = gra.dobiezCmentaz();
+					if(k==null) {
+						dobiezKarte();
+						dobiezKarte();
+					}else {
+						doReki(k);
+						dobiezKarte();
+					}
+				}else {
+					dobiezKarte();
+					dobiezKarte();
+				}			
+				break;
+			case "Black Jack":
+				dobiezKarte();
+				karta k = gra.dobiez();
+				if(k.dajKolor()=="kier" || k.dajKolor()=="karo") {
+					dobiezKarte();
+				}
+				doReki(k);
+				break;
+			case "Jesse Jones":
+				czy = kontakt.czyDobracInaczej();
+				if(czy==true) {
+					gracz cel = kontakt.wybiezCel();
+					List<karta> reka = cel.dajReke();
+					Random rand = new Random();
+					karta wynik = reka.get(rand.nextInt(reka.size()));
+					reka.remove(wynik);
+					doReki(wynik);
+					dobiezKarte();
+				}else {
+					dobiezKarte();
+					dobiezKarte();
+				}				
+				break;
+			case "Kit Carlson":
+				List<karta> wyciogniete = new ArrayList<karta>();
+				wyciogniete.add(gra.dobiez());
+				wyciogniete.add(gra.dobiez());
+				wyciogniete.add(gra.dobiez());
+				System.out.print("Wyci¹gn¹³eœ te trzy karty-wybierz której z nich nie chcesz");
+				karta smiec = kontakt.wybiezKarte(wyciogniete);
+				wyciogniete.remove(smiec);
+				gra.naSzczyt(smiec);
+				for(karta ka : wyciogniete) {
+					doReki(ka);
+				}
+			default:
+				dobiezKarte();
+				dobiezKarte();
+				break;
+		}			
 	}
-	
+
 	//wywo³ywane na koniec tury
 	public void odzucKarty() {
 		int ile = reka.size();

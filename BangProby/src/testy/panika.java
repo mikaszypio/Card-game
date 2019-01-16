@@ -1,6 +1,7 @@
 package testy;
 
 import java.util.List;
+import java.util.Random;
 
 public class panika extends karta{
 	
@@ -44,9 +45,10 @@ public class panika extends karta{
 			}
 			if(co=="karta") {
 				List<karta> reka = cel.dajReke();
-				karta odrzucona = kontakt.wybiezKarte(reka);
-				reka.remove(odrzucona);
-				strzelec.doReki(odrzucona);		
+				Random rand = new Random();
+				karta wynik = reka.get(rand.nextInt(reka.size()));
+				reka.remove(wynik);
+				strzelec.doReki(wynik);		
 			}
 			return true;
 		}
