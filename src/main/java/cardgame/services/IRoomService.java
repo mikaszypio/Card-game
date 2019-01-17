@@ -1,4 +1,4 @@
-package cardgame.helpers;
+package cardgame.services;
 
 import cardgame.model.Room;
 import cardgame.model.User;
