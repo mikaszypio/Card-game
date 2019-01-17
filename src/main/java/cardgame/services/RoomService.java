@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RoomHelper implements IRoomHelper {
+public class RoomService implements IRoomService {
 
 	@Autowired
 	RoomRepository roomRepository;
