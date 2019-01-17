@@ -1,8 +1,7 @@
 package cardgame.repositories;
 
-import org.springframework.data.repository.CrudRepository;
-
 import cardgame.model.User;
+import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 	
