@@ -9,4 +9,5 @@ public interface IRoomService {
 	public Room getEmptyRoom(String name);
 	public void joinRoom(User user, Room room);
 	public void leaveRoom(User user);
+	public Room save(Room room);
 }

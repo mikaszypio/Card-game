@@ -66,5 +66,11 @@ public class RoomService implements IRoomService {
 		
 		user.setRoom(null);
 		userRepository.save(user);
-	}	
+	}
+
+	@Override
+	public Room save(Room room) {
+		
+		return roomRepository.save(room);
+	}
 }
