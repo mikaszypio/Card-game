@@ -18,6 +18,12 @@ public class RoomService implements IRoomService {
 	UserRepository userRepository;
 	
 	@Override
+	public boolean checkReadiness(Room room) {
+		
+		return room.getReadiness() == room.getUsers().size();
+	}
+	
+	@Override
 	public Room getEmptyRoom(String name) {
 		
 		Room room = roomRepository.findByActiveAndReadiness(false, (byte) -1);
@@ -46,7 +52,7 @@ public class RoomService implements IRoomService {
 	public void leaveRoom(User user) {
 		
 		Room room = user.getRoom();
-		long size = userRepository.findByRoomId(room.getRoomId()).size();
+		long size = room.getUsers().size();
 		if (size == 1) {
 			room.setReadiness((byte) -1);
 			room.setActive(false);
