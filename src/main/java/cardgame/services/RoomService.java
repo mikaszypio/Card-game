@@ -4,6 +4,7 @@ import cardgame.model.Room;
 import cardgame.model.User;
 import cardgame.repositories.RoomRepository;
 import cardgame.repositories.UserRepository;
+import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class RoomService implements IRoomService {
 	@Override
 	public boolean checkReadiness(Room room) {
 		
-		return room.getReadiness() == room.getUsers().size();
+		return room.getReadiness() == getRoomUsers(room).size();
 	}
 	
 	@Override
@@ -32,6 +33,11 @@ public class RoomService implements IRoomService {
 		}
 		
 		return room;
+	}
+	
+	private List<User> getRoomUsers(Room room) {
+		
+		return roomRepository.findById(room.getRoomId()).get().getUsers();
 	}
 
 	@Override
@@ -52,8 +58,7 @@ public class RoomService implements IRoomService {
 	public void leaveRoom(User user) {
 		
 		Room room = user.getRoom();
-		long size = room.getUsers().size();
-		if (size == 1) {
+		if (getRoomUsers(room).size() == 1) {
 			room.setReadiness((byte) -1);
 			room.setActive(false);
 			roomRepository.save(room);
@@ -61,6 +66,5 @@ public class RoomService implements IRoomService {
 		
 		user.setRoom(null);
 		userRepository.save(user);
-	}
-	
+	}	
 }
