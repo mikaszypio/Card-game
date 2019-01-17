@@ -32,18 +32,29 @@ public class RoomHelper implements IRoomHelper {
 	@Transactional
 	public void joinRoom(User user, Room room) {
 		
-		user.setRoom(room);
 		if (room.getReadiness() == -1) {
 			room.setReadiness((byte) 0);
+			roomRepository.save(room);
 		}
 		
+		user.setRoom(room);
 		userRepository.save(user);
-		roomRepository.save(room);
 	}
 
 	@Override
+	@Transactional
 	public void leaveRoom(User user) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		
+		Room room = user.getRoom();
+		long size = userRepository.findByRoomId(room.getRoomId()).size();
+		if (size == 1) {
+			room.setReadiness((byte) -1);
+			room.setActive(false);
+			roomRepository.save(room);
+		}
+		
+		user.setRoom(null);
+		userRepository.save(user);
 	}
 	
 }
