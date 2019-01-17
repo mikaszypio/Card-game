@@ -1,9 +1,9 @@
-package cardgame.helpers;
+package cardgame.services;
 
 import cardgame.model.User;
 import java.util.List;
 
-public interface IUserHelper {
+public interface IUserService {
 
 	public User createUser(String username, String password);
 	public void increaseScore(List<User> users);
