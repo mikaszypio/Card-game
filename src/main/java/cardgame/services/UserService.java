@@ -40,7 +40,7 @@ public class UserService implements IUserService {
 	}
 	
 	public float recalculateScore(User user) {
-		return (float) (user.getGamesWon() / user.getGames()) * 100;
+		return (float) user.getGamesWon() / user.getGames() * 100;
 	}
 
 	@Override
