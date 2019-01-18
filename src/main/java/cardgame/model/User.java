@@ -15,14 +15,16 @@ import javax.persistence.Table;
 public class User implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
 	
 	@Column(nullable = false, unique = true)
 	private String username;
 
 	private String password;
-	private Integer score;
+	private Integer games;
+	private Integer gamesWon;
+	private Float score;
 	
 	@ManyToOne
 	@JoinColumn(name = "role_id")
@@ -40,10 +42,13 @@ public class User implements Serializable {
 		this.username = username;
 	}
 	
-	public User(String username, String password) {
+	public User(String username, String password, Role role) {
 		this.username = username;
 		this.password = password;
-		score = 0;
+		games = 0;
+		gamesWon = 0;
+		score = (float) 0.0;
+		this.role = role;
 	}
 	
 	public Long getUserId() {
@@ -58,7 +63,15 @@ public class User implements Serializable {
 		return password;
 	}
 	
-	public Integer getScore() {
+	public Integer getGames() {
+		return games;
+	}
+	
+	public Integer getGamesWon() {
+		return gamesWon;
+	}
+	
+	public Float getScore() {
 		return score;
 	}
 	
@@ -82,7 +95,15 @@ public class User implements Serializable {
 		this.password = password;
 	}
 	
-	public void setScore(int score) {
+	public void setGames(int games) {
+		this.games = games;
+	}
+	
+	public void setGamesWon(int gamesWon) {
+		this.gamesWon = gamesWon;
+	}
+	
+	public void setScore(float score) {
 		this.score = score;
 	}
 	

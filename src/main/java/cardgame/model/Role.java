@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class Role implements Serializable {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer roleId;
 	
 	@Column(nullable = false, unique = true)
