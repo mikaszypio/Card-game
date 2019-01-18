@@ -268,8 +268,67 @@ public class gra {
 				g.zReki(k);
 			}
 		}
+		martwi.add(g);
+		sprawdzKoniec();
 	}	
 	
+	public static void sprawdzKoniec() {
+		int zlo = 0;
+		boolean szeryf = false;
+		for(gracz g : gracze) {
+			switch(g.dajRole()) {
+				case 1:
+					szeryf = true;
+					break;
+				case 3:
+					zlo++;
+					break;
+				case 4:
+					zlo++;
+					break;
+				default:
+					break;
+			}
+		}
+		if(szeryf==false) {
+			if(gracze.size()==1 && gracze.get(0).dajRole()==3) {
+				zakoncz(3);
+			}else {
+				zakoncz(4);
+			}		
+		}
+		if(zlo==0) {
+			zakoncz(1);
+		}
+		
+	}	
+	
+	public static void zakoncz(int kto) {
+		for(gracz g : martwi) {
+			gracze.add(g);
+		}
+		List<gracz> wygrali = new ArrayList<gracz>();
+		List<gracz> przegrali = new ArrayList<gracz>();
+		if(kto==1) {
+			for(gracz g : gracze) {
+				if(g.dajRole()<3) {
+					wygrali.add(g);
+				}else {
+					przegrali.add(g);
+				}
+			}
+		}else {
+			for(gracz g : gracze) {
+				if(g.dajRole()==kto) {
+					wygrali.add(g);
+				}else {
+					przegrali.add(g);
+				}
+			}
+		}
+		//tutaj musi byæ jakiœ eksport list wygrali i przegrali do systemu rankingowego
+		System.exit(0);
+	}
 	
 	public static void stworzTalie() {
 		talia = new ArrayList<karta>();
