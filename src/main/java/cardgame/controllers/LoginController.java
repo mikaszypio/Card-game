@@ -12,6 +12,7 @@ public class LoginController {
 	UserRepository userRepository;
 	
 	public boolean CheckCredentials(User user) throws Exception {
+		
 		User potentialUser = userRepository.findByUsername(user.getUsername());
 		return (potentialUser.getPassword().equals(user.getPassword()));
 	}
