@@ -1,7 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.Gra;
-import cardgame.game.model.gracz;
+import cardgame.game.model.Gracz;
 
 public class eq extends karta {
 
@@ -46,7 +46,7 @@ public class eq extends karta {
 	}
 	
 	public boolean zagraj() {
-		gracz g = gra.dajAktualnegoGracza();
+		Gracz g = gra.dajAktualnegoGracza();
 		g.wyposaz(this);
 		return true;
 	}

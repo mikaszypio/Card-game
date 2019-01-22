@@ -2,7 +2,7 @@ package cardgame.game.model.cards;
 
 import cardgame.game.Gra;
 import cardgame.game.kontakt;
-import cardgame.game.model.gracz;
+import cardgame.game.model.Gracz;
 
 public class pojedynek extends karta{
 	
@@ -27,8 +27,8 @@ public class pojedynek extends karta{
 	}
 	
 	public boolean zagraj() {
-		gracz cel = kontakt.wybiezCel(gra);
-		gracz wyzywajacy = gra.dajAktualnegoGracza();
+		Gracz cel = kontakt.wybiezCel(gra);
+		Gracz wyzywajacy = gra.dajAktualnegoGracza();
 		boolean odbito = false;
 		boolean toczySie = true;
 		while(toczySie==true) {

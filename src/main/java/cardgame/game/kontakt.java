@@ -1,7 +1,7 @@
 package cardgame.game;
 
 import cardgame.game.model.cards.karta;
-import cardgame.game.model.gracz;
+import cardgame.game.model.Gracz;
 import java.util.List;
 import java.util.Scanner;
 
@@ -40,11 +40,11 @@ public class kontakt {
 		}
 	}
 	
-	public static gracz wybiezCel(Gra gra) {
-		List<gracz> gracze = gra.dajGraczy();
+	public static Gracz wybiezCel(Gra gra) {
+		List<Gracz> gracze = gra.dajGraczy();
 		while(true) {
 			System.out.print("Lista graczy\n");
-			for(gracz g : gracze) {
+			for(Gracz g : gracze) {
 				String wyjscie = g.dajNick() + "\n";
 				System.out.print(wyjscie);
 			}
@@ -52,7 +52,7 @@ public class kontakt {
 			Scanner reader = new Scanner(System.in);
 			String nazwa = reader.nextLine();
 			reader.close();
-			for(gracz g : gracze) {
+			for(Gracz g : gracze) {
 				if(g.dajNick()==nazwa) {
 					return g;
 				}

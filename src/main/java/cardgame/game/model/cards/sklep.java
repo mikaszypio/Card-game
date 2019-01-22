@@ -1,7 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.Gra;
-import cardgame.game.model.gracz;
+import cardgame.game.model.Gracz;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class sklep extends karta{
 	public boolean zagraj() {
 		int ile = gra.dajIleGraczy();
 		List<karta> karty = new ArrayList<karta>();
-		List<gracz> gracze = gra.dajGraczy();
+		List<Gracz> gracze = gra.dajGraczy();
 		int aktualny = gra.dajNumerAktualnegoGracza();
 		
 		for(int x = 0; x<ile; x++) {

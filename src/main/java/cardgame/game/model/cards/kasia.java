@@ -2,7 +2,7 @@ package cardgame.game.model.cards;
 
 import cardgame.game.Gra;
 import cardgame.game.kontakt;
-import cardgame.game.model.gracz;
+import cardgame.game.model.Gracz;
 import java.util.List;
 
 public class kasia extends karta{
@@ -28,7 +28,7 @@ public class kasia extends karta{
 	}
 	
 	public boolean zagraj() {
-		gracz cel = kontakt.wybiezCel(gra);
+		Gracz cel = kontakt.wybiezCel(gra);
 		String co = kontakt.coChceszZniszczyc();
 		if(co=="bron") { 
 			eq bron = cel.dajBron();

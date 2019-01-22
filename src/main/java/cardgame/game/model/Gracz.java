@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class gracz {
+public class Gracz {
 
 	private Gra gra;
 	private postac hero;
 	private String nick;
-	private int ID;
+	private Long ID;
 	private int rola;		//1=szeryf, 2=pomocnik, 3=renegat, 4=bandyta
 	private List<karta> reka;
 	private int hp;
@@ -24,7 +24,7 @@ public class gracz {
 	private boolean czyDynamit;
 	private boolean czyWiezienie;
 
-	public gracz(String a) {
+	public Gracz(String a) {
 		nick=a;
 		reka = new ArrayList<karta>(); 
 		bron=null;
@@ -36,7 +36,7 @@ public class gracz {
 		hp=5;
 	}
 	
-	public gracz(String a, int id) {
+	public Gracz(String a, Long id) {
 		nick=a;
 		ID=id;
 		reka = new ArrayList<karta>(); 
@@ -228,7 +228,7 @@ public class gracz {
 			if(wybuch==true) {
 				zran(3);
 			}else {
-				gracz g = gra.dajNastepnegoGracza();
+				Gracz g = gra.dajNastepnegoGracza();
 				g.dostanDynamit();
 			}
 		}
@@ -371,7 +371,7 @@ public class gracz {
 			case "Jesse Jones":
 				czy = kontakt.czyDobracInaczej();
 				if(czy==true) {
-					gracz cel = kontakt.wybiezCel(gra);
+					Gracz cel = kontakt.wybiezCel(gra);
 					List<karta> reka = cel.dajReke();
 					Random rand = new Random();
 					karta wynik = reka.get(rand.nextInt(reka.size()));

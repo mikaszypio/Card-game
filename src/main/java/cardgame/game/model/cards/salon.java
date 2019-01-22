@@ -1,7 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.Gra;
-import cardgame.game.model.gracz;
+import cardgame.game.model.Gracz;
 import java.util.List;
 
 public class salon extends karta{
@@ -27,8 +27,8 @@ public class salon extends karta{
 	}
 	
 	public boolean zagraj() {
-		List<gracz> gracze = gra.dajGraczy();
-		for(gracz g : gracze) {
+		List<Gracz> gracze = gra.dajGraczy();
+		for(Gracz g : gracze) {
 			g.lecz(1);
 		}		
 		return true;

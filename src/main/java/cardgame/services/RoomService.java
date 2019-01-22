@@ -1,9 +1,13 @@
 package cardgame.services;
 
+import cardgame.game.Gra;
+import cardgame.game.model.Gracz;
 import cardgame.model.Room;
 import cardgame.model.User;
 import cardgame.repositories.RoomRepository;
 import cardgame.repositories.UserRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

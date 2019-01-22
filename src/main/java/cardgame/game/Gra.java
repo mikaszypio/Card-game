@@ -17,7 +17,7 @@ import cardgame.game.model.cards.salon;
 import cardgame.game.model.cards.sklep;
 import cardgame.game.model.cards.welsfargo;
 import cardgame.game.model.cards.wiezienie;
-import cardgame.game.model.gracz;
+import cardgame.game.model.Gracz;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,27 +27,27 @@ public class Gra extends Thread {
 	private List<karta> talia;
 	private karta szczyt;
 	private List<karta> cmentaz;
-	private List<gracz> gracze;
-	private List<gracz> martwi;
+	private List<Gracz> gracze;
+	private List<Gracz> martwi;
 	private int ileGraczy;
 	private int aktualny;
 	
-	public Gra(List<gracz> gracze) {
+	public Gra(List<Gracz> gracze) {
 		this.gracze = gracze;
-		for(gracz g : gracze) {
+		for(Gracz g : gracze) {
 			g.ustawGre(this);
 		}
 	}
 	
 	public void run() {
 		szczyt=null;
-		martwi = new ArrayList<gracz>();
+		martwi = new ArrayList<Gracz>();
 		cmentaz = new ArrayList<karta>();
 		ileGraczy = gracze.size();
 		aktualny=0;	
 
 		for(int x=0; x<ileGraczy; x++) {
-			gracz g=gracze.get(0);
+			Gracz g=gracze.get(0);
 			//tu powinno wys�a� list� "gracze" do poszczeg�lnego klienta-tego będącego aktualnie graczem g
 			gracze.remove(g);
 			gracze.add(g);
@@ -55,7 +55,7 @@ public class Gra extends Thread {
 		
 		stworzTalie();
 		List<postac> postacie = listaPostaci();
-		for(gracz g : gracze) {
+		for(Gracz g : gracze) {
 			Random rand = new Random();
 			postac wybrana = postacie.get(rand.nextInt(postacie.size()));
 			postacie.remove(wybrana);
@@ -92,7 +92,7 @@ public class Gra extends Thread {
 				break;
 		}
 		if(gramy==true) {
-			for(gracz g : gracze) {
+			for(Gracz g : gracze) {
 				Random rand = new Random();
 				String s = role.get(rand.nextInt(role.size()));
 				role.remove(s);
@@ -114,7 +114,7 @@ public class Gra extends Thread {
 		}
 		
 		while(gramy==true) {
-			gracz tmp = gracze.get(aktualny);
+			Gracz tmp = gracze.get(aktualny);
 			tura(tmp);
 			if(aktualny<(ileGraczy-1)) {
 				aktualny++;
@@ -128,21 +128,21 @@ public class Gra extends Thread {
 		szczyt=k;
 	}
 	
-	public List<gracz> dajGraczy() {
+	public List<Gracz> dajGraczy() {
 		return gracze;
 	}
 	
-	public gracz dajAktualnegoGracza() {
+	public Gracz dajAktualnegoGracza() {
 		return gracze.get(aktualny);
 	}
 	
-	public gracz dajNastepnegoGracza() {
+	public Gracz dajNastepnegoGracza() {
 		int x = aktualny+1;
 		if(x==ileGraczy) {x=0;}
 		return gracze.get(x);
 	}
 	
-	public int dajNumerGracza(gracz g) {
+	public int dajNumerGracza(Gracz g) {
 		for(int x=0; x<gracze.size(); x++) {
 			if(gracze.get(x)==g) {
 				return x;
@@ -159,7 +159,7 @@ public class Gra extends Thread {
 	}
 	
 	
-	public void tura(gracz g){
+	public void tura(Gracz g){
 		g.ustawStrzelanie(false);
 		g.sprawdzDynamit();
 		boolean czy = g.sprawdzWiezienie();
@@ -219,7 +219,7 @@ public class Gra extends Thread {
 	}
 	
 	//liczy odleg�o�� mi�dzy graczami
-	public int policzDystans(gracz jeden, gracz dwa) {
+	public int policzDystans(Gracz jeden, Gracz dwa) {
 		int pierwszy = dajNumerGracza(jeden);
 		int drugi = dajNumerGracza(dwa);
 		if(pierwszy ==-1 || drugi==-1) {
@@ -266,8 +266,8 @@ public class Gra extends Thread {
 		return wynik;
 	}
 	
-	public void zgon(gracz g) {
-		gracz akt = dajAktualnegoGracza();
+	public void zgon(Gracz g) {
+		Gracz akt = dajAktualnegoGracza();
 		gracze.remove(g);
 		ileGraczy--;
 		aktualny = dajNumerGracza(akt);
@@ -279,8 +279,8 @@ public class Gra extends Thread {
 			g.doReki(g.dajDodatek());
 			g.ustawDodatek(null);
 		}
-		gracz sep = null;
-		for(gracz zywy : gracze) {
+		Gracz sep = null;
+		for(Gracz zywy : gracze) {
 			if(zywy.dajPostac().dajNazwe()=="Sam Sep") {
 				sep=zywy;
 			}
@@ -303,7 +303,7 @@ public class Gra extends Thread {
 	public void sprawdzKoniec() {
 		int zlo = 0;
 		boolean szeryf = false;
-		for(gracz g : gracze) {
+		for(Gracz g : gracze) {
 			switch(g.dajRole()) {
 				case 1:
 					szeryf = true;
@@ -332,13 +332,13 @@ public class Gra extends Thread {
 	}	
 	
 	public void zakoncz(int kto) {
-		for(gracz g : martwi) {
+		for(Gracz g : martwi) {
 			gracze.add(g);
 		}
-		List<gracz> wygrali = new ArrayList<gracz>();
-		List<gracz> przegrali = new ArrayList<gracz>();
+		List<Gracz> wygrali = new ArrayList<Gracz>();
+		List<Gracz> przegrali = new ArrayList<Gracz>();
 		if(kto==1) {
-			for(gracz g : gracze) {
+			for(Gracz g : gracze) {
 				if(g.dajRole()<3) {
 					wygrali.add(g);
 				}else {
@@ -346,7 +346,7 @@ public class Gra extends Thread {
 				}
 			}
 		}else {
-			for(gracz g : gracze) {
+			for(Gracz g : gracze) {
 				if(g.dajRole()==kto) {
 					wygrali.add(g);
 				}else {

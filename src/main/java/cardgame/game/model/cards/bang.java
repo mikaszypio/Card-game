@@ -2,7 +2,7 @@ package cardgame.game.model.cards;
 
 import cardgame.game.Gra;
 import cardgame.game.kontakt;
-import cardgame.game.model.gracz;
+import cardgame.game.model.Gracz;
 
 public class bang extends karta{
 	
@@ -26,8 +26,8 @@ public class bang extends karta{
 	}
 	
 	public boolean zagraj() {		
-		gracz cel = kontakt.wybiezCel(gra);
-		gracz strzelec = gra.dajAktualnegoGracza();
+		Gracz cel = kontakt.wybiezCel(gra);
+		Gracz strzelec = gra.dajAktualnegoGracza();
 		postac p = strzelec.dajPostac();
 		String name = p.dajNazwe();
 		if(strzelec.czyStrzelal()==true)

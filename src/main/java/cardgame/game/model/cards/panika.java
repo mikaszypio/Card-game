@@ -2,7 +2,7 @@ package cardgame.game.model.cards;
 
 import cardgame.game.Gra;
 import cardgame.game.kontakt;
-import cardgame.game.model.gracz;
+import cardgame.game.model.Gracz;
 import java.util.List;
 import java.util.Random;
 
@@ -29,8 +29,8 @@ public class panika extends karta{
 	}
 	
 	public boolean zagraj() {
-		gracz cel = kontakt.wybiezCel(gra);
-		gracz strzelec = gra.dajAktualnegoGracza();
+		Gracz cel = kontakt.wybiezCel(gra);
+		Gracz strzelec = gra.dajAktualnegoGracza();
 		int dystans = gra.policzDystans(strzelec, cel);
 		int zasieg = strzelec.zasiegCzysty() - cel.modZasiegu();
 		if(dystans>zasieg) {

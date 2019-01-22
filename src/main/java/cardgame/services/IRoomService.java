@@ -1,5 +1,8 @@
 package cardgame.services;
 
+import java.util.List;
+
+import cardgame.game.model.Gracz;
 import cardgame.model.Room;
 import cardgame.model.User;
 
