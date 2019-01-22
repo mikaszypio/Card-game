@@ -8,6 +8,7 @@ public class gracz {
 
 	private postac hero;
 	private String nick;
+	private int ID;
 	private int rola;		//1=szeryf, 2=pomocnik, 3=renegat, 4=bandyta
 	private List<karta> reka;
 	private int hp;
@@ -19,6 +20,19 @@ public class gracz {
 
 	public gracz(String a) {
 		nick=a;
+		reka = new ArrayList<karta>(); 
+		bron=null;
+		dodatek=null;
+		czyDynamit=false;
+		czyWiezienie=false;
+		strzelal=false;
+		
+		hp=5;
+	}
+	
+	public gracz(String a, int id) {
+		nick=a;
+		ID=id;
 		reka = new ArrayList<karta>(); 
 		bron=null;
 		dodatek=null;

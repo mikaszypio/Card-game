@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-//pomys³ siê zjawi³, by ka¿da gra by³a osobnym procesem. w takim przypadku ta klasa sta³a by siê klas¹ g³ówn¹ (zawiera main). tylko trza by by³o do niej dodaæ np 
-//tworzenie decku i postaci. jako argument program by przyjmowa³ listê graczy. 
 public class gra {
 
 	private static List<karta> talia;
@@ -16,51 +14,22 @@ public class gra {
 	private static int ileGraczy;
 	private static int aktualny;
 	
-	public gra(List<gracz> g) {		
-		gracze=g;
+	public static void main(List<gracz> input) {
+	//public static void main(String[] args) {
+		gracze=input;
 		szczyt=null;
 		martwi = new ArrayList<gracz>();
 		cmentaz = new ArrayList<karta>();
 		ileGraczy = gracze.size();
-		aktualny=0;
-	}
-	
-	public static void naSzczyt(karta k) {
-		szczyt=k;
-	}
-	
-	public static List<gracz> dajGraczy() {
-		return gracze;
-	}
-	
-	public static gracz dajAktualnegoGracza() {
-		return gracze.get(aktualny);
-	}
-	
-	public static gracz dajNastepnegoGracza() {
-		int x = aktualny+1;
-		if(x==ileGraczy) {x=0;}
-		return gracze.get(x);
-	}
-	
-	public static int dajNumerGracza(gracz g) {
-		for(int x=0; x<gracze.size(); x++) {
-			if(gracze.get(x)==g) {
-				return x;
-			}
+		aktualny=0;	
+
+		for(int x=0; x<ileGraczy; x++) {
+			//tu powinno wys³aæ listê "gracze" do poszczególnego klienta
+			gracz g=gracze.get(0);
+			gracze.remove(g);
+			gracze.add(g);
 		}
-		return -1;
-	}
-	
-	public static int dajIleGraczy() {
-		return ileGraczy;
-	}
-	public static int dajNumerAktualnegoGracza() {
-		return aktualny; 
-	}
-	
-	//jeœli ka¿da gra bêdzie osobnym procesem, ta funckja stanie siê mainem. tylko trza bêdzie dodaæ do niej to, co jest w konstruktorze
-	public static void graj() {	
+		
 		stworzTalie();
 		List<postac> postacie = listaPostaci();
 		for(gracz g : gracze) {
@@ -69,6 +38,7 @@ public class gra {
 			postacie.remove(wybrana);
 			g.ustawPostac(wybrana);
 		}
+		
 		List<String> role = new ArrayList<String>();
 		boolean gramy=true;
 		role.add("szeryf");
@@ -130,6 +100,41 @@ public class gra {
 			}
 		}
 	}
+	
+	public static void naSzczyt(karta k) {
+		szczyt=k;
+	}
+	
+	public static List<gracz> dajGraczy() {
+		return gracze;
+	}
+	
+	public static gracz dajAktualnegoGracza() {
+		return gracze.get(aktualny);
+	}
+	
+	public static gracz dajNastepnegoGracza() {
+		int x = aktualny+1;
+		if(x==ileGraczy) {x=0;}
+		return gracze.get(x);
+	}
+	
+	public static int dajNumerGracza(gracz g) {
+		for(int x=0; x<gracze.size(); x++) {
+			if(gracze.get(x)==g) {
+				return x;
+			}
+		}
+		return -1;
+	}
+	
+	public static int dajIleGraczy() {
+		return ileGraczy;
+	}
+	public static int dajNumerAktualnegoGracza() {
+		return aktualny; 
+	}
+	
 	
 	public static void tura(gracz g){
 		g.ustawStrzelanie(false);
@@ -507,7 +512,7 @@ public class gra {
 		tmp = new postac(3, 4, "Calamity Janet");  //done
 		lista.add(tmp);
 		tmp = new postac(4, 3, "El Gringo");  //gdy oberwie, zabiera kartê z ³apy tego, co go zrani³ (nie dzia³a przy wybuchu dynamitu)
-		lista.add(tmp);
+		//lista.add(tmp);
 		tmp = new postac(5, 4, "Jesse Jones");  //done
 		lista.add(tmp);
 		tmp = new postac(6, 4, "Jourdonnais");  //done
@@ -515,7 +520,7 @@ public class gra {
 		tmp = new postac(7, 4, "Kit Carlson");  //done
 		lista.add(tmp);
 		tmp = new postac(8, 4, "Lusky Duke");  //sprawdza pokera dwa razy
-		lista.add(tmp);
+		//lista.add(tmp);
 		tmp = new postac(9, 3, "Paul Regret");  //done
 		lista.add(tmp);
 		tmp = new postac(10, 4, "Pedro Ramirez");  //done
@@ -523,11 +528,11 @@ public class gra {
 		tmp = new postac(11, 4, "Rose Doolan");  //done
 		lista.add(tmp);
 		tmp = new postac(12, 4, "Sid Ketchum");  //W DOWOLNYM MOMENCIE mo¿e spaliæ dwie karty z ³apy by wylezyæ 1hp.
-		lista.add(tmp);
+		//lista.add(tmp);
 		tmp = new postac(13, 4, "Slab Zabójca");  //done
 		lista.add(tmp);
 		tmp = new postac(14, 4, "Suzy Lafayette");  //gdy ma pust¹ rêkê, dobieta kartê z talii
-		lista.add(tmp);
+		//lista.add(tmp);
 		tmp = new postac(15, 4, "Sam Sêp");  //done
 		lista.add(tmp);
 		tmp = new postac(16, 4, "Willy the Kid");  //done
