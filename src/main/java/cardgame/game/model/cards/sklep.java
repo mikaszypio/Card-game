@@ -7,32 +7,34 @@ import java.util.List;
 
 public class sklep extends karta{
 	
-	public sklep(int id, String naz, int num, String col) {
+	public sklep(int id, String naz, int num, String col, Gra g) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
 		opis = "Brak opisu";
 		numer=num;
 		kolor=col;
+		gra=g;
 	}
 	
-	public sklep(int id, String obraz, String opek, String naz, int num, String col) {
+	public sklep(int id, String obraz, String opek, String naz, int num, String col, Gra g) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
 		opis = opek;
 		numer=num;
 		kolor=col;
+		gra=g;
 	}
 	
 	public boolean zagraj() {
-		int ile = Gra.dajIleGraczy();
+		int ile = gra.dajIleGraczy();
 		List<karta> karty = new ArrayList<karta>();
-		List<gracz> gracze = Gra.dajGraczy();
-		int aktualny = Gra.dajNumerAktualnegoGracza();
+		List<gracz> gracze = gra.dajGraczy();
+		int aktualny = gra.dajNumerAktualnegoGracza();
 		
 		for(int x = 0; x<ile; x++) {
-			karta k = Gra.dobiez();
+			karta k = gra.dobiez();
 			karty.add(k);
 		}
 		

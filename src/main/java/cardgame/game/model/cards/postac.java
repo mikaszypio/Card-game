@@ -1,25 +1,30 @@
 package cardgame.game.model.cards;
 
+import cardgame.game.Gra;
+
 public class postac {
 
+	private Gra gra;
 	private int maxHp;
 	private String nazwa;
 	private int ID;
 	private String obrazek;
 	private String opis;
 	
-	public postac(int id, int hp, String name) {
+	public postac(int id, int hp, String name, Gra g) {
 		ID=id;
 		maxHp=hp;
 		nazwa=name;
+		gra=g;
 	}
 	
-	public postac(int id, int hp, String name, String pic, String opek) {
+	public postac(int id, int hp, String name, String pic, String opek, Gra g) {
 		ID=id;
 		maxHp=hp;
 		nazwa=name;
 		obrazek=pic;
 		opis=opek;
+		gra=g;
 	}
 	
 	public int dajID() {

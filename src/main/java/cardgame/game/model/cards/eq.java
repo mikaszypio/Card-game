@@ -12,7 +12,7 @@ public class eq extends karta {
 	private boolean obrona;
 	private boolean miltistrzal;
 	
-	public eq(int id, String naz, int num, String col, boolean czyBron, int zasM, int obrM, boolean czyBroni, boolean czyWielo){
+	public eq(int id, String naz, int num, String col, boolean czyBron, int zasM, int obrM, boolean czyBroni, boolean czyWielo, Gra g){
 		ID=id;
 		nazwa=naz;
 		numer=num;
@@ -22,6 +22,7 @@ public class eq extends karta {
 		obronaMod=obrM;
 		obrona=czyBroni;
 		miltistrzal=czyWielo;
+		gra=g;
 	}
 	
 	public boolean czyBron() {
@@ -45,7 +46,7 @@ public class eq extends karta {
 	}
 	
 	public boolean zagraj() {
-		gracz g = Gra.dajAktualnegoGracza();
+		gracz g = gra.dajAktualnegoGracza();
 		g.wyposaz(this);
 		return true;
 	}

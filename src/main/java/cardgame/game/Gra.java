@@ -24,21 +24,22 @@ import java.util.Random;
 
 public class Gra extends Thread {
 
-	private static List<karta> talia;
-	private static karta szczyt;
-	private static List<karta> cmentaz;
-	private static List<gracz> gracze;
-	private static List<gracz> martwi;
-	private static int ileGraczy;
-	private static int aktualny;
+	private List<karta> talia;
+	private karta szczyt;
+	private List<karta> cmentaz;
+	private List<gracz> gracze;
+	private List<gracz> martwi;
+	private int ileGraczy;
+	private int aktualny;
 	
 	public Gra(List<gracz> gracze) {
 		this.gracze = gracze;
+		for(gracz g : gracze) {
+			g.ustawGre(this);
+		}
 	}
 	
 	public void run() {
-	//public static void main(String[] args) {
-	
 		szczyt=null;
 		martwi = new ArrayList<gracz>();
 		cmentaz = new ArrayList<karta>();
@@ -46,8 +47,8 @@ public class Gra extends Thread {
 		aktualny=0;	
 
 		for(int x=0; x<ileGraczy; x++) {
-			//tu powinno wys�a� list� "gracze" do poszczeg�lnego klienta
 			gracz g=gracze.get(0);
+			//tu powinno wys�a� list� "gracze" do poszczeg�lnego klienta-tego będącego aktualnie graczem g
 			gracze.remove(g);
 			gracze.add(g);
 		}
@@ -123,25 +124,25 @@ public class Gra extends Thread {
 		}
 	}
 	
-	public static void naSzczyt(karta k) {
+	public void naSzczyt(karta k) {
 		szczyt=k;
 	}
 	
-	public static List<gracz> dajGraczy() {
+	public List<gracz> dajGraczy() {
 		return gracze;
 	}
 	
-	public static gracz dajAktualnegoGracza() {
+	public gracz dajAktualnegoGracza() {
 		return gracze.get(aktualny);
 	}
 	
-	public static gracz dajNastepnegoGracza() {
+	public gracz dajNastepnegoGracza() {
 		int x = aktualny+1;
 		if(x==ileGraczy) {x=0;}
 		return gracze.get(x);
 	}
 	
-	public static int dajNumerGracza(gracz g) {
+	public int dajNumerGracza(gracz g) {
 		for(int x=0; x<gracze.size(); x++) {
 			if(gracze.get(x)==g) {
 				return x;
@@ -150,15 +151,15 @@ public class Gra extends Thread {
 		return -1;
 	}
 	
-	public static int dajIleGraczy() {
+	public int dajIleGraczy() {
 		return ileGraczy;
 	}
-	public static int dajNumerAktualnegoGracza() {
+	public int dajNumerAktualnegoGracza() {
 		return aktualny; 
 	}
 	
 	
-	public static void tura(gracz g){
+	public void tura(gracz g){
 		g.ustawStrzelanie(false);
 		g.sprawdzDynamit();
 		boolean czy = g.sprawdzWiezienie();
@@ -183,7 +184,7 @@ public class Gra extends Thread {
 	}
 	
 	//wyci�ga i zwraca kart� z talii
-	public static karta dobiez() {
+	public karta dobiez() {
 		karta wynik;
 		if(szczyt==null) {
 			if(talia.size()==0) {
@@ -200,7 +201,7 @@ public class Gra extends Thread {
 		return wynik;
 	}
 	
-	public static karta dobiezCmentaz() {
+	public karta dobiezCmentaz() {
 		if(cmentaz.size()==0) {
 			return null;
 		}else {
@@ -213,12 +214,12 @@ public class Gra extends Thread {
 	}
 	
 	//ciepie kart� na cmentarz
-	public static void odzuc(karta k) {
+	public void odzuc(karta k) {
 		cmentaz.add(k);
 	}
 	
 	//liczy odleg�o�� mi�dzy graczami
-	public static int policzDystans(gracz jeden, gracz dwa) {
+	public int policzDystans(gracz jeden, gracz dwa) {
 		int pierwszy = dajNumerGracza(jeden);
 		int drugi = dajNumerGracza(dwa);
 		if(pierwszy ==-1 || drugi==-1) {
@@ -241,7 +242,7 @@ public class Gra extends Thread {
 	}
 	
 	//te dwie funckje sprawdzaj� pokera (efekt bary�ki, dynamitu itd). w��cznie z doci�gni�ciem karty i wyrzuceniem jej
-	public static boolean poker(String kolor) {
+	public boolean poker(String kolor) {
 		karta kart = dobiez();
 		boolean wynik;
 		if(kolor==kart.dajKolor()) {
@@ -253,7 +254,7 @@ public class Gra extends Thread {
 		return wynik;
 	}
 	
-	public static boolean poker(String kolor, int min, int max) {
+	public boolean poker(String kolor, int min, int max) {
 		karta kart = dobiez();
 		boolean wynik;
 		if(kolor==kart.dajKolor() && min>=kart.dajNumer() && max<=kart.dajNumer()) {
@@ -265,7 +266,7 @@ public class Gra extends Thread {
 		return wynik;
 	}
 	
-	public static void zgon(gracz g) {
+	public void zgon(gracz g) {
 		gracz akt = dajAktualnegoGracza();
 		gracze.remove(g);
 		ileGraczy--;
@@ -280,7 +281,7 @@ public class Gra extends Thread {
 		}
 		gracz sep = null;
 		for(gracz zywy : gracze) {
-			if(zywy.dajPostac().dajNazwe()=="Sam S�p") {
+			if(zywy.dajPostac().dajNazwe()=="Sam Sep") {
 				sep=zywy;
 			}
 		}
@@ -299,7 +300,7 @@ public class Gra extends Thread {
 		sprawdzKoniec();
 	}	
 	
-	public static void sprawdzKoniec() {
+	public void sprawdzKoniec() {
 		int zlo = 0;
 		boolean szeryf = false;
 		for(gracz g : gracze) {
@@ -330,7 +331,7 @@ public class Gra extends Thread {
 		
 	}	
 	
-	public static void zakoncz(int kto) {
+	public void zakoncz(int kto) {
 		for(gracz g : martwi) {
 			gracze.add(g);
 		}
@@ -357,254 +358,209 @@ public class Gra extends Thread {
 		System.exit(0);
 	}
 	
-	public static void stworzTalie() {
+	public void stworzTalie() {
 		talia = new ArrayList<karta>();
 		karta tmp;
 				
-		tmp = new eq(1, "Volcanic", 10, "pik", true, 1, 0, false, true);
+		tmp = new eq(1, "Volcanic", 10, "pik", true, 1, 0, false, true, this);
 		talia.add(tmp);
-		tmp = new eq(2, "Volcanic", 10, "trefl", true, 1, 0, false, true);
+		tmp = new eq(2, "Volcanic", 10, "trefl", true, 1, 0, false, true, this);
 		talia.add(tmp);
-		tmp = new eq(3, "Schofield", 13, "pik", true, 2, 0, false, false);
+		tmp = new eq(3, "Schofield", 13, "pik", true, 2, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(4, "Schofield", 11, "trefl", true, 2, 0, false, false);
+		tmp = new eq(4, "Schofield", 11, "trefl", true, 2, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(5, "Schofield", 12, "trefl", true, 2, 0, false, false);
+		tmp = new eq(5, "Schofield", 12, "trefl", true, 2, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(6, "Remington", 13, "trefl", true, 3, 0, false, false);
+		tmp = new eq(6, "Remington", 13, "trefl", true, 3, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(7, "Rev Carabine", 14, "trefl", true, 4, 0, false, false);
+		tmp = new eq(7, "Rev Carabine", 14, "trefl", true, 4, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(8, "Winchester", 8, "pik", true, 5, 0, false, false);
+		tmp = new eq(8, "Winchester", 8, "pik", true, 5, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(9, "Luneta", 14, "pik", false, 1, 0, false, false);
+		tmp = new eq(9, "Luneta", 14, "pik", false, 1, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(10, "Bary�ka", 14, "pik", false, 0, 0, true, false);
+		tmp = new eq(10, "Barylka", 14, "pik", false, 0, 0, true, false, this);
 		talia.add(tmp);
-		tmp = new eq(11, "Bary�ka", 12, "pik", false, 0, 0, true, false);
+		tmp = new eq(11, "Barylka", 12, "pik", false, 0, 0, true, false, this);
 		talia.add(tmp);
-		tmp = new eq(12, "Mustang", 8, "kier", false, 0, 1, false, false);
+		tmp = new eq(12, "Mustang", 8, "kier", false, 0, 1, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(13, "Mustang", 9, "kier", false, 0, 1, false, false);
+		tmp = new eq(13, "Mustang", 9, "kier", false, 0, 1, false, false, this);
 		talia.add(tmp);
-		tmp = new piwko(14, "Piwko", 6, "kier");
+		tmp = new piwko(14, "Piwko", 6, "kier", this);
 		talia.add(tmp);
-		tmp = new piwko(15, "Piwko", 7, "kier");
+		tmp = new piwko(15, "Piwko", 7, "kier", this);
 		talia.add(tmp);
-		tmp = new piwko(16, "Piwko", 8, "kier");
+		tmp = new piwko(16, "Piwko", 8, "kier", this);
 		talia.add(tmp);
-		tmp = new piwko(17, "Piwko", 9, "kier");
+		tmp = new piwko(17, "Piwko", 9, "kier", this);
 		talia.add(tmp);
-		tmp = new piwko(18, "Piwko", 10, "kier");
+		tmp = new piwko(18, "Piwko", 10, "kier", this);
 		talia.add(tmp);
-		tmp = new piwko(19, "Piwko", 11, "kier");
+		tmp = new piwko(19, "Piwko", 11, "kier", this);
 		talia.add(tmp);
-		tmp = new dynamit(20, "Dynamit", 2, "kier");
+		tmp = new dynamit(20, "Dynamit", 2, "kier", this);
 		talia.add(tmp);
-		tmp = new bang(21, "Bang", 12, "kier");
+		tmp = new bang(21, "Bang", 12, "kier", this);
 		talia.add(tmp);
-		tmp = new bang(22, "Bang", 13, "kier");
+		tmp = new bang(22, "Bang", 13, "kier", this);
 		talia.add(tmp);
-		tmp = new bang(23, "Bang", 14, "kier");
+		tmp = new bang(23, "Bang", 14, "kier", this);
 		talia.add(tmp);
-		tmp = new bang(24, "Bang", 2, "karo");
+		tmp = new bang(24, "Bang", 2, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(25, "Bang", 3, "karo");
+		tmp = new bang(25, "Bang", 3, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(26, "Bang", 4, "karo");
+		tmp = new bang(26, "Bang", 4, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(27, "Bang", 5, "karo");
+		tmp = new bang(27, "Bang", 5, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(28, "Bang", 6, "karo");
+		tmp = new bang(28, "Bang", 6, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(29, "Bang", 7, "karo");
+		tmp = new bang(29, "Bang", 7, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(30, "Bang", 8, "karo");
+		tmp = new bang(30, "Bang", 8, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(31, "Bang", 9, "karo");
+		tmp = new bang(31, "Bang", 9, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(32, "Bang", 10, "karo");
+		tmp = new bang(32, "Bang", 10, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(33, "Bang", 11, "karo");
+		tmp = new bang(33, "Bang", 11, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(34, "Bang", 12, "karo");
+		tmp = new bang(34, "Bang", 12, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(35, "Bang", 13, "karo");
+		tmp = new bang(35, "Bang", 13, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(36, "Bang", 14, "karo");
+		tmp = new bang(36, "Bang", 14, "karo", this);
 		talia.add(tmp);
-		tmp = new bang(37, "Bang", 14, "pik");
+		tmp = new bang(37, "Bang", 14, "pik", this);
 		talia.add(tmp);
-		tmp = new bang(38, "Bang", 2, "trefl");
+		tmp = new bang(38, "Bang", 2, "trefl", this);
 		talia.add(tmp);
-		tmp = new bang(39, "Bang", 3, "trefl");
+		tmp = new bang(39, "Bang", 3, "trefl", this);
 		talia.add(tmp);
-		tmp = new bang(40, "Bang", 4, "trefl");
+		tmp = new bang(40, "Bang", 4, "trefl", this);
 		talia.add(tmp);
-		tmp = new bang(41, "Bang", 5, "trefl");
+		tmp = new bang(41, "Bang", 5, "trefl", this);
 		talia.add(tmp);
-		tmp = new bang(42, "Bang", 6, "trefl");
+		tmp = new bang(42, "Bang", 6, "trefl", this);
 		talia.add(tmp);
-		tmp = new bang(43, "Bang", 7, "trefl");
+		tmp = new bang(43, "Bang", 7, "trefl", this);
 		talia.add(tmp);
-		tmp = new bang(44, "Bang", 8, "trefl");
+		tmp = new bang(44, "Bang", 8, "trefl", this);
 		talia.add(tmp);
-		tmp = new bang(45, "Bang", 9, "trefl");
+		tmp = new bang(45, "Bang", 9, "trefl", this);
 		talia.add(tmp);
-		tmp = new welsfargo(46, "Wells Fargo", 3, "kier");
+		tmp = new welsfargo(46, "Wells Fargo", 3, "kier", this);
 		talia.add(tmp);
-		tmp = new dylizans(47, "Dyli�ans", 9, "pik");
+		tmp = new dylizans(47, "Dylizans", 9, "pik", this);
 		talia.add(tmp);
-		tmp = new dylizans(48, "Dyli�ans", 9, "pik");
+		tmp = new dylizans(48, "Dylizans", 9, "pik", this);
 		talia.add(tmp);
-		tmp = new wiezienie(49, "Wi�zienie", 4, "kier");
+		tmp = new wiezienie(49, "Wiezienie", 4, "kier", this);
 		talia.add(tmp);
-		tmp = new wiezienie(50, "Wi�zienie", 11, "pik");
+		tmp = new wiezienie(50, "Wiezienie", 11, "pik", this);
 		talia.add(tmp);
-		tmp = new wiezienie(51, "Wi�zienie", 10, "pik");
+		tmp = new wiezienie(51, "Wiezienie", 10, "pik", this);
 		talia.add(tmp);
-		tmp = new salon(52, "Saloon", 5, "kier");
+		tmp = new salon(52, "Saloon", 5, "kier", this);
 		talia.add(tmp);
-		tmp = new gatling(53, "Gatling", 10, "kier");
+		tmp = new gatling(53, "Gatling", 10, "kier", this);
 		talia.add(tmp);
-		tmp = new pudlo(54, "Pud�o", 2, "pik");
+		tmp = new pudlo(54, "Pudlo", 2, "pik", this);
 		talia.add(tmp);
-		tmp = new pudlo(55, "Pud�o", 3, "pik");
+		tmp = new pudlo(55, "Pudlo", 3, "pik", this);
 		talia.add(tmp);
-		tmp = new pudlo(56, "Pud�o", 4, "pik");
+		tmp = new pudlo(56, "Pudlo", 4, "pik", this);
 		talia.add(tmp);
-		tmp = new pudlo(57, "Pud�o", 5, "pik");
+		tmp = new pudlo(57, "Pudlo", 5, "pik", this);
 		talia.add(tmp);
-		tmp = new pudlo(58, "Pud�o", 6, "pik");
+		tmp = new pudlo(58, "Pudlo", 6, "pik", this);
 		talia.add(tmp);
-		tmp = new pudlo(59, "Pud�o", 7, "pik");
+		tmp = new pudlo(59, "Pudlo", 7, "pik", this);
 		talia.add(tmp);
-		tmp = new pudlo(60, "Pud�o", 8, "pik");
+		tmp = new pudlo(60, "Pudlo", 8, "pik", this);
 		talia.add(tmp);
-		tmp = new pudlo(61, "Pud�o", 10, "trefl");
+		tmp = new pudlo(61, "Pudlo", 10, "trefl", this);
 		talia.add(tmp);
-		tmp = new pudlo(62, "Pud�o", 11, "trefl");
+		tmp = new pudlo(62, "Pudlo", 11, "trefl", this);
 		talia.add(tmp);
-		tmp = new pudlo(63, "Pud�o", 12, "trefl");
+		tmp = new pudlo(63, "Pudlo", 12, "trefl", this);
 		talia.add(tmp);
-		tmp = new pudlo(64, "Pud�o", 13, "trefl");
+		tmp = new pudlo(64, "Pudlo", 13, "trefl", this);
 		talia.add(tmp);
-		tmp = new pudlo(65, "Pud�o", 14, "trefl");
+		tmp = new pudlo(65, "Pudlo", 14, "trefl", this);
 		talia.add(tmp);
-		tmp = new kasia(66, "Kasia Balou", 13, "kier");
+		tmp = new kasia(66, "Kasia Balou", 13, "kier", this);
 		talia.add(tmp);
-		tmp = new kasia(67, "Kasia Balou", 9, "karo");
+		tmp = new kasia(67, "Kasia Balou", 9, "karo", this);
 		talia.add(tmp);
-		tmp = new kasia(68, "Kasia Balou", 10, "karo");
+		tmp = new kasia(68, "Kasia Balou", 10, "karo", this);
 		talia.add(tmp);
-		tmp = new kasia(69, "Kasia Balou", 11, "karo");
+		tmp = new kasia(69, "Kasia Balou", 11, "karo", this);
 		talia.add(tmp);
-		tmp = new panika(70, "Panika", 8, "karo");
+		tmp = new panika(70, "Panika", 8, "karo", this);
 		talia.add(tmp);
-		tmp = new panika(71, "Panika", 11, "kier");
+		tmp = new panika(71, "Panika", 11, "kier", this);
 		talia.add(tmp);
-		tmp = new panika(72, "Panika", 12, "kier");
+		tmp = new panika(72, "Panika", 12, "kier", this);
 		talia.add(tmp);	
-		tmp = new panika(73, "Panika", 14, "kier");
+		tmp = new panika(73, "Panika", 14, "kier", this);
 		talia.add(tmp);
-		tmp = new sklep(74, "Sklep", 12, "pik");
+		tmp = new sklep(74, "Sklep", 12, "pik", this);
 		talia.add(tmp);	
-		tmp = new sklep(75, "Sklep", 9, "trefl");
+		tmp = new sklep(75, "Sklep", 9, "trefl", this);
 		talia.add(tmp);
-		tmp = new pojedynek(76, "Pojedynek", 12, "karo");
+		tmp = new pojedynek(76, "Pojedynek", 12, "karo", this);
 		talia.add(tmp);
-		tmp = new pojedynek(77, "Pojedynek", 11, "pik");
+		tmp = new pojedynek(77, "Pojedynek", 11, "pik", this);
 		talia.add(tmp);	
-		tmp = new pojedynek(78, "Pojedynek", 8, "trefl");
+		tmp = new pojedynek(78, "Pojedynek", 8, "trefl", this);
 		talia.add(tmp);
-		tmp = new indianie(79, "Indianie", 13, "karo");
+		tmp = new indianie(79, "Indianie", 13, "karo", this);
 		talia.add(tmp);
-		tmp = new indianie(80, "Indianie", 14, "karo");
+		tmp = new indianie(80, "Indianie", 14, "karo", this);
 		talia.add(tmp);
 	}
 	
-	public static List<postac> listaPostaci(){
+	public List<postac> listaPostaci(){
 		List<postac> lista = new ArrayList<postac>();
 		postac tmp;
 		
-		tmp = new postac(1, 4, "Bart Cassady");  //done
+		tmp = new postac(1, 4, "Bart Cassady", this);  //done
 		lista.add(tmp);
-		tmp = new postac(2, 4, "Black Jack");  //done
+		tmp = new postac(2, 4, "Black Jack", this);  //done
 		lista.add(tmp);
-		tmp = new postac(3, 4, "Calamity Janet");  //done
+		tmp = new postac(3, 4, "Calamity Janet", this);  //done
 		lista.add(tmp);
-		tmp = new postac(4, 3, "El Gringo");  //gdy oberwie, zabiera kart� z �apy tego, co go zrani� (nie dzia�a przy wybuchu dynamitu)
+		tmp = new postac(4, 3, "El Gringo", this);  //gdy oberwie, zabiera kart� z �apy tego, co go zrani� (nie dzia�a przy wybuchu dynamitu)
 		//lista.add(tmp);
-		tmp = new postac(5, 4, "Jesse Jones");  //done
+		tmp = new postac(5, 4, "Jesse Jones", this);  //done
 		lista.add(tmp);
-		tmp = new postac(6, 4, "Jourdonnais");  //done
+		tmp = new postac(6, 4, "Jourdonnais", this);  //done
 		lista.add(tmp);
-		tmp = new postac(7, 4, "Kit Carlson");  //done
+		tmp = new postac(7, 4, "Kit Carlson", this);  //done
 		lista.add(tmp);
-		tmp = new postac(8, 4, "Lusky Duke");  //sprawdza pokera dwa razy
+		tmp = new postac(8, 4, "Lusky Duke", this);  //sprawdza pokera dwa razy
 		//lista.add(tmp);
-		tmp = new postac(9, 3, "Paul Regret");  //done
+		tmp = new postac(9, 3, "Paul Regret", this);  //done
 		lista.add(tmp);
-		tmp = new postac(10, 4, "Pedro Ramirez");  //done
+		tmp = new postac(10, 4, "Pedro Ramirez", this);  //done
 		lista.add(tmp);
-		tmp = new postac(11, 4, "Rose Doolan");  //done
+		tmp = new postac(11, 4, "Rose Doolan", this);  //done
 		lista.add(tmp);
-		tmp = new postac(12, 4, "Sid Ketchum");  //W DOWOLNYM MOMENCIE mo�e spali� dwie karty z �apy by wylezy� 1hp.
+		tmp = new postac(12, 4, "Sid Ketchum", this);  //W DOWOLNYM MOMENCIE mo�e spali� dwie karty z �apy by wylezy� 1hp.
 		//lista.add(tmp);
-		tmp = new postac(13, 4, "Slab Zab�jca");  //done
+		tmp = new postac(13, 4, "Slab Zabojca", this);  //done
 		lista.add(tmp);
-		tmp = new postac(14, 4, "Suzy Lafayette");  //gdy ma pust� r�k�, dobieta kart� z talii
+		tmp = new postac(14, 4, "Suzy Lafayette", this);  //gdy ma pust� r�k�, dobieta kart� z talii
 		//lista.add(tmp);
-		tmp = new postac(15, 4, "Sam S�p");  //done
+		tmp = new postac(15, 4, "Sam Sep", this);  //done
 		lista.add(tmp);
-		tmp = new postac(16, 4, "Willy the Kid");  //done
+		tmp = new postac(16, 4, "Willy the Kid", this);  //done
 		lista.add(tmp);	
 		
 		return lista;
-	}
-	
-	
-	
-	
-	
-	//testowe - jak b�dzie si� implementowa�o finaln� wersj� to mo�na ola�
-	public void napiszTalie() {
-		System.out.print("\nTalia:\n");
-		if(talia.size()>0) {
-			for(karta k : talia) {
-				k.opisz();
-			}
-		}else {
-			System.out.print("pusto");
-		}
-	}
-	
-	public void napiszCmentaz() {
-		System.out.print("\nCmentaz:\n");
-		if(cmentaz.size()>0) {
-			for(karta k : cmentaz) {
-				k.opisz();
-			}
-		}else {
-			System.out.print("pusto");
-		}
-	}
-	
-	public void napiszGraczy() {
-		System.out.print("\nListaGraczy:\n");
-		for(gracz g : gracze) {
-			System.out.print("Gracz " + g.dajNick() + " ma " + g.zdrowie() + " z " + g.maxZdrowie() + "hp.\n" );
-			g.opiszReke();
-		}
-	}
-	
-	public void zassaj() {
-		for(gracz g : gracze) {
-			g.dobiezKarte();
-			g.dobiezKarte();
-			g.dobiezKarte();
-			g.dobiezKarte();
-			g.dobiezKarte();
-		}
 	}
 }

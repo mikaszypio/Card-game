@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class gracz {
 
+	private Gra gra;
 	private postac hero;
 	private String nick;
 	private int ID;
@@ -46,6 +47,10 @@ public class gracz {
 		strzelal=false;
 		
 		hp=5;
+	}
+	
+	public void ustawGre(Gra g) {
+		gra=g;
 	}
 	
 	public postac dajPostac() {
@@ -93,12 +98,12 @@ public class gracz {
 	public void wyposaz(eq cos){
 		if(cos.czyBron()==true){
 			if(bron!=null) {
-				Gra.odzuc(bron);
+				gra.odzuc(bron);
 			}
 			bron=cos;
 		}else {
 			if(dodatek!=null) {
-				Gra.odzuc(dodatek);
+				gra.odzuc(dodatek);
 			}
 			dodatek=cos;
 		}
@@ -176,7 +181,7 @@ public class gracz {
 	
 	public void dobiezKarte() {
 		karta k;
-		k=Gra.dobiez();
+		k=gra.dobiez();
 		reka.add(k);
 	}
 	
@@ -194,7 +199,7 @@ public class gracz {
 		for(karta k : reka) {
 			if(k.dajNazwe()==nazwa) {
 				reka.remove(k);
-				Gra.odzuc(k);
+				gra.odzuc(k);
 				System.out.print("Odrzucoco kart� " + nazwa + "\n");
 				return true;
 				
@@ -219,11 +224,11 @@ public class gracz {
 	public void sprawdzDynamit() {
 		if(czyDynamit==true) {
 			czyDynamit=false;
-			boolean wybuch = Gra.poker("pik", 2, 9); 
+			boolean wybuch = gra.poker("pik", 2, 9); 
 			if(wybuch==true) {
 				zran(3);
 			}else {
-				gracz g = Gra.dajNastepnegoGracza();
+				gracz g = gra.dajNastepnegoGracza();
 				g.dostanDynamit();
 			}
 		}
@@ -232,7 +237,7 @@ public class gracz {
 	//ogarnia wiezienie, je�li jest-wywo�ywa� zawsze na start tury
 	public boolean sprawdzWiezienie() {
 		if(czyWiezienie==true) {
-			boolean wyjscie = Gra.poker("kier");
+			boolean wyjscie = gra.poker("kier");
 			return wyjscie;
 		}
 		return true;
@@ -248,18 +253,18 @@ public class gracz {
 	//funcja wywo�ywana dostaniem banga
 	public void postrzel() {
 		if(hero.dajNazwe()=="Jourdonnais") {
-			if(Gra.poker("kier")==true) {
+			if(gra.poker("kier")==true) {
 				System.out.print("Epicko�� Jourdonnaisa ochroni�a\n");
 				return;
 			}
 		}
 		if(obrona()==true) {
-			if(Gra.poker("kier")==true) {
+			if(gra.poker("kier")==true) {
 				System.out.print("Bary�ka ochroni�a\n");
 				return;
 			}
 		}		
-		boolean czy = testKarty("Pud�o", "Bang");
+		boolean czy = testKarty("Pudlo", "Bang");
 		if(czy==true){
 			System.out.print("Spud�owa�\n");
 		}else {
@@ -273,19 +278,19 @@ public class gracz {
 		int pudla=0;
 		
 		if(hero.dajNazwe()=="Jourdonnais") {
-			if(Gra.poker("kier")==true) {
+			if(gra.poker("kier")==true) {
 				System.out.print("Epicko�� Jourdonnaisa pomaga uskoczy�\n");
 				barylki++;
 			}
 		}
 		if(obrona()==true) {
-			if(Gra.poker("kier")==true) {
+			if(gra.poker("kier")==true) {
 				System.out.print("Bary�ka pomaga uskoczy�\n");
 				barylki++;
 			}
 		}	
 		for(karta k : reka) {
-			if(k.dajNazwe()=="Pud�o") {
+			if(k.dajNazwe()=="Pudlo") {
 				pudla++;
 			}
 		}
@@ -295,7 +300,7 @@ public class gracz {
 			return;
 		}
 		if(barylki==1) {
-			boolean czy = testKarty("Pud�o", "Bang");
+			boolean czy = testKarty("Pudlo", "Bang");
 			if(czy==true){
 				System.out.print("Spud�owa� dzi�ki pomocy bary�ki/�wietno�ci Jourdonnaisa\n");
 			}
@@ -305,10 +310,10 @@ public class gracz {
 				//pytanie czy chcesz pud�owa�
 				int ile=2;
 				for(karta k : reka) {
-					if(k.dajNazwe()=="Pud�o" && ile>0) {
+					if(k.dajNazwe()=="Pudlo" && ile>0) {
 						ile--;
 						reka.remove(k);
-						Gra.odzuc(k);
+						gra.odzuc(k);
 					}
 				}
 				System.out.print("Jakim� cudem spud�owa� \n");
@@ -330,7 +335,7 @@ public class gracz {
 			if(testKarty("Piwko", "Zgon")==true) {
 				hp++;
 			}else {
-				Gra.zgon(this);
+				gra.zgon(this);
 			}
 		}
 	}
@@ -342,7 +347,7 @@ public class gracz {
 			case "Pedro Ramirez":
 				czy = kontakt.czyDobracInaczej();
 				if(czy==true) {
-					karta k = Gra.dobiezCmentaz();
+					karta k = gra.dobiezCmentaz();
 					if(k==null) {
 						dobiezKarte();
 						dobiezKarte();
@@ -357,7 +362,7 @@ public class gracz {
 				break;
 			case "Black Jack":
 				dobiezKarte();
-				karta k = Gra.dobiez();
+				karta k = gra.dobiez();
 				if(k.dajKolor()=="kier" || k.dajKolor()=="karo") {
 					dobiezKarte();
 				}
@@ -366,7 +371,7 @@ public class gracz {
 			case "Jesse Jones":
 				czy = kontakt.czyDobracInaczej();
 				if(czy==true) {
-					gracz cel = kontakt.wybiezCel();
+					gracz cel = kontakt.wybiezCel(gra);
 					List<karta> reka = cel.dajReke();
 					Random rand = new Random();
 					karta wynik = reka.get(rand.nextInt(reka.size()));
@@ -380,13 +385,13 @@ public class gracz {
 				break;
 			case "Kit Carlson":
 				List<karta> wyciogniete = new ArrayList<karta>();
-				wyciogniete.add(Gra.dobiez());
-				wyciogniete.add(Gra.dobiez());
-				wyciogniete.add(Gra.dobiez());
+				wyciogniete.add(gra.dobiez());
+				wyciogniete.add(gra.dobiez());
+				wyciogniete.add(gra.dobiez());
 				System.out.print("Wyci�gn��e� te trzy karty-wybierz kt�rej z nich nie chcesz");
 				karta smiec = kontakt.wybiezKarte(wyciogniete);
 				wyciogniete.remove(smiec);
-				Gra.naSzczyt(smiec);
+				gra.naSzczyt(smiec);
 				for(karta ka : wyciogniete) {
 					doReki(ka);
 				}
@@ -403,36 +408,8 @@ public class gracz {
 		int ileMoze = zdrowie();
 		while(ile>ileMoze) {
 			karta k = kontakt.wybiezKarte(reka);
-			Gra.odzuc(k);	
+			gra.odzuc(k);	
 			ile--;
 		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	//funkcje do test�w-ola� w finalnej implementacji
-	public void pisz() {
-		System.out.print(nick);
-		System.out.print("\n");
-	}
-	
-	public void opisz() {
-		String wyjscie = "Posta�";
-		if(obrona()==true) {wyjscie = wyjscie+" chowa si� za beczk�,";}
-		if(wielostrzal()==true) {wyjscie = wyjscie+" mo�e strzela� wiele razy,";}
-		wyjscie = wyjscie+" ma "+zasieg()+"pkt zasiegu, inni za� maj� zasi�g do niego zwi�kszony o "+modZasiegu()+".";
-		System.out.println(wyjscie);
-	}
-	
-	public void opiszReke() {
-		String wyjscie = "Posta� ma na r�ce nast�puj�ce karty:";
-		for(karta kar : reka) {
-			wyjscie = wyjscie + " " + kar.dajNazwe();
-		}
-		System.out.println(wyjscie);
 	}
 }

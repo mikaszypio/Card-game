@@ -1,31 +1,16 @@
 package cardgame.game.model.cards;
 
+import cardgame.game.Gra;
+
 public class karta {
 
+	protected Gra gra;
 	protected int ID;
 	protected String nazwa;
 	protected String obrazek;
 	protected String opis;
 	protected int numer;
 	protected String kolor;
-	
-	public karta() {
-		ID=-1;
-		nazwa = "Brak nazwy";
-		obrazek = "Brak obrazu";
-		opis = "Brak opisu";
-		numer = 1;
-		kolor = "pik";
-	}
-	
-	public karta(int id, String naz, int num, String col) {
-		ID=id;
-		nazwa=naz;
-		obrazek = "Brak obrazu";
-		opis = "Brak opisu";
-		numer=num;
-		kolor=col;
-	}
 	
 	public int dajID() {
 		return ID;
@@ -53,11 +38,6 @@ public class karta {
 	
 	public boolean zagraj() {
 		return false;
-	}
-	
-	//testowe
-	public void opisz() {	
-		System.out.print(ID + "-" + nazwa + "\n");
 	}
 	
 }

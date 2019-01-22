@@ -6,26 +6,28 @@ import java.util.List;
 
 public class indianie extends karta{
 	
-	public indianie(int id, String naz, int num, String col) {
+	public indianie(int id, String naz, int num, String col, Gra g) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
 		opis = "Brak opisu";
 		numer=num;
 		kolor=col;
+		gra=g;
 	}
 	
-	public indianie(int id, String obraz, String opek, String naz, int num, String col) {
+	public indianie(int id, String obraz, String opek, String naz, int num, String col, Gra g) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
 		opis = opek;
 		numer=num;
 		kolor=col;
+		gra=g;
 	}
 	
 	public boolean zagraj() {
-		List<gracz> gracze = Gra.dajGraczy();
+		List<gracz> gracze = gra.dajGraczy();
 		for(gracz g : gracze) {
 			boolean czy = g.testKarty("Bang", "Indianie");
 			if(czy==false) {
