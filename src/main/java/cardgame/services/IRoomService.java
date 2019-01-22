@@ -13,4 +13,7 @@ public interface IRoomService {
 	public void joinRoom(User user, Room room);
 	public void leaveRoom(User user);
 	public Room save(Room room);
+	public void startGame();
+	public Gracz userToPlayer(User user);
+	public List<Gracz> listOfPlayers(Room room);
 }
