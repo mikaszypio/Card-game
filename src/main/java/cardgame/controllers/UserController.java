@@ -16,7 +16,7 @@ public class UserController {
 	
 	public User getUserDetails(Long id) {
 		
-		userRepository.findById(id);
+		return userRepository.findById(id).get();
 	}
 	
 	public List<User> getAllUsers() {
