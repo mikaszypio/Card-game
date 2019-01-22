@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class gra {
+public class Gra extends Thread {
 
 	private static List<karta> talia;
 	private static karta szczyt;
@@ -32,9 +32,13 @@ public class gra {
 	private static int ileGraczy;
 	private static int aktualny;
 	
-	public static void main(List<gracz> input) {
+	public Gra(List<gracz> gracze) {
+		this.gracze = gracze;
+	}
+	
+	public void run() {
 	//public static void main(String[] args) {
-		gracze=input;
+	
 		szczyt=null;
 		martwi = new ArrayList<gracz>();
 		cmentaz = new ArrayList<karta>();

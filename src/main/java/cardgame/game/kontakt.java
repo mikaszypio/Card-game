@@ -41,7 +41,7 @@ public class kontakt {
 	}
 	
 	public static gracz wybiezCel() {
-		List<gracz> gracze = gra.dajGraczy();
+		List<gracz> gracze = Gra.dajGraczy();
 		while(true) {
 			System.out.print("Lista graczy\n");
 			for(gracz g : gracze) {

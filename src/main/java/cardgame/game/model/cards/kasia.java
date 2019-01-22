@@ -1,6 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.gra;
+import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.gracz;
 import java.util.List;
@@ -31,18 +31,18 @@ public class kasia extends karta{
 		if(co=="bron") { 
 			eq bron = cel.dajBron();
 			cel.ustawBron(null);
-			gra.odzuc(bron);
+			Gra.odzuc(bron);
 		}
 		if(co=="dodatek") { 
 			eq doda = cel.dajDodatek();
 			cel.ustawDodatek(null);
-			gra.odzuc(doda);
+			Gra.odzuc(doda);
 		}
 		if(co=="karta") {
 			List<karta> reka = cel.dajReke();
 			karta odrzucona = kontakt.wybiezKarte(reka);
 			reka.remove(odrzucona);
-			gra.odzuc(odrzucona);		
+			Gra.odzuc(odrzucona);		
 		}
 		return true;
 	}

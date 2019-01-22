@@ -1,6 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.gra;
+import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.gracz;
 import java.util.List;
@@ -28,8 +28,8 @@ public class panika extends karta{
 	
 	public boolean zagraj() {
 		gracz cel = kontakt.wybiezCel();
-		gracz strzelec = gra.dajAktualnegoGracza();
-		int dystans = gra.policzDystans(strzelec, cel);
+		gracz strzelec = Gra.dajAktualnegoGracza();
+		int dystans = Gra.policzDystans(strzelec, cel);
 		int zasieg = strzelec.zasiegCzysty() - cel.modZasiegu();
 		if(dystans>zasieg) {
 			System.out.print("Nie si�gniesz");

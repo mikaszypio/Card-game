@@ -1,6 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.gra;
+import cardgame.game.Gra;
 import cardgame.game.model.gracz;
 
 public class dylizans extends karta{
@@ -24,7 +24,7 @@ public class dylizans extends karta{
 	}
 	
 	public boolean zagraj() {
-		gracz g =gra.dajAktualnegoGracza();
+		gracz g =Gra.dajAktualnegoGracza();
 		g.dobiezKarte();
 		g.dobiezKarte();
 		return true;

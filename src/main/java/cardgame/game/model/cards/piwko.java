@@ -1,6 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.gra;
+import cardgame.game.Gra;
 import cardgame.game.model.gracz;
 
 public class piwko extends karta {
@@ -24,7 +24,7 @@ public class piwko extends karta {
 	}
 	
 	public boolean zagraj() {
-		gracz g =gra.dajAktualnegoGracza();
+		gracz g =Gra.dajAktualnegoGracza();
 		g.lecz(1);
 		return true;
 	}

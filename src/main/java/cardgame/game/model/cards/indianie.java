@@ -1,6 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.gra;
+import cardgame.game.Gra;
 import cardgame.game.model.gracz;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class indianie extends karta{
 	}
 	
 	public boolean zagraj() {
-		List<gracz> gracze = gra.dajGraczy();
+		List<gracz> gracze = Gra.dajGraczy();
 		for(gracz g : gracze) {
 			boolean czy = g.testKarty("Bang", "Indianie");
 			if(czy==false) {

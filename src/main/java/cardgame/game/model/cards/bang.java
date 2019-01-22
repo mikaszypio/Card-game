@@ -1,6 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.gra;
+import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.gracz;
 
@@ -26,7 +26,7 @@ public class bang extends karta{
 	
 	public boolean zagraj() {		
 		gracz cel = kontakt.wybiezCel();
-		gracz strzelec = gra.dajAktualnegoGracza();
+		gracz strzelec = Gra.dajAktualnegoGracza();
 		postac p = strzelec.dajPostac();
 		String name = p.dajNazwe();
 		if(strzelec.czyStrzelal()==true)
@@ -34,7 +34,7 @@ public class bang extends karta{
 			System.out.print("Nie mo�esz strzela� ponownie");
 			return false;				
 		}
-		int dystans = gra.policzDystans(strzelec, cel);
+		int dystans = Gra.policzDystans(strzelec, cel);
 		int zasieg = strzelec.zasieg() - cel.modZasiegu();
 		if(dystans>zasieg) {
 			System.out.print("Nie dostrzelisz");

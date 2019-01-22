@@ -1,6 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.gra;
+import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.gracz;
 
@@ -25,7 +25,7 @@ public class pudlo extends karta{
 	}
 	
 	public boolean zagraj() {
-		gracz strzelec = gra.dajAktualnegoGracza();
+		gracz strzelec = Gra.dajAktualnegoGracza();
 		postac p = strzelec.dajPostac();
 		String name = p.dajNazwe();
 		if(name=="Calamity Janet") {
@@ -35,7 +35,7 @@ public class pudlo extends karta{
 				return false;				
 			}
 			gracz cel = kontakt.wybiezCel();
-			int dystans = gra.policzDystans(strzelec, cel);
+			int dystans = Gra.policzDystans(strzelec, cel);
 			int zasieg = strzelec.zasieg() - cel.modZasiegu();
 			if(dystans>zasieg) {
 				System.out.print("Nie dostrzelisz");

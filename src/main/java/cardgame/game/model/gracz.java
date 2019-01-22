@@ -1,6 +1,6 @@
 package cardgame.game.model;
 
-import cardgame.game.gra;
+import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.cards.eq;
 import cardgame.game.model.cards.karta;
@@ -93,12 +93,12 @@ public class gracz {
 	public void wyposaz(eq cos){
 		if(cos.czyBron()==true){
 			if(bron!=null) {
-				gra.odzuc(bron);
+				Gra.odzuc(bron);
 			}
 			bron=cos;
 		}else {
 			if(dodatek!=null) {
-				gra.odzuc(dodatek);
+				Gra.odzuc(dodatek);
 			}
 			dodatek=cos;
 		}
@@ -176,7 +176,7 @@ public class gracz {
 	
 	public void dobiezKarte() {
 		karta k;
-		k=gra.dobiez();
+		k=Gra.dobiez();
 		reka.add(k);
 	}
 	
@@ -194,7 +194,7 @@ public class gracz {
 		for(karta k : reka) {
 			if(k.dajNazwe()==nazwa) {
 				reka.remove(k);
-				gra.odzuc(k);
+				Gra.odzuc(k);
 				System.out.print("Odrzucoco kart� " + nazwa + "\n");
 				return true;
 				
@@ -219,11 +219,11 @@ public class gracz {
 	public void sprawdzDynamit() {
 		if(czyDynamit==true) {
 			czyDynamit=false;
-			boolean wybuch = gra.poker("pik", 2, 9); 
+			boolean wybuch = Gra.poker("pik", 2, 9); 
 			if(wybuch==true) {
 				zran(3);
 			}else {
-				gracz g = gra.dajNastepnegoGracza();
+				gracz g = Gra.dajNastepnegoGracza();
 				g.dostanDynamit();
 			}
 		}
@@ -232,7 +232,7 @@ public class gracz {
 	//ogarnia wiezienie, je�li jest-wywo�ywa� zawsze na start tury
 	public boolean sprawdzWiezienie() {
 		if(czyWiezienie==true) {
-			boolean wyjscie = gra.poker("kier");
+			boolean wyjscie = Gra.poker("kier");
 			return wyjscie;
 		}
 		return true;
@@ -248,13 +248,13 @@ public class gracz {
 	//funcja wywo�ywana dostaniem banga
 	public void postrzel() {
 		if(hero.dajNazwe()=="Jourdonnais") {
-			if(gra.poker("kier")==true) {
+			if(Gra.poker("kier")==true) {
 				System.out.print("Epicko�� Jourdonnaisa ochroni�a\n");
 				return;
 			}
 		}
 		if(obrona()==true) {
-			if(gra.poker("kier")==true) {
+			if(Gra.poker("kier")==true) {
 				System.out.print("Bary�ka ochroni�a\n");
 				return;
 			}
@@ -273,13 +273,13 @@ public class gracz {
 		int pudla=0;
 		
 		if(hero.dajNazwe()=="Jourdonnais") {
-			if(gra.poker("kier")==true) {
+			if(Gra.poker("kier")==true) {
 				System.out.print("Epicko�� Jourdonnaisa pomaga uskoczy�\n");
 				barylki++;
 			}
 		}
 		if(obrona()==true) {
-			if(gra.poker("kier")==true) {
+			if(Gra.poker("kier")==true) {
 				System.out.print("Bary�ka pomaga uskoczy�\n");
 				barylki++;
 			}
@@ -308,7 +308,7 @@ public class gracz {
 					if(k.dajNazwe()=="Pud�o" && ile>0) {
 						ile--;
 						reka.remove(k);
-						gra.odzuc(k);
+						Gra.odzuc(k);
 					}
 				}
 				System.out.print("Jakim� cudem spud�owa� \n");
@@ -330,7 +330,7 @@ public class gracz {
 			if(testKarty("Piwko", "Zgon")==true) {
 				hp++;
 			}else {
-				gra.zgon(this);
+				Gra.zgon(this);
 			}
 		}
 	}
@@ -342,7 +342,7 @@ public class gracz {
 			case "Pedro Ramirez":
 				czy = kontakt.czyDobracInaczej();
 				if(czy==true) {
-					karta k = gra.dobiezCmentaz();
+					karta k = Gra.dobiezCmentaz();
 					if(k==null) {
 						dobiezKarte();
 						dobiezKarte();
@@ -357,7 +357,7 @@ public class gracz {
 				break;
 			case "Black Jack":
 				dobiezKarte();
-				karta k = gra.dobiez();
+				karta k = Gra.dobiez();
 				if(k.dajKolor()=="kier" || k.dajKolor()=="karo") {
 					dobiezKarte();
 				}
@@ -380,13 +380,13 @@ public class gracz {
 				break;
 			case "Kit Carlson":
 				List<karta> wyciogniete = new ArrayList<karta>();
-				wyciogniete.add(gra.dobiez());
-				wyciogniete.add(gra.dobiez());
-				wyciogniete.add(gra.dobiez());
+				wyciogniete.add(Gra.dobiez());
+				wyciogniete.add(Gra.dobiez());
+				wyciogniete.add(Gra.dobiez());
 				System.out.print("Wyci�gn��e� te trzy karty-wybierz kt�rej z nich nie chcesz");
 				karta smiec = kontakt.wybiezKarte(wyciogniete);
 				wyciogniete.remove(smiec);
-				gra.naSzczyt(smiec);
+				Gra.naSzczyt(smiec);
 				for(karta ka : wyciogniete) {
 					doReki(ka);
 				}
@@ -403,7 +403,7 @@ public class gracz {
 		int ileMoze = zdrowie();
 		while(ile>ileMoze) {
 			karta k = kontakt.wybiezKarte(reka);
-			gra.odzuc(k);	
+			Gra.odzuc(k);	
 			ile--;
 		}
 	}
