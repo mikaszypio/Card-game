@@ -1,4 +1,4 @@
-package testy;
+package cardgame.game.model.cards;
 
 public class karta {
 

@@ -1,8 +1,13 @@
-package testy;
+package cardgame.game.model;
 
+import cardgame.game.gra;
+import cardgame.game.model.cards.eq;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import cardgame.game.model.cards.karta;
+import cardgame.game.kontakt;
+import cardgame.game.model.cards.postac;
 
 public class gracz {
 
@@ -75,7 +80,7 @@ public class gracz {
 		return dodatek;
 	}
 	
-	//têpe funckje ustawiaj¹ce broñ/dodatek - w praktyce u¿ywanej chyba tylko z nullem przy kradzierzy
+	//tï¿½pe funckje ustawiajï¿½ce broï¿½/dodatek - w praktyce uï¿½ywanej chyba tylko z nullem przy kradzierzy
 	public void ustawBron(eq k) {
 		bron=k;
 	}
@@ -84,7 +89,7 @@ public class gracz {
 		dodatek=k;
 	}
 	
-	//bystra funkcja wywo³ywana gdy zagrywam broñ/dodatek 
+	//bystra funkcja wywoï¿½ywana gdy zagrywam broï¿½/dodatek 
 	public void wyposaz(eq cos){
 		if(cos.czyBron()==true){
 			if(bron!=null) {
@@ -115,7 +120,7 @@ public class gracz {
 		czyWiezienie=true;
 	}
 	
-	//zwraca zasiêg gracza
+	//zwraca zasiï¿½g gracza
 	public int zasieg() {
 		int wynik=1;
 		if(bron!=null) {wynik=wynik+bron.dajZasiegMod(); }
@@ -124,7 +129,7 @@ public class gracz {
 		return wynik;
 	}
 	
-	//zwraca zasiêg bez uwzglêdnienia broni (jakaœ karta potrzebuje takiego)
+	//zwraca zasiï¿½g bez uwzglï¿½dnienia broni (jakaï¿½ karta potrzebuje takiego)
 	public int zasiegCzysty() {
 		int wynik=1;
 		if(dodatek!=null) {wynik=wynik+dodatek.dajZasiegMod(); }
@@ -132,7 +137,7 @@ public class gracz {
 		return wynik;
 	}
 	
-	//zwraca negatywny podyfikator zasiêgu DO tego gracza (efekt mustanga)
+	//zwraca negatywny podyfikator zasiï¿½gu DO tego gracza (efekt mustanga)
 	public int modZasiegu() {
 		int wynik=0;
 		if(dodatek!=null) {wynik=wynik+dodatek.dajObronaMod(); }
@@ -151,7 +156,7 @@ public class gracz {
 		//return 5;
 	}
 	
-	//mówi, czy gracz ma bary³kê
+	//mï¿½wi, czy gracz ma baryï¿½kï¿½
 	public boolean obrona() {
 		if(dodatek!=null) {
 			return dodatek.czyObrona();
@@ -160,7 +165,7 @@ public class gracz {
 		}
 	}
 	
-	//mówi, czy broñ gracza mo¿e strzelaæ wiele razy
+	//mï¿½wi, czy broï¿½ gracza moï¿½e strzelaï¿½ wiele razy
 	public boolean wielostrzal() {
 		if(bron!=null) {
 			return bron.czyMultistrzal();
@@ -183,14 +188,14 @@ public class gracz {
 		reka.remove(k);
 	}
 	
-	//metoda sprawdza, czy masz dan¹ kartê na rêce, jeœli masz to odrzuca. W finalnej wersji powinna jeszcze pytaæ, czy chcesz odrzuciæ, ale... coœ jest nie tak w kontakcie
+	//metoda sprawdza, czy masz danï¿½ kartï¿½ na rï¿½ce, jeï¿½li masz to odrzuca. W finalnej wersji powinna jeszcze pytaï¿½, czy chcesz odrzuciï¿½, ale... coï¿½ jest nie tak w kontakcie
 	public boolean testKarty(String nazwa, String zrodlo) {
 		System.out.print("Testuje gracz " + nick + "\n");
 		for(karta k : reka) {
 			if(k.dajNazwe()==nazwa) {
 				reka.remove(k);
 				gra.odzuc(k);
-				System.out.print("Odrzucoco kartê " + nazwa + "\n");
+				System.out.print("Odrzucoco kartï¿½ " + nazwa + "\n");
 				return true;
 				
 				/*  wersja z zapytaniem
@@ -210,7 +215,7 @@ public class gracz {
 		return false;
 	}
 
-	//ogarnia dynamit, jeœli jest-wywo³ywaæ zawsze na start tury
+	//ogarnia dynamit, jeï¿½li jest-wywoï¿½ywaï¿½ zawsze na start tury
 	public void sprawdzDynamit() {
 		if(czyDynamit==true) {
 			czyDynamit=false;
@@ -224,11 +229,11 @@ public class gracz {
 		}
 	}
 	
-	//ogarnia wiezienie, jeœli jest-wywo³ywaæ zawsze na start tury
+	//ogarnia wiezienie, jeï¿½li jest-wywoï¿½ywaï¿½ zawsze na start tury
 	public boolean sprawdzWiezienie() {
 		if(czyWiezienie==true) {
-			boolean wyjœcie = gra.poker("kier");
-			return wyjœcie;
+			boolean wyjscie = gra.poker("kier");
+			return wyjscie;
 		}
 		return true;
 	}
@@ -240,73 +245,73 @@ public class gracz {
 		}
 	}
 	
-	//funcja wywo³ywana dostaniem banga
+	//funcja wywoï¿½ywana dostaniem banga
 	public void postrzel() {
 		if(hero.dajNazwe()=="Jourdonnais") {
 			if(gra.poker("kier")==true) {
-				System.out.print("Epickoœæ Jourdonnaisa ochroni³a\n");
+				System.out.print("Epickoï¿½ï¿½ Jourdonnaisa ochroniï¿½a\n");
 				return;
 			}
 		}
 		if(obrona()==true) {
 			if(gra.poker("kier")==true) {
-				System.out.print("Bary³ka ochroni³a\n");
+				System.out.print("Baryï¿½ka ochroniï¿½a\n");
 				return;
 			}
 		}		
-		boolean czy = testKarty("Pud³o", "Bang");
+		boolean czy = testKarty("Pudï¿½o", "Bang");
 		if(czy==true){
-			System.out.print("Spud³owa³\n");
+			System.out.print("Spudï¿½owaï¿½\n");
 		}else {
 			zran(1);
 		}
 	}
 	
-	//funcja wywo³ywana dostaniem banga od postaci któr¹ trzeba podwójnie pud³owaæ
+	//funcja wywoï¿½ywana dostaniem banga od postaci ktï¿½rï¿½ trzeba podwï¿½jnie pudï¿½owaï¿½
 	public void postrzelBardziej() {
 		int barylki=0;
 		int pudla=0;
 		
 		if(hero.dajNazwe()=="Jourdonnais") {
 			if(gra.poker("kier")==true) {
-				System.out.print("Epickoœæ Jourdonnaisa pomaga uskoczyæ\n");
+				System.out.print("Epickoï¿½ï¿½ Jourdonnaisa pomaga uskoczyï¿½\n");
 				barylki++;
 			}
 		}
 		if(obrona()==true) {
 			if(gra.poker("kier")==true) {
-				System.out.print("Bary³ka pomaga uskoczyæ\n");
+				System.out.print("Baryï¿½ka pomaga uskoczyï¿½\n");
 				barylki++;
 			}
 		}	
 		for(karta k : reka) {
-			if(k.dajNazwe()=="Pud³o") {
+			if(k.dajNazwe()=="Pudï¿½o") {
 				pudla++;
 			}
 		}
 		
 		if(barylki==2) {
-			System.out.print("Unikn¹³eœ precyzyjnego trafienia\n");
+			System.out.print("Uniknï¿½ï¿½eï¿½ precyzyjnego trafienia\n");
 			return;
 		}
 		if(barylki==1) {
-			boolean czy = testKarty("Pud³o", "Bang");
+			boolean czy = testKarty("Pudï¿½o", "Bang");
 			if(czy==true){
-				System.out.print("Spud³owa³ dziêki pomocy bary³ki/œwietnoœci Jourdonnaisa\n");
+				System.out.print("Spudï¿½owaï¿½ dziï¿½ki pomocy baryï¿½ki/ï¿½wietnoï¿½ci Jourdonnaisa\n");
 			}
 		}
 		if(barylki==0) {
 			if(pudla>1) {
-				//pytanie czy chcesz pud³owaæ
+				//pytanie czy chcesz pudï¿½owaï¿½
 				int ile=2;
 				for(karta k : reka) {
-					if(k.dajNazwe()=="Pud³o" && ile>0) {
+					if(k.dajNazwe()=="Pudï¿½o" && ile>0) {
 						ile--;
 						reka.remove(k);
 						gra.odzuc(k);
 					}
 				}
-				System.out.print("Jakimœ cudem spud³owa³ \n");
+				System.out.print("Jakimï¿½ cudem spudï¿½owaï¿½ \n");
 				return;
 			}
 		}
@@ -330,7 +335,7 @@ public class gracz {
 		}
 	}
 	
-	//wywo³ywane na pocz¹tku tury
+	//wywoï¿½ywane na poczï¿½tku tury
 	public void wezKarty() {	
 		boolean czy;
 		switch(hero.dajNazwe()) {
@@ -378,7 +383,7 @@ public class gracz {
 				wyciogniete.add(gra.dobiez());
 				wyciogniete.add(gra.dobiez());
 				wyciogniete.add(gra.dobiez());
-				System.out.print("Wyci¹gn¹³eœ te trzy karty-wybierz której z nich nie chcesz");
+				System.out.print("Wyciï¿½gnï¿½ï¿½eï¿½ te trzy karty-wybierz ktï¿½rej z nich nie chcesz");
 				karta smiec = kontakt.wybiezKarte(wyciogniete);
 				wyciogniete.remove(smiec);
 				gra.naSzczyt(smiec);
@@ -392,7 +397,7 @@ public class gracz {
 		}			
 	}
 
-	//wywo³ywane na koniec tury
+	//wywoï¿½ywane na koniec tury
 	public void odzucKarty() {
 		int ile = reka.size();
 		int ileMoze = zdrowie();
@@ -409,22 +414,22 @@ public class gracz {
 	
 	
 	
-	//funkcje do testów-olaæ w finalnej implementacji
+	//funkcje do testï¿½w-olaï¿½ w finalnej implementacji
 	public void pisz() {
 		System.out.print(nick);
 		System.out.print("\n");
 	}
 	
 	public void opisz() {
-		String wyjscie = "Postaæ";
-		if(obrona()==true) {wyjscie = wyjscie+" chowa siê za beczk¹,";}
-		if(wielostrzal()==true) {wyjscie = wyjscie+" mo¿e strzelaæ wiele razy,";}
-		wyjscie = wyjscie+" ma "+zasieg()+"pkt zasiegu, inni zaœ maj¹ zasiêg do niego zwiêkszony o "+modZasiegu()+".";
+		String wyjscie = "Postaï¿½";
+		if(obrona()==true) {wyjscie = wyjscie+" chowa siï¿½ za beczkï¿½,";}
+		if(wielostrzal()==true) {wyjscie = wyjscie+" moï¿½e strzelaï¿½ wiele razy,";}
+		wyjscie = wyjscie+" ma "+zasieg()+"pkt zasiegu, inni zaï¿½ majï¿½ zasiï¿½g do niego zwiï¿½kszony o "+modZasiegu()+".";
 		System.out.println(wyjscie);
 	}
 	
 	public void opiszReke() {
-		String wyjscie = "Postaæ ma na rêce nastêpuj¹ce karty:";
+		String wyjscie = "Postaï¿½ ma na rï¿½ce nastï¿½pujï¿½ce karty:";
 		for(karta kar : reka) {
 			wyjscie = wyjscie + " " + kar.dajNazwe();
 		}

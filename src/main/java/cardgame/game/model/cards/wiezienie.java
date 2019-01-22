@@ -1,4 +1,8 @@
-package testy;
+package cardgame.game.model.cards;
+
+import cardgame.game.kontakt;
+import cardgame.game.model.cards.karta;
+import cardgame.game.model.gracz;
 
 public class wiezienie extends karta{
 	

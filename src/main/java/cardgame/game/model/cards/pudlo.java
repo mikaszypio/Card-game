@@ -1,4 +1,10 @@
-package testy;
+package cardgame.game.model.cards;
+
+import cardgame.game.model.cards.postac;
+import cardgame.game.kontakt;
+import cardgame.game.model.cards.karta;
+import cardgame.game.model.gracz;
+import cardgame.game.gra;
 
 public class pudlo extends karta{
 
@@ -27,7 +33,7 @@ public class pudlo extends karta{
 		if(name=="Calamity Janet") {
 			if(strzelec.czyStrzelal()==true)
 				if(strzelec.wielostrzal()==false) {
-				System.out.print("Nie mo¿esz strzelaæ ponownie");
+				System.out.print("Nie moï¿½esz strzelaï¿½ ponownie");
 				return false;				
 			}
 			gracz cel = kontakt.wybiezCel();

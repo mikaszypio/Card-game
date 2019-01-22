@@ -1,8 +1,26 @@
-package testy;
+package cardgame.game;
 
+import cardgame.game.model.cards.gatling;
+import cardgame.game.model.cards.eq;
+import cardgame.game.model.cards.dynamit;
+import cardgame.game.model.cards.dylizans;
+import cardgame.game.model.cards.bang;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import cardgame.game.model.gracz;
+import cardgame.game.model.cards.indianie;
+import cardgame.game.model.cards.karta;
+import cardgame.game.model.cards.kasia;
+import cardgame.game.model.cards.panika;
+import cardgame.game.model.cards.piwko;
+import cardgame.game.model.cards.pojedynek;
+import cardgame.game.model.cards.postac;
+import cardgame.game.model.cards.pudlo;
+import cardgame.game.model.cards.salon;
+import cardgame.game.model.cards.sklep;
+import cardgame.game.model.cards.welsfargo;
+import cardgame.game.model.cards.wiezienie;
 
 public class gra {
 
@@ -24,7 +42,7 @@ public class gra {
 		aktualny=0;	
 
 		for(int x=0; x<ileGraczy; x++) {
-			//tu powinno wys³aæ listê "gracze" do poszczególnego klienta
+			//tu powinno wysï¿½aï¿½ listï¿½ "gracze" do poszczegï¿½lnego klienta
 			gracz g=gracze.get(0);
 			gracze.remove(g);
 			gracze.add(g);
@@ -65,7 +83,7 @@ public class gra {
 				break;
 			default:
 				gramy=false;
-				System.out.print("Z³a iloœæ graczy");
+				System.out.print("Zï¿½a iloï¿½ï¿½ graczy");
 				break;
 		}
 		if(gramy==true) {
@@ -146,7 +164,7 @@ public class gra {
 			while(dalej==true) {
 				karta k = kontakt.wybiezKarte(gracze.get(aktualny).dajReke());
 				if(k==null) {
-					//prymitywna wersja sygna³u zakoñczenia tury
+					//prymitywna wersja sygnaï¿½u zakoï¿½czenia tury
 					dalej=false;
 				}else {
 					boolean czyWyszlo = k.zagraj();
@@ -160,7 +178,7 @@ public class gra {
 		}
 	}
 	
-	//wyci¹ga i zwraca kartê z talii
+	//wyciï¿½ga i zwraca kartï¿½ z talii
 	public static karta dobiez() {
 		karta wynik;
 		if(szczyt==null) {
@@ -190,17 +208,17 @@ public class gra {
 		}
 	}
 	
-	//ciepie kartê na cmentarz
+	//ciepie kartï¿½ na cmentarz
 	public static void odzuc(karta k) {
 		cmentaz.add(k);
 	}
 	
-	//liczy odleg³oœæ miêdzy graczami
+	//liczy odlegï¿½oï¿½ï¿½ miï¿½dzy graczami
 	public static int policzDystans(gracz jeden, gracz dwa) {
 		int pierwszy = dajNumerGracza(jeden);
 		int drugi = dajNumerGracza(dwa);
 		if(pierwszy ==-1 || drugi==-1) {
-			System.out.print("liczenie dystansu-przysz³y z³e dane");
+			System.out.print("liczenie dystansu-przyszï¿½y zï¿½e dane");
 			return 0;
 		}else {
 			if(pierwszy>drugi) {
@@ -218,7 +236,7 @@ public class gra {
 		}		
 	}
 	
-	//te dwie funckje sprawdzaj¹ pokera (efekt bary³ki, dynamitu itd). w³¹cznie z doci¹gniêciem karty i wyrzuceniem jej
+	//te dwie funckje sprawdzajï¿½ pokera (efekt baryï¿½ki, dynamitu itd). wï¿½ï¿½cznie z dociï¿½gniï¿½ciem karty i wyrzuceniem jej
 	public static boolean poker(String kolor) {
 		karta kart = dobiez();
 		boolean wynik;
@@ -258,7 +276,7 @@ public class gra {
 		}
 		gracz sep = null;
 		for(gracz zywy : gracze) {
-			if(zywy.dajPostac().dajNazwe()=="Sam Sêp") {
+			if(zywy.dajPostac().dajNazwe()=="Sam Sï¿½p") {
 				sep=zywy;
 			}
 		}
@@ -331,7 +349,7 @@ public class gra {
 				}
 			}
 		}
-		//tutaj musi byæ jakiœ eksport list wygrali i przegrali do systemu rankingowego
+		//tutaj musi byï¿½ jakiï¿½ eksport list wygrali i przegrali do systemu rankingowego
 		System.exit(0);
 	}
 	
@@ -357,9 +375,9 @@ public class gra {
 		talia.add(tmp);
 		tmp = new eq(9, "Luneta", 14, "pik", false, 1, 0, false, false);
 		talia.add(tmp);
-		tmp = new eq(10, "Bary³ka", 14, "pik", false, 0, 0, true, false);
+		tmp = new eq(10, "Baryï¿½ka", 14, "pik", false, 0, 0, true, false);
 		talia.add(tmp);
-		tmp = new eq(11, "Bary³ka", 12, "pik", false, 0, 0, true, false);
+		tmp = new eq(11, "Baryï¿½ka", 12, "pik", false, 0, 0, true, false);
 		talia.add(tmp);
 		tmp = new eq(12, "Mustang", 8, "kier", false, 0, 1, false, false);
 		talia.add(tmp);
@@ -431,43 +449,43 @@ public class gra {
 		talia.add(tmp);
 		tmp = new welsfargo(46, "Wells Fargo", 3, "kier");
 		talia.add(tmp);
-		tmp = new dylizans(47, "Dyli¿ans", 9, "pik");
+		tmp = new dylizans(47, "Dyliï¿½ans", 9, "pik");
 		talia.add(tmp);
-		tmp = new dylizans(48, "Dyli¿ans", 9, "pik");
+		tmp = new dylizans(48, "Dyliï¿½ans", 9, "pik");
 		talia.add(tmp);
-		tmp = new wiezienie(49, "Wiêzienie", 4, "kier");
+		tmp = new wiezienie(49, "Wiï¿½zienie", 4, "kier");
 		talia.add(tmp);
-		tmp = new wiezienie(50, "Wiêzienie", 11, "pik");
+		tmp = new wiezienie(50, "Wiï¿½zienie", 11, "pik");
 		talia.add(tmp);
-		tmp = new wiezienie(51, "Wiêzienie", 10, "pik");
+		tmp = new wiezienie(51, "Wiï¿½zienie", 10, "pik");
 		talia.add(tmp);
 		tmp = new salon(52, "Saloon", 5, "kier");
 		talia.add(tmp);
 		tmp = new gatling(53, "Gatling", 10, "kier");
 		talia.add(tmp);
-		tmp = new pudlo(54, "Pud³o", 2, "pik");
+		tmp = new pudlo(54, "Pudï¿½o", 2, "pik");
 		talia.add(tmp);
-		tmp = new pudlo(55, "Pud³o", 3, "pik");
+		tmp = new pudlo(55, "Pudï¿½o", 3, "pik");
 		talia.add(tmp);
-		tmp = new pudlo(56, "Pud³o", 4, "pik");
+		tmp = new pudlo(56, "Pudï¿½o", 4, "pik");
 		talia.add(tmp);
-		tmp = new pudlo(57, "Pud³o", 5, "pik");
+		tmp = new pudlo(57, "Pudï¿½o", 5, "pik");
 		talia.add(tmp);
-		tmp = new pudlo(58, "Pud³o", 6, "pik");
+		tmp = new pudlo(58, "Pudï¿½o", 6, "pik");
 		talia.add(tmp);
-		tmp = new pudlo(59, "Pud³o", 7, "pik");
+		tmp = new pudlo(59, "Pudï¿½o", 7, "pik");
 		talia.add(tmp);
-		tmp = new pudlo(60, "Pud³o", 8, "pik");
+		tmp = new pudlo(60, "Pudï¿½o", 8, "pik");
 		talia.add(tmp);
-		tmp = new pudlo(61, "Pud³o", 10, "trefl");
+		tmp = new pudlo(61, "Pudï¿½o", 10, "trefl");
 		talia.add(tmp);
-		tmp = new pudlo(62, "Pud³o", 11, "trefl");
+		tmp = new pudlo(62, "Pudï¿½o", 11, "trefl");
 		talia.add(tmp);
-		tmp = new pudlo(63, "Pud³o", 12, "trefl");
+		tmp = new pudlo(63, "Pudï¿½o", 12, "trefl");
 		talia.add(tmp);
-		tmp = new pudlo(64, "Pud³o", 13, "trefl");
+		tmp = new pudlo(64, "Pudï¿½o", 13, "trefl");
 		talia.add(tmp);
-		tmp = new pudlo(65, "Pud³o", 14, "trefl");
+		tmp = new pudlo(65, "Pudï¿½o", 14, "trefl");
 		talia.add(tmp);
 		tmp = new kasia(66, "Kasia Balou", 13, "kier");
 		talia.add(tmp);
@@ -511,7 +529,7 @@ public class gra {
 		lista.add(tmp);
 		tmp = new postac(3, 4, "Calamity Janet");  //done
 		lista.add(tmp);
-		tmp = new postac(4, 3, "El Gringo");  //gdy oberwie, zabiera kartê z ³apy tego, co go zrani³ (nie dzia³a przy wybuchu dynamitu)
+		tmp = new postac(4, 3, "El Gringo");  //gdy oberwie, zabiera kartï¿½ z ï¿½apy tego, co go zraniï¿½ (nie dziaï¿½a przy wybuchu dynamitu)
 		//lista.add(tmp);
 		tmp = new postac(5, 4, "Jesse Jones");  //done
 		lista.add(tmp);
@@ -527,13 +545,13 @@ public class gra {
 		lista.add(tmp);
 		tmp = new postac(11, 4, "Rose Doolan");  //done
 		lista.add(tmp);
-		tmp = new postac(12, 4, "Sid Ketchum");  //W DOWOLNYM MOMENCIE mo¿e spaliæ dwie karty z ³apy by wylezyæ 1hp.
+		tmp = new postac(12, 4, "Sid Ketchum");  //W DOWOLNYM MOMENCIE moï¿½e spaliï¿½ dwie karty z ï¿½apy by wylezyï¿½ 1hp.
 		//lista.add(tmp);
-		tmp = new postac(13, 4, "Slab Zabójca");  //done
+		tmp = new postac(13, 4, "Slab Zabï¿½jca");  //done
 		lista.add(tmp);
-		tmp = new postac(14, 4, "Suzy Lafayette");  //gdy ma pust¹ rêkê, dobieta kartê z talii
+		tmp = new postac(14, 4, "Suzy Lafayette");  //gdy ma pustï¿½ rï¿½kï¿½, dobieta kartï¿½ z talii
 		//lista.add(tmp);
-		tmp = new postac(15, 4, "Sam Sêp");  //done
+		tmp = new postac(15, 4, "Sam Sï¿½p");  //done
 		lista.add(tmp);
 		tmp = new postac(16, 4, "Willy the Kid");  //done
 		lista.add(tmp);	
@@ -545,7 +563,7 @@ public class gra {
 	
 	
 	
-	//testowe - jak bêdzie siê implementowa³o finaln¹ wersjê to mo¿na olaæ
+	//testowe - jak bï¿½dzie siï¿½ implementowaï¿½o finalnï¿½ wersjï¿½ to moï¿½na olaï¿½
 	public void napiszTalie() {
 		System.out.print("\nTalia:\n");
 		if(talia.size()>0) {

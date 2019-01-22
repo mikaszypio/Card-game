@@ -1,5 +1,10 @@
-package testy;
+package cardgame.game.model.cards;
 
+import cardgame.game.kontakt;
+import cardgame.game.model.cards.karta;
+import cardgame.game.model.gracz;
+import cardgame.game.gra;
+import cardgame.game.model.cards.eq;
 import java.util.List;
 import java.util.Random;
 
@@ -29,7 +34,7 @@ public class panika extends karta{
 		int dystans = gra.policzDystans(strzelec, cel);
 		int zasieg = strzelec.zasiegCzysty() - cel.modZasiegu();
 		if(dystans>zasieg) {
-			System.out.print("Nie siêgniesz");
+			System.out.print("Nie siï¿½gniesz");
 			return false;
 		}else {
 			String co = kontakt.coChceszZniszczyc();

@@ -1,5 +1,8 @@
-package testy;
+package cardgame.game.model.cards;
 
+import cardgame.game.model.cards.karta;
+import cardgame.game.model.gracz;
+import cardgame.game.gra;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +41,7 @@ public class sklep extends karta{
 		
 		for(int x = 0; x<ile; x++) {
 			//karta wybrana = kontakt.wybiezKarte(karty);
-			//w tym momencie automatycznie wybiera siê, kto jak¹ kartê dostanie. Po ogarniêciu clasy kontakt bêdzie mo¿na korzystaæ z jej funkcji by gracze wybierali
+			//w tym momencie automatycznie wybiera siï¿½, kto jakï¿½ kartï¿½ dostanie. Po ogarniï¿½ciu clasy kontakt bï¿½dzie moï¿½na korzystaï¿½ z jej funkcji by gracze wybierali
 			karta wybrana = karty.get(0);
 			karty.remove(wybrana);
 			gracze.get(aktualny).doReki(wybrana);

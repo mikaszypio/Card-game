@@ -1,10 +1,12 @@
-package testy;
+package cardgame.game.model.cards;
 
 import java.util.List;
+import cardgame.game.gra;
+import cardgame.game.model.gracz;
 
-public class salon extends karta{
-
-	public salon(int id, String naz, int num, String col) {
+public class gatling extends karta{
+	
+	public gatling(int id, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
@@ -13,7 +15,7 @@ public class salon extends karta{
 		kolor=col;
 	}
 	
-	public salon(int id, String obraz, String opek, String naz, int num, String col) {
+	public gatling(int id, String obraz, String opek, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
@@ -25,7 +27,7 @@ public class salon extends karta{
 	public boolean zagraj() {
 		List<gracz> gracze = gra.dajGraczy();
 		for(gracz g : gracze) {
-			g.lecz(1);
+			g.postrzel();
 		}		
 		return true;
 	}

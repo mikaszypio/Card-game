@@ -1,5 +1,7 @@
-package testy;
+package cardgame.game.model.cards;
 
+import cardgame.game.model.gracz;
+import cardgame.game.gra;
 import java.util.List;
 
 public class indianie extends karta{

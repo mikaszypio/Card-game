@@ -1,8 +1,11 @@
-package testy;
+package cardgame.game.model.cards;
 
-public class welsfargo extends karta{
+import cardgame.game.gra;
+import cardgame.game.model.gracz;
+
+public class dylizans extends karta{
 	
-	public welsfargo(int id, String naz, int num, String col) {
+	public dylizans(int id, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
@@ -11,7 +14,7 @@ public class welsfargo extends karta{
 		kolor=col;
 	}
 	
-	public welsfargo(int id, String obraz, String opek, String naz, int num, String col) {
+	public dylizans(int id, String obraz, String opek, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
@@ -22,7 +25,6 @@ public class welsfargo extends karta{
 	
 	public boolean zagraj() {
 		gracz g =gra.dajAktualnegoGracza();
-		g.dobiezKarte();
 		g.dobiezKarte();
 		g.dobiezKarte();
 		return true;

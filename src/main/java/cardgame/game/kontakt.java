@@ -1,19 +1,22 @@
-package testy;
+package cardgame.game;
 
+import cardgame.game.model.cards.karta;
+import cardgame.game.model.gracz;
+import cardgame.game.gra;
 import java.util.List;
 import java.util.Scanner;
 
 public class kontakt {
-	//ca³a klasa jest œmieciem do testowania, finalnie zast¹pi siê j¹ metodami ³¹cz¹cymi siê z gui
-	//acz nawet teraz nie chce w pe³ni dzia³aæ momentami
+	//caï¿½a klasa jest ï¿½mieciem do testowania, finalnie zastï¿½pi siï¿½ jï¿½ metodami ï¿½ï¿½czï¿½cymi siï¿½ z gui
+	//acz nawet teraz nie chce w peï¿½ni dziaï¿½aï¿½ momentami
 	public static karta wybiezKarte(List<karta> reka) {
 		while(true) {
-			System.out.print("Twoja rêka\n");
+			System.out.print("Twoja rï¿½ka\n");
 			for(karta kar : reka) {
 				String wyjscie = kar.dajID() + "-" + kar.dajNazwe() + "\n";
 				System.out.print(wyjscie);
 			}
-			System.out.print("Wybiez kartê (wpisz numer)\n");
+			System.out.print("Wybiez kartï¿½ (wpisz numer)\n");
 			Scanner reader = new Scanner(System.in);
 			int id = reader.nextInt();
 			reader.close();
@@ -27,7 +30,7 @@ public class kontakt {
 	
 	public static String coChceszZniszczyc() {
 		while(true) {
-			System.out.print("Co chcesz mu zniszczyæ? Kartê z rêki, broñ czy dodatek? (R/B/D)");			
+			System.out.print("Co chcesz mu zniszczyï¿½? Kartï¿½ z rï¿½ki, broï¿½ czy dodatek? (R/B/D)");			
 			Scanner reader = new Scanner(System.in);
 			String wynik = reader.nextLine();
 			reader.close();
@@ -59,7 +62,7 @@ public class kontakt {
 	}
 	
 	public static boolean czyOdzucic(String nazwa, String zrodlo) {
-		System.out.print("Czy chcesz zu¿yæ kartê " + nazwa + " by ustrzec siê przed " + zrodlo + "(1/0)\n");
+		System.out.print("Czy chcesz zuï¿½yï¿½ kartï¿½ " + nazwa + " by ustrzec siï¿½ przed " + zrodlo + "(1/0)\n");
 		while(true) {
 			Scanner reader = new Scanner(System.in);
 			int wynik = reader.nextInt();
@@ -70,12 +73,12 @@ public class kontakt {
 			if(wynik==0) {
 				return false;
 			}
-			System.out.print("Nie rozpoznano odpowiedzi, spróbuj jeszcze raz. \n");
+			System.out.print("Nie rozpoznano odpowiedzi, sprï¿½buj jeszcze raz. \n");
 		}
 	}
 	
 	public static boolean czyDobracInaczej() {
-		System.out.print("Czy chcesz dobraæ kartê w inny sposób ni¿ z talii (1/0)\n");
+		System.out.print("Czy chcesz dobraï¿½ kartï¿½ w inny sposï¿½b niï¿½ z talii (1/0)\n");
 		while(true) {
 			Scanner reader = new Scanner(System.in);
 			int wynik = reader.nextInt();
@@ -86,7 +89,7 @@ public class kontakt {
 			if(wynik==0) {
 				return false;
 			}
-			System.out.print("Nie rozpoznano odpowiedzi, spróbuj jeszcze raz. \n");
+			System.out.print("Nie rozpoznano odpowiedzi, sprï¿½buj jeszcze raz. \n");
 		}
 	}
 }

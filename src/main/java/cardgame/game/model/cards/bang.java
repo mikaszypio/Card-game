@@ -1,4 +1,8 @@
-package testy;
+package cardgame.game.model.cards;
+
+import cardgame.game.gra;
+import cardgame.game.model.gracz;
+import cardgame.game.kontakt;
 
 public class bang extends karta{
 	
@@ -27,7 +31,7 @@ public class bang extends karta{
 		String name = p.dajNazwe();
 		if(strzelec.czyStrzelal()==true)
 			if(strzelec.wielostrzal()==false && name!="Willy the Kid") {
-			System.out.print("Nie mo¿esz strzelaæ ponownie");
+			System.out.print("Nie moï¿½esz strzelaï¿½ ponownie");
 			return false;				
 		}
 		int dystans = gra.policzDystans(strzelec, cel);
@@ -36,7 +40,7 @@ public class bang extends karta{
 			System.out.print("Nie dostrzelisz");
 			return false;
 		}else {
-			if(name=="Slab Zabójca") {
+			if(name=="Slab Zabï¿½jca") {
 				cel.postrzelBardziej();
 			}else {
 				cel.postrzel();
