@@ -48,6 +48,13 @@
             <artifactId>postgresql</artifactId>
             <version>42.2.5</version>
         </dependency>
+        
+        <!-- org.hsqldb -->
+        <dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.4.1</version>
+        </dependency>
                 
         <!-- org.webjars dependencies -->
         <dependency>
