@@ -10,4 +10,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	
 	@Query("select u from User u where u.role.name = player")
 	public List<User> findAllPlayers(Sort sort);
+	
+	public User findByUsername(String username);
 }
