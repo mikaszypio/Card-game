@@ -1,8 +1,8 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.gra;
-import cardgame.game.model.gracz;
 import cardgame.game.kontakt;
+import cardgame.game.model.gracz;
 
 public class bang extends karta{
 	

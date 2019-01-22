@@ -2,7 +2,6 @@ package cardgame.game;
 
 import cardgame.game.model.cards.karta;
 import cardgame.game.model.gracz;
-import cardgame.game.gra;
 import java.util.List;
 import java.util.Scanner;
 

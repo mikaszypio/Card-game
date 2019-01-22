@@ -1,13 +1,13 @@
 package cardgame.game.model;
 
 import cardgame.game.gra;
+import cardgame.game.kontakt;
 import cardgame.game.model.cards.eq;
+import cardgame.game.model.cards.karta;
+import cardgame.game.model.cards.postac;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import cardgame.game.model.cards.karta;
-import cardgame.game.kontakt;
-import cardgame.game.model.cards.postac;
 
 public class gracz {
 

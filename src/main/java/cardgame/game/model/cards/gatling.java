@@ -1,8 +1,8 @@
 package cardgame.game.model.cards;
 
-import java.util.List;
 import cardgame.game.gra;
 import cardgame.game.model.gracz;
+import java.util.List;
 
 public class gatling extends karta{
 	

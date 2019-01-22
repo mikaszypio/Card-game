@@ -1,10 +1,8 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.kontakt;
-import cardgame.game.model.cards.karta;
-import cardgame.game.model.gracz;
 import cardgame.game.gra;
-import cardgame.game.model.cards.eq;
+import cardgame.game.kontakt;
+import cardgame.game.model.gracz;
 import java.util.List;
 import java.util.Random;
 

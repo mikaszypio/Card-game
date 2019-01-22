@@ -1,14 +1,10 @@
 package cardgame.game;
 
-import cardgame.game.model.cards.gatling;
-import cardgame.game.model.cards.eq;
-import cardgame.game.model.cards.dynamit;
-import cardgame.game.model.cards.dylizans;
 import cardgame.game.model.cards.bang;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import cardgame.game.model.gracz;
+import cardgame.game.model.cards.dylizans;
+import cardgame.game.model.cards.dynamit;
+import cardgame.game.model.cards.eq;
+import cardgame.game.model.cards.gatling;
 import cardgame.game.model.cards.indianie;
 import cardgame.game.model.cards.karta;
 import cardgame.game.model.cards.kasia;
@@ -21,6 +17,10 @@ import cardgame.game.model.cards.salon;
 import cardgame.game.model.cards.sklep;
 import cardgame.game.model.cards.welsfargo;
 import cardgame.game.model.cards.wiezienie;
+import cardgame.game.model.gracz;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class gra {
 

@@ -1,8 +1,5 @@
 package cardgame.game.model.cards;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class postac {
 
 	private int maxHp;

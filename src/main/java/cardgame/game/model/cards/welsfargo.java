@@ -1,8 +1,7 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.model.cards.karta;
-import cardgame.game.model.gracz;
 import cardgame.game.gra;
+import cardgame.game.model.gracz;
 
 public class welsfargo extends karta{
 	
