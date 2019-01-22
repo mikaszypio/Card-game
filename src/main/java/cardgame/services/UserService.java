@@ -64,7 +64,7 @@ public class UserService implements IUserService {
 			user.setGamesWon(user.getGamesWon() +1);
 			return user;
 		}).map((user) -> {
-			user.equals(recalculateScore(user));
+			user.setScore(recalculateScore(user));
 			return user;
 		}).forEachOrdered((user) -> {
 			userRepository.save(user);
