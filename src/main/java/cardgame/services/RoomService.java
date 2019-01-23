@@ -78,18 +78,21 @@ public class RoomService implements IRoomService {
 		return roomRepository.save(room);
 	}
 	
+	@Override
 	public void startGame() {
 		Gra game = new Gra(new ArrayList<> ());
 		game.start();
 	}
 	
+	@Override
 	public Gracz userToPlayer(User user) {
 		Gracz player = new Gracz(user.getUsername(), user.getUserId());
 		return player;
 	}
 	
+	@Override
 	public List<Gracz> listOfPlayers(Room room){
-		List<Gracz> playersList = new ArrayList<Gracz>();
+		List<Gracz> playersList = new ArrayList<>();
 		List<User> usersList = getRoomUsers(room);
 		for(User user : usersList) {
 			playersList.add(userToPlayer(user));
