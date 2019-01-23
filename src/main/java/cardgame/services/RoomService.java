@@ -77,4 +77,23 @@ public class RoomService implements IRoomService {
 		
 		return roomRepository.save(room);
 	}
+	
+	public void startGame() {
+		Gra game = new Gra(new ArrayList<> ());
+		game.start();
+	}
+	
+	public Gracz userToPlayer(User user) {
+		Gracz player = new Gracz(user.getUsername(), user.getUserId());
+		return player;
+	}
+	
+	public List<Gracz> listOfPlayers(Room room){
+		List<Gracz> playersList = new ArrayList<Gracz>();
+		List<User> usersList = getRoomUsers(room);
+		for(User user : usersList) {
+			playersList.add(userToPlayer(user));
+		}
+		return playersList;
+	}
 }
