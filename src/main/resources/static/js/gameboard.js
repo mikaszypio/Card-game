@@ -1,4 +1,4 @@
-document.addEventListener('readystatechange', event => {
+document.addEventListener("DOMContentLoaded", event => {
 	var prevBox = document.getElementById("gb-preview");
 	var playersBox = document.getElementById("gb-players");
 	var handBox = document.getElementById("gb-hand");
@@ -71,255 +71,10 @@ document.addEventListener('readystatechange', event => {
 		{ name: "bang", b: "orange", suit: "tiles", symbol: "Q" }
 	];
 	var turnID = 2;
-
-	function drawPlayers() {
-		playersBox.innerHTML = "";
-		var i = 0;
-		var len = players.length;
-
-		for(var i=0; i<len; i++) {
-			var playerNode = document.createElement("div");
-			playerNode.id = players[i].id;
-			playerNode.classList.add("gb-player");
-
-			if(turnID == players[i].id){
-				playerTurn = document.createElement("div");
-				playerTurn.classList.add("gb-turn");
-
-				playerNode.appendChild(playerTurn);
-
-			}
-
-			var playerRole = document.createElement("div");
-			playerRole.classList.add("gb-role");
-			if('role' in players[i]){
-				playerRole.style.display = "block";
-				playerRole.classList.add("gb-r"+players[i].role);
-			} else {
-				playerRole.style.display = "none";
-			}
-
-			var playerCharacter = document.createElement("div");
-			playerCharacter.classList.add("gb-portrait", "gb-ch"+players[i].ch);
-
-			var playerInfo = document.createElement("div");
-			playerInfo.classList.add("gb-info");
-
-			var playerName = document.createElement("div");
-			playerName.classList.add("gb-name");
-			playerName.innerHTML = players[i].name;
-
-			var playerStats = document.createElement("div");
-			playerStats.classList.add("gb-stats");
-
-			var playerHealth = document.createElement("div");
-			playerHealth.classList.add("gb-hp");
-			playerHealth.innerHTML = players[i].hp;
-
-			var playerCards = document.createElement("div");
-			playerCards.classList.add("gb-cards");
-			playerCards.innerHTML = players[i].cards;
-
-			playerStats.appendChild(playerHealth);
-			playerStats.appendChild(playerCards);
-
-			var playerItems = document.createElement("div");
-			playerItems.classList.add("gb-items");
-
-			players[i].items.forEach(function (item) {
-			var itemNode = drawCard(item);
-			itemNode.classList.remove("gb-card");
-			itemNode.classList.remove("gb-small");
-			itemNode.getElementsByClassName("gb-card-symbol")[0].style.display = "none";
-			itemNode.classList.add("gb-icon");
-			playerItems.appendChild(itemNode);
-			});
-
-			playerInfo.appendChild(playerName);
-			playerInfo.appendChild(playerStats);
-			playerInfo.appendChild(playerItems);
-
-			playerNode.appendChild(playerRole);
-			playerNode.appendChild(playerCharacter);
-			playerNode.appendChild(playerInfo);
-
-			if(i==0) {
-				playerNode.style.left = boardPts.center + "px";
-				playerNode.style.top = boardPts.bottom + "px";
-			} else {
-				playerNode.style.left = playersPos[len]['p'+(i+1)].x + "px";
-				playerNode.style.top = playersPos[len]['p'+(i+1)].y + "px";
-			}
-			if(playerNode)
-			playersBox.appendChild(playerNode);
-		}
-		// drawHand();
-		// if(turnID === players[0].id){
-		// 	let element = document.querySelectorAll('.gb-card');
-		// 	element.forEach(function(el) {
-		// 		el.onclick = function () {
-		// 			console.log(hand[whichChild(this)].name);
-		// 		};
-		// 	});
-		// }
-		
-	}
-
-	function draw(){
-		drawPlayers();
-		drawHand();
-		drawStack();
-	}
-
-	function myTurn(){
-		draw();
-		let container = document.querySelector('#gb-hand');
-		let element = container.querySelectorAll('.gb-card');
-		element.forEach(function(el) {
-			el.onclick = function () {
-			console.log(hand[whichChild(this)].name);
-			};
-		});
-	}
-
-
-	function targetPlayer(){
-		draw();
-		let element = document.querySelectorAll('.gb-player');
-		element.forEach(function(el) {
-			el.onclick = function () {
-			console.log(players[whichChild(this)].name);
-			};
-		});
-	}
-
-	function drawCard(card, size = "small"){
-		var cardNode = document.createElement("div");
-
-		var cardName = "gb-" + card.name;
-		var cardBorder = "gb-b-" + card.b;
-		var cardSuit = "gb-" + card.suit;
-		var cardSize = "gb-" + size;
-
-		cardNode.classList.add("gb-card", 
-			cardName, cardBorder, cardSuit, cardSize);
-
-		var cardSymbolNode = document.createElement("span");
-		cardSymbolNode.classList.add("gb-card-symbol");
-		cardSymbolNode.innerHTML = card.symbol;
-
-		cardNode.appendChild(cardSymbolNode);
-
-		return cardNode;
-	}
-
-	function whichChild(elem){
-		var  i= 0;
-		while((elem=elem.previousSibling)!=null) ++i;
-		return i;
-	}
-
-	function drawHand() {
-		handBox.innerHTML = "";
-		var handWidth = handBox.offsetWidth;
-		var cardsCount = hand.length;
-		for(var i=0; i<cardsCount; i++) {
-			card = drawCard(hand[i]);
-			handBox.appendChild(card);
-		}
-		var cards = handBox.getElementsByClassName("gb-card");
-
-		if(handWidth < cardsCount * 72){
-			var cardSpacing = (handWidth - 72) / (cardsCount - 1);
-
-			for(let i = 0; i < cardsCount-1; ++i){
-				cards[i].style.left = i * cardSpacing + "px";
-			}
-			cards[cardsCount-1].style.left = handWidth - 72 + "px";
-		} else {
-			var center = Math.abs((handWidth - (cardsCount * 72)) / 2);
-
-			for(let i = 0; i < cardsCount; ++i){
-				cards[i].style.left = (i * 72 + center) + "px";
-			}
-		}
-	}
-
-	function drawStack(card = stack[0],size = "small") {
-		stackBox.style.left = boardPts.center + "px";
-		stackBox.style.top = boardPts.middle + "px";
-		var cardNode = document.createElement("div");
-
-		var cardName = "gb-" + card.name;
-		var cardBorder = "gb-b-" + card.b;
-		var cardSuit = "gb-" + card.suit;
-		var cardSize = "gb-" + size;
-
-		cardNode.classList.add("gb-card", 
-			cardName, cardBorder, cardSuit, cardSize);
-
-		var cardSymbolNode = document.createElement("span");
-		cardSymbolNode.classList.add("gb-card-symbol");
-		cardSymbolNode.innerHTML = card.symbol;
-
-		cardNode.appendChild(cardSymbolNode);
-		stackBox.appendChild(cardNode);
-	}
-
-	function previewCard(cardNode) {
-		var prevCard = cardNode.cloneNode(true);
-
-		prevCard.classList.remove("gb-small");
-		prevCard.classList.add("gb-medium");
-		prevCard.removeAttribute("style");
-
-		var prevDesc = document.createElement("div");
-
-		prevDesc.classList.add("gb-card-desc");
-		prevDesc.innerHTML = cardDesc;
-		
-		prevBox.appendChild(prevCard);
-		prevBox.appendChild(prevDesc);
-	}
-
-	function previewCharacter(charNode) {
-		var prevChar = charNode.cloneNode(true);
-
-		prevChar.classList.add("gb-large");
-
-		var prevDesc = document.createElement("div");
-
-		prevDesc.classList.add("gb-char-desc");
-		prevDesc.innerHTML = charDesc;
-
-		prevBox.appendChild(prevChar);
-		prevBox.appendChild(prevDesc);
-	}
-
-	function addCardToHand(card) {
-		hand.push(card);
-		drawHand();
-	}
-
-	function removeCardFromHand() {
-		hand.pop();
-		drawHand();
-	}
-
-	function changeTurnRNG(){
-		var playerID =  Math.floor(Math.random() * players.length);
-		turnID = players[playerID].id;
-		draw();
-		
-		if(turnID === players[0].id){
-			myTurn();
-		}
-	}
-
 	var bangCard = { name: "bang", b: "orange", suit: "hearts", symbol: "8" };
 	var cardDesc = "Zadaje jeden punkt obrażeń wybranemu graczowi.";
 	var charDesc = "Brzydki Bill";
-
+	
 
 	$(document).off('mouseover', '.gb-card').on('mouseover', '.gb-card', function(event) {
 		previewCard(this);
@@ -349,39 +104,275 @@ document.addEventListener('readystatechange', event => {
 	$( "#btt4" ).click(function() {
 		targetPlayer();
 	});
+	
+
+//Function declarations------------------------------------------------------------------------
+function addCardToHand(card) {
+	hand.push(card);
+	drawHand();
+}
+
+function removeCardFromHand() {
+	hand.pop();
+	drawHand();
+}
+
+function changeTurnRNG(){
+	var playerID =  Math.floor(Math.random() * players.length);
+	turnID = players[playerID].id;
 	draw();
-	var stompClient = null;
-	function connect() {
-		var socket = new SockJS('/chat-socket');
-		stompClient = Stomp.over(socket);
-		stompClient.connect({}, function (frame) {
-			//setConnected(true);
-			console.log('Connected: ' + frame);
-			stompClient.subscribe('/chat/1', function (message) {
-				postMessage(JSON.parse(message.body));
-			});
-		});
+	
+	if(turnID === players[0].id){
+		myTurn();
 	}
-	connect();
+}
+function previewCard(cardNode) {
+	var prevCard = cardNode.cloneNode(true);
+
+	prevCard.classList.remove("gb-small");
+	prevCard.classList.add("gb-medium");
+	prevCard.removeAttribute("style");
+
+	var prevDesc = document.createElement("div");
+
+	prevDesc.classList.add("gb-card-desc");
+	prevDesc.innerHTML = cardDesc;
+	
+	prevBox.appendChild(prevCard);
+	prevBox.appendChild(prevDesc);
+}
+
+function previewCharacter(charNode) {
+	var prevChar = charNode.cloneNode(true);
+
+	prevChar.classList.add("gb-large");
+
+	var prevDesc = document.createElement("div");
+
+	prevDesc.classList.add("gb-char-desc");
+	prevDesc.innerHTML = charDesc;
+
+	prevBox.appendChild(prevChar);
+	prevBox.appendChild(prevDesc);
+}
+function drawCard(card, size = "small"){
+	var cardNode = document.createElement("div");
+
+	var cardName = "gb-" + card.name;
+	var cardBorder = "gb-b-" + card.b;
+	var cardSuit = "gb-" + card.suit;
+	var cardSize = "gb-" + size;
+
+	cardNode.classList.add("gb-card", 
+		cardName, cardBorder, cardSuit, cardSize);
+
+	var cardSymbolNode = document.createElement("span");
+	cardSymbolNode.classList.add("gb-card-symbol");
+	cardSymbolNode.innerHTML = card.symbol;
+
+	cardNode.appendChild(cardSymbolNode);
+
+	return cardNode;
+}
+
+function whichChild(elem){
+	var  i= 0;
+	while((elem=elem.previousSibling)!=null) ++i;
+	return i;
+}
+
+function drawHand() {
+	handBox.innerHTML = "";
+	var handWidth = handBox.offsetWidth;
+	var cardsCount = hand.length;
+	for(var i=0; i<cardsCount; i++) {
+		card = drawCard(hand[i]);
+		handBox.appendChild(card);
+	}
+	var cards = handBox.getElementsByClassName("gb-card");
+
+	if(handWidth < cardsCount * 72){
+		var cardSpacing = (handWidth - 72) / (cardsCount - 1);
+
+		for(let i = 0; i < cardsCount-1; ++i){
+			cards[i].style.left = i * cardSpacing + "px";
+		}
+		cards[cardsCount-1].style.left = handWidth - 72 + "px";
+	} else {
+		var center = Math.abs((handWidth - (cardsCount * 72)) / 2);
+
+		for(let i = 0; i < cardsCount; ++i){
+			cards[i].style.left = (i * 72 + center) + "px";
+		}
+	}
+}
+
+function drawStack(card = stack[0],size = "small") {
+	stackBox.style.left = boardPts.center + "px";
+	stackBox.style.top = boardPts.middle + "px";
+	var cardNode = document.createElement("div");
+
+	var cardName = "gb-" + card.name;
+	var cardBorder = "gb-b-" + card.b;
+	var cardSuit = "gb-" + card.suit;
+	var cardSize = "gb-" + size;
+
+	cardNode.classList.add("gb-card", 
+		cardName, cardBorder, cardSuit, cardSize);
+
+	var cardSymbolNode = document.createElement("span");
+	cardSymbolNode.classList.add("gb-card-symbol");
+	cardSymbolNode.innerHTML = card.symbol;
+
+	cardNode.appendChild(cardSymbolNode);
+	stackBox.appendChild(cardNode);
+}
+
+function draw(){
+	drawPlayers();
+	drawHand();
+	drawStack();
+}
+
+function myTurn(){
+	draw();
+	let container = document.querySelector('#gb-hand');
+	let element = container.querySelectorAll('.gb-card');
+	element.forEach(function(el) {
+		el.onclick = function () {
+		console.log(hand[whichChild(this)].name);
+		};
+	});
+}
+
+
+function targetPlayer(){
+	draw();
+	let element = document.querySelectorAll('.gb-player');
+	element.forEach(function(el) {
+		el.onclick = function () {
+		console.log(players[whichChild(this)].name);
+		};
+	});
+}
+
+function drawPlayers() {
+	playersBox.innerHTML = "";
+	var i = 0;
+	var len = players.length;
+
+	for(var i=0; i<len; i++) {
+		var playerNode = document.createElement("div");
+		playerNode.id = players[i].id;
+		playerNode.classList.add("gb-player");
+
+		if(turnID == players[i].id){
+			playerTurn = document.createElement("div");
+			playerTurn.classList.add("gb-turn");
+
+			playerNode.appendChild(playerTurn);
+
+		}
+
+		var playerRole = document.createElement("div");
+		playerRole.classList.add("gb-role");
+		if('role' in players[i]){
+			playerRole.style.display = "block";
+			playerRole.classList.add("gb-r"+players[i].role);
+		} else {
+			playerRole.style.display = "none";
+		}
+
+		var playerCharacter = document.createElement("div");
+		playerCharacter.classList.add("gb-portrait", "gb-ch"+players[i].ch);
+
+		var playerInfo = document.createElement("div");
+		playerInfo.classList.add("gb-info");
+
+		var playerName = document.createElement("div");
+		playerName.classList.add("gb-name");
+		playerName.innerHTML = players[i].name;
+
+		var playerStats = document.createElement("div");
+		playerStats.classList.add("gb-stats");
+
+		var playerHealth = document.createElement("div");
+		playerHealth.classList.add("gb-hp");
+		playerHealth.innerHTML = players[i].hp;
+
+		var playerCards = document.createElement("div");
+		playerCards.classList.add("gb-cards");
+		playerCards.innerHTML = players[i].cards;
+
+		playerStats.appendChild(playerHealth);
+		playerStats.appendChild(playerCards);
+
+		var playerItems = document.createElement("div");
+		playerItems.classList.add("gb-items");
+
+		players[i].items.forEach(function (item) {
+		var itemNode = drawCard(item);
+		itemNode.classList.remove("gb-card");
+		itemNode.classList.remove("gb-small");
+		itemNode.getElementsByClassName("gb-card-symbol")[0].style.display = "none";
+		itemNode.classList.add("gb-icon");
+		playerItems.appendChild(itemNode);
+		});
+
+		playerInfo.appendChild(playerName);
+		playerInfo.appendChild(playerStats);
+		playerInfo.appendChild(playerItems);
+
+		playerNode.appendChild(playerRole);
+		playerNode.appendChild(playerCharacter);
+		playerNode.appendChild(playerInfo);
+
+		if(i==0) {
+			playerNode.style.left = boardPts.center + "px";
+			playerNode.style.top = boardPts.bottom + "px";
+		} else {
+			playerNode.style.left = playersPos[len]['p'+(i+1)].x + "px";
+			playerNode.style.top = playersPos[len]['p'+(i+1)].y + "px";
+		}
+		if(playerNode)
+		playersBox.appendChild(playerNode);
+	}
+}
+
 	$( "#msg" ).off().on('keyup', function (e) {
 		if (e.keyCode == 13) {
 			console.log("\""+$( "#msg" ).val()+"\"");
 			stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'author': 'tom' ,'content': $( "#msg" ).val()}));
 		}
 	});
-	function postMessage(message) {
-		console.log("run post");
-		let wiadomosc = document.createElement("div");
-		wiadomosc.classList.add("chat-msg");
-		let autor = document.createElement("span");
-		autor.classList.add("chat-msg-username");
-		autor.innerHTML = message.author;
-		let tresc = document.createElement("span");
-		tresc.classList.add("chat-msg-text");
-		tresc.innerHTML = message.content;
-		wiadomosc.appendChild(autor);
-		wiadomosc.appendChild(tresc);
-		$(".chat-list").append(wiadomosc);
-	}
+draw();
 });
 
+var stompClient = null;
+function connect() {
+	var socket = new SockJS('/chat-socket');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function (frame) {		
+		//console.log('Connected: ' + frame);
+		try{
+		stompClient.subscribe('/chat/1', function (message) {
+			
+			postMessage(JSON.parse(message.body));
+			
+		});}catch(e){};
+	});
+}
+function postMessage(message) {
+	let wiadomosc = document.createElement("div");
+	wiadomosc.classList.add("chat-msg");
+	let autor = document.createElement("span");
+	autor.classList.add("chat-msg-username");
+	autor.innerHTML = message.author;
+	let tresc = document.createElement("span");
+	tresc.classList.add("chat-msg-text");
+	tresc.innerHTML = message.content;
+	wiadomosc.appendChild(autor);
+	wiadomosc.appendChild(tresc);
+	$(".chat-list").append(wiadomosc);
+}	
+connect();
