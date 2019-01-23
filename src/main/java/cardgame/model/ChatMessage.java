@@ -10,8 +10,8 @@ public class ChatMessage {
 		
 	}
 	
-	public ChatMessage(String content) {
-		this(null, content, null);
+	public ChatMessage(String author, String content) {
+		this(author, content, null);
 	}
 	
 	public ChatMessage(String author, String content, String time) {
@@ -30,5 +30,17 @@ public class ChatMessage {
 	
 	public String getTime() {
 		return time;
+	}
+	
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public void setTime(String time) {
+		this.time = time;
 	}
 }
