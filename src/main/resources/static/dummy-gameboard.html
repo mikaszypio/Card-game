@@ -5,6 +5,9 @@
 	<title></title>
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/gameboard.css">
+	<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/gameboard.js"></script>
 </head>
@@ -40,7 +43,7 @@
 					</div>
 				</div>
 				<div class="chat-input">
-					<textarea placeholder="Wyślij wiadomość" maxlength="255"></textarea>
+					<input type="text" id="msg" class="form-control" placeholder="Nowa widomosc">
 				</div>
 			</div>
 		</div>
@@ -49,6 +52,7 @@
 	<input id = "btt1" type = "button" value = "Dodaj karte" />
 	<input id = "btt2" type = "button" value = "Usuń karte" />
 	<input id = "btt3" type = "button" value = "Zmień ture randomowo" />
+	<input id = "btt4" type = "button" value = "Celuj w gracza" />
 	<!-- <input id = "btt1" type = "button" onclick = "addCardToHand(bangCard)" value = "Dodaj karte" />
 	<input id = "btt2" type = "button" onclick = "removeCardFromHand()" value = "Usuń karte" />
 	<input id = "btt3" type = "button" onclick = "changeTurnRNG()" value = "Zmień ture randomowo" /> -->
