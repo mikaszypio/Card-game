@@ -18,7 +18,7 @@ document.addEventListener('readystatechange', event => {
 	// juz posortowana kolejnosc graczy gdzie 1 rekord to widok pierwszej osoby
 	var players = [
 		{ id: 23, name: "Player2", role:1, ch: 1, hp: 5, cards: 5, items: [dummyItems[0]] },
-		{ id: 30, name: "Player4", ch: 2, hp: 4, cards: 4, items: [] },
+		{ id: 30, name: "Player4", ch: 2, hp: 0, cards: 4, items: [] },
 		{ id: 19, name: "James", ch: 3, hp: 4, cards: 4, items: [dummyItems[2], dummyItems[0],dummyItems[2], dummyItems[0],dummyItems[2], dummyItems[0]] },
 		{ id: 2, name: "Billy", ch: 5, hp: 3, cards: 3, items: [] },
 		{ id: 127, name: "Player121", ch: 4, hp: 3, cards: 2, items: [] },
@@ -66,6 +66,9 @@ document.addEventListener('readystatechange', event => {
 		{ name: "bang", b: "orange", suit: "pikes", symbol: "10" },
 		{ name: "bang", b: "orange", suit: "clovers", symbol: "2" },
 		{ name: "bang", b: "orange", suit: "hearts", symbol: "J" }
+	];
+	var stack = [
+		{ name: "bang", b: "orange", suit: "tiles", symbol: "Q" }
 	];
 	var turnID = 2;
 
@@ -148,19 +151,46 @@ document.addEventListener('readystatechange', event => {
 				playerNode.style.top = playersPos[len]['p'+(i+1)].y + "px";
 			}
 			if(playerNode)
-
 			playersBox.appendChild(playerNode);
 		}
-		drawHand();
-		if(turnID === players[0].id){
-			let element = document.querySelectorAll('.gb-card');
-			element.forEach(function(el) {
-				el.onclick = function () {
-					console.log(hand[whichChild(this)].name);
-				};
-			});
-		}
+		// drawHand();
+		// if(turnID === players[0].id){
+		// 	let element = document.querySelectorAll('.gb-card');
+		// 	element.forEach(function(el) {
+		// 		el.onclick = function () {
+		// 			console.log(hand[whichChild(this)].name);
+		// 		};
+		// 	});
+		// }
 		
+	}
+
+	function draw(){
+		drawPlayers();
+		drawHand();
+		drawStack();
+	}
+
+	function myTurn(){
+		draw();
+		let container = document.querySelector('#gb-hand');
+		let element = container.querySelectorAll('.gb-card');
+		element.forEach(function(el) {
+			el.onclick = function () {
+			console.log(hand[whichChild(this)].name);
+			};
+		});
+	}
+
+
+	function targetPlayer(){
+		draw();
+		let element = document.querySelectorAll('.gb-player');
+		element.forEach(function(el) {
+			el.onclick = function () {
+			console.log(players[whichChild(this)].name);
+			};
+		});
 	}
 
 	function drawCard(card, size = "small"){
@@ -215,9 +245,25 @@ document.addEventListener('readystatechange', event => {
 		}
 	}
 
-	function drawStack() {
+	function drawStack(card = stack[0],size = "small") {
 		stackBox.style.left = boardPts.center + "px";
 		stackBox.style.top = boardPts.middle + "px";
+		var cardNode = document.createElement("div");
+
+		var cardName = "gb-" + card.name;
+		var cardBorder = "gb-b-" + card.b;
+		var cardSuit = "gb-" + card.suit;
+		var cardSize = "gb-" + size;
+
+		cardNode.classList.add("gb-card", 
+			cardName, cardBorder, cardSuit, cardSize);
+
+		var cardSymbolNode = document.createElement("span");
+		cardSymbolNode.classList.add("gb-card-symbol");
+		cardSymbolNode.innerHTML = card.symbol;
+
+		cardNode.appendChild(cardSymbolNode);
+		stackBox.appendChild(cardNode);
 	}
 
 	function previewCard(cardNode) {
@@ -263,16 +309,16 @@ document.addEventListener('readystatechange', event => {
 	function changeTurnRNG(){
 		var playerID =  Math.floor(Math.random() * players.length);
 		turnID = players[playerID].id;
-		drawPlayers();
+		draw();
+		
+		if(turnID === players[0].id){
+			myTurn();
+		}
 	}
-
-	drawPlayers();
-	drawHand();
-	drawStack();
 
 	var bangCard = { name: "bang", b: "orange", suit: "hearts", symbol: "8" };
 	var cardDesc = "Zadaje jeden punkt obrażeń wybranemu graczowi.";
-	var charDesc = "Brzydki Bill"
+	var charDesc = "Brzydki Bill";
 
 
 	$(document).off('mouseover', '.gb-card').on('mouseover', '.gb-card', function(event) {
@@ -300,4 +346,41 @@ document.addEventListener('readystatechange', event => {
 	$( "#btt3" ).click(function() {
 		changeTurnRNG();
 	});
+	$( "#btt4" ).click(function() {
+		targetPlayer();
+	});
+	draw();
+	var stompClient = null;
+	function connect() {
+		var socket = new SockJS('/card-game-websocket');
+		stompClient = Stomp.over(socket);
+		stompClient.connect({}, function (frame) {
+			//setConnected(true);
+			console.log('Connected: ' + frame);
+			stompClient.subscribe('/chat/1', function (message) {
+				postMessage(JSON.parse(message.body));
+			});
+		});
+	}
+	connect();
+	$( "#msg" ).off().on('keyup', function (e) {
+		if (e.keyCode == 13) {
+			console.log("\""+$( "#msg" ).val()+"\"");
+			stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'username': $( "#msg" ).val()}));
+		}
+	});
+	function postMessage(message) {
+		let wiadomosc = document.createElement("div");
+		wiadomosc.classList.add("chat-msg");
+		let autor = document.createElement("span");
+		autor.classList.add("chat-msg-username");
+		autor.innerHTML = message.author;
+		let tresc = document.createElement("span");
+		tresc.classList.add("chat-msg-text");
+		tresc.innerHTML = message.content;
+		wiadomosc.appendChild(autor);
+		wiadomosc.appendChild(tresc);
+		$(".chat-list").append(wiadomosc);
+	}
 });
+
