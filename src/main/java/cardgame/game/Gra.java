@@ -1,36 +1,47 @@
 package cardgame.game;
 
+import cardgame.controllers.GameController;
 import cardgame.game.model.cards.bang;
 import cardgame.game.model.cards.dylizans;
 import cardgame.game.model.cards.dynamit;
-import cardgame.game.model.cards.eq;
+import cardgame.game.model.cards.Equipment;
 import cardgame.game.model.cards.gatling;
 import cardgame.game.model.cards.indianie;
-import cardgame.game.model.cards.karta;
+import cardgame.game.model.cards.Card;
 import cardgame.game.model.cards.kasia;
 import cardgame.game.model.cards.panika;
 import cardgame.game.model.cards.piwko;
 import cardgame.game.model.cards.pojedynek;
-import cardgame.game.model.cards.postac;
+import cardgame.game.model.cards.Postac;
 import cardgame.game.model.cards.pudlo;
 import cardgame.game.model.cards.salon;
 import cardgame.game.model.cards.sklep;
 import cardgame.game.model.cards.welsfargo;
 import cardgame.game.model.cards.wiezienie;
 import cardgame.game.model.Gracz;
+import cardgame.services.IRoomService;
+import cardgame.viewmodel.GameboardViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class Gra extends Thread {
 
-	private List<karta> talia;
-	private karta szczyt;
-	private List<karta> cmentaz;
+	private List<Card> talia;
+	private Card szczyt;
+	private List<Card> cmentaz;
 	private List<Gracz> gracze;
 	private List<Gracz> martwi;
 	private int ileGraczy;
 	private int aktualny;
+	private Long id;
+	
+	@Autowired
+	IRoomService roomService;
+	
+	@Autowired
+	GameController controller;
 	
 	public Gra(List<Gracz> gracze) {
 		this.gracze = gracze;
@@ -42,7 +53,7 @@ public class Gra extends Thread {
 	public void run() {
 		szczyt=null;
 		martwi = new ArrayList<Gracz>();
-		cmentaz = new ArrayList<karta>();
+		cmentaz = new ArrayList<Card>();
 		ileGraczy = gracze.size();
 		aktualny=0;	
 
@@ -54,10 +65,10 @@ public class Gra extends Thread {
 		}
 		
 		stworzTalie();
-		List<postac> postacie = listaPostaci();
+		List<Postac> postacie = listaPostaci();
 		for(Gracz g : gracze) {
 			Random rand = new Random();
-			postac wybrana = postacie.get(rand.nextInt(postacie.size()));
+			Postac wybrana = postacie.get(rand.nextInt(postacie.size()));
 			postacie.remove(wybrana);
 			g.ustawPostac(wybrana);
 		}
@@ -124,7 +135,7 @@ public class Gra extends Thread {
 		}
 	}
 	
-	public void naSzczyt(karta k) {
+	public void naSzczyt(Card k) {
 		szczyt=k;
 	}
 	
@@ -160,6 +171,14 @@ public class Gra extends Thread {
 	
 	
 	public void tura(Gracz g){
+		for(Gracz gracz : gracze) {
+			GameboardViewModel viewModel = new GameboardViewModel(gracze, aktualny, gracze.indexOf(g));
+			try {
+				controller.sendViewModel(ileGraczy, ileGraczy, viewModel);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
 		g.ustawStrzelanie(false);
 		g.sprawdzDynamit();
 		boolean czy = g.sprawdzWiezienie();
@@ -167,7 +186,7 @@ public class Gra extends Thread {
 			g.wezKarty();
 			boolean dalej = true;
 			while(dalej==true) {
-				karta k = kontakt.wybiezKarte(gracze.get(aktualny).dajReke());
+				Card k = kontakt.wybiezKarte(gracze.get(aktualny).dajReke());
 				if(k==null) {
 					//prymitywna wersja sygna�u zako�czenia tury
 					dalej=false;
@@ -184,12 +203,12 @@ public class Gra extends Thread {
 	}
 	
 	//wyci�ga i zwraca kart� z talii
-	public karta dobiez() {
-		karta wynik;
+	public Card dobiez() {
+		Card wynik;
 		if(szczyt==null) {
 			if(talia.size()==0) {
 				talia=cmentaz;
-				cmentaz=new ArrayList<karta>();
+				cmentaz=new ArrayList<Card>();
 			}
 			Random rand = new Random();
 			wynik = talia.get(rand.nextInt(talia.size()));
@@ -201,20 +220,20 @@ public class Gra extends Thread {
 		return wynik;
 	}
 	
-	public karta dobiezCmentaz() {
+	public Card dobiezCmentaz() {
 		if(cmentaz.size()==0) {
 			return null;
 		}else {
 			int numer=cmentaz.size();
 			numer--;
-			karta wynik = cmentaz.get(numer);
+			Card wynik = cmentaz.get(numer);
 			cmentaz.remove(wynik);
 			return wynik;
 		}
 	}
 	
 	//ciepie kart� na cmentarz
-	public void odzuc(karta k) {
+	public void odzuc(Card k) {
 		cmentaz.add(k);
 	}
 	
@@ -243,7 +262,7 @@ public class Gra extends Thread {
 	
 	//te dwie funckje sprawdzaj� pokera (efekt bary�ki, dynamitu itd). w��cznie z doci�gni�ciem karty i wyrzuceniem jej
 	public boolean poker(String kolor) {
-		karta kart = dobiez();
+		Card kart = dobiez();
 		boolean wynik;
 		if(kolor==kart.dajKolor()) {
 			wynik=true;
@@ -255,7 +274,7 @@ public class Gra extends Thread {
 	}
 	
 	public boolean poker(String kolor, int min, int max) {
-		karta kart = dobiez();
+		Card kart = dobiez();
 		boolean wynik;
 		if(kolor==kart.dajKolor() && min>=kart.dajNumer() && max<=kart.dajNumer()) {
 			wynik=true;
@@ -286,12 +305,12 @@ public class Gra extends Thread {
 			}
 		}
 		if(sep==null) {
-			for(karta k : g.dajReke()) {
+			for(Card k : g.dajReke()) {
 				odzuc(k);
 				g.zReki(k);
 			}
 		}else {
-			for(karta k : g.dajReke()) {
+			for(Card k : g.dajReke()) {
 				sep.doReki(k);
 				g.zReki(k);
 			}
@@ -355,38 +374,39 @@ public class Gra extends Thread {
 			}
 		}
 		//tutaj musi by� jaki� eksport list wygrali i przegrali do systemu rankingowego
-		System.exit(0);
+		
+		//System.exit(0);
 	}
 	
 	public void stworzTalie() {
-		talia = new ArrayList<karta>();
-		karta tmp;
+		talia = new ArrayList<Card>();
+		Card tmp;
 				
-		tmp = new eq(1, "Volcanic", 10, "pik", true, 1, 0, false, true, this);
+		tmp = new Equipment(1, "Volcanic", 10, "pik", true, 1, 0, false, true, this);
 		talia.add(tmp);
-		tmp = new eq(2, "Volcanic", 10, "trefl", true, 1, 0, false, true, this);
+		tmp = new Equipment(2, "Volcanic", 10, "trefl", true, 1, 0, false, true, this);
 		talia.add(tmp);
-		tmp = new eq(3, "Schofield", 13, "pik", true, 2, 0, false, false, this);
+		tmp = new Equipment(3, "Schofield", 13, "pik", true, 2, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(4, "Schofield", 11, "trefl", true, 2, 0, false, false, this);
+		tmp = new Equipment(4, "Schofield", 11, "trefl", true, 2, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(5, "Schofield", 12, "trefl", true, 2, 0, false, false, this);
+		tmp = new Equipment(5, "Schofield", 12, "trefl", true, 2, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(6, "Remington", 13, "trefl", true, 3, 0, false, false, this);
+		tmp = new Equipment(6, "Remington", 13, "trefl", true, 3, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(7, "Rev Carabine", 14, "trefl", true, 4, 0, false, false, this);
+		tmp = new Equipment(7, "Rev Carabine", 14, "trefl", true, 4, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(8, "Winchester", 8, "pik", true, 5, 0, false, false, this);
+		tmp = new Equipment(8, "Winchester", 8, "pik", true, 5, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(9, "Luneta", 14, "pik", false, 1, 0, false, false, this);
+		tmp = new Equipment(9, "Luneta", 14, "pik", false, 1, 0, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(10, "Barylka", 14, "pik", false, 0, 0, true, false, this);
+		tmp = new Equipment(10, "Barylka", 14, "pik", false, 0, 0, true, false, this);
 		talia.add(tmp);
-		tmp = new eq(11, "Barylka", 12, "pik", false, 0, 0, true, false, this);
+		tmp = new Equipment(11, "Barylka", 12, "pik", false, 0, 0, true, false, this);
 		talia.add(tmp);
-		tmp = new eq(12, "Mustang", 8, "kier", false, 0, 1, false, false, this);
+		tmp = new Equipment(12, "Mustang", 8, "kier", false, 0, 1, false, false, this);
 		talia.add(tmp);
-		tmp = new eq(13, "Mustang", 9, "kier", false, 0, 1, false, false, this);
+		tmp = new Equipment(13, "Mustang", 9, "kier", false, 0, 1, false, false, this);
 		talia.add(tmp);
 		tmp = new piwko(14, "Piwko", 6, "kier", this);
 		talia.add(tmp);
@@ -524,41 +544,41 @@ public class Gra extends Thread {
 		talia.add(tmp);
 	}
 	
-	public List<postac> listaPostaci(){
-		List<postac> lista = new ArrayList<postac>();
-		postac tmp;
+	public List<Postac> listaPostaci(){
+		List<Postac> lista = new ArrayList<Postac>();
+		Postac tmp;
 		
-		tmp = new postac(1, 4, "Bart Cassady", this);  //done
+		tmp = new Postac(1, 4, "Bart Cassady", this);  //done
 		lista.add(tmp);
-		tmp = new postac(2, 4, "Black Jack", this);  //done
+		tmp = new Postac(2, 4, "Black Jack", this);  //done
 		lista.add(tmp);
-		tmp = new postac(3, 4, "Calamity Janet", this);  //done
+		tmp = new Postac(3, 4, "Calamity Janet", this);  //done
 		lista.add(tmp);
-		tmp = new postac(4, 3, "El Gringo", this);  //gdy oberwie, zabiera kart� z �apy tego, co go zrani� (nie dzia�a przy wybuchu dynamitu)
+		tmp = new Postac(4, 3, "El Gringo", this);  //gdy oberwie, zabiera kart� z �apy tego, co go zrani� (nie dzia�a przy wybuchu dynamitu)
 		//lista.add(tmp);
-		tmp = new postac(5, 4, "Jesse Jones", this);  //done
+		tmp = new Postac(5, 4, "Jesse Jones", this);  //done
 		lista.add(tmp);
-		tmp = new postac(6, 4, "Jourdonnais", this);  //done
+		tmp = new Postac(6, 4, "Jourdonnais", this);  //done
 		lista.add(tmp);
-		tmp = new postac(7, 4, "Kit Carlson", this);  //done
+		tmp = new Postac(7, 4, "Kit Carlson", this);  //done
 		lista.add(tmp);
-		tmp = new postac(8, 4, "Lusky Duke", this);  //sprawdza pokera dwa razy
+		tmp = new Postac(8, 4, "Lusky Duke", this);  //sprawdza pokera dwa razy
 		//lista.add(tmp);
-		tmp = new postac(9, 3, "Paul Regret", this);  //done
+		tmp = new Postac(9, 3, "Paul Regret", this);  //done
 		lista.add(tmp);
-		tmp = new postac(10, 4, "Pedro Ramirez", this);  //done
+		tmp = new Postac(10, 4, "Pedro Ramirez", this);  //done
 		lista.add(tmp);
-		tmp = new postac(11, 4, "Rose Doolan", this);  //done
+		tmp = new Postac(11, 4, "Rose Doolan", this);  //done
 		lista.add(tmp);
-		tmp = new postac(12, 4, "Sid Ketchum", this);  //W DOWOLNYM MOMENCIE mo�e spali� dwie karty z �apy by wylezy� 1hp.
+		tmp = new Postac(12, 4, "Sid Ketchum", this);  //W DOWOLNYM MOMENCIE mo�e spali� dwie karty z �apy by wylezy� 1hp.
 		//lista.add(tmp);
-		tmp = new postac(13, 4, "Slab Zabojca", this);  //done
+		tmp = new Postac(13, 4, "Slab Zabojca", this);  //done
 		lista.add(tmp);
-		tmp = new postac(14, 4, "Suzy Lafayette", this);  //gdy ma pust� r�k�, dobieta kart� z talii
+		tmp = new Postac(14, 4, "Suzy Lafayette", this);  //gdy ma pust� r�k�, dobieta kart� z talii
 		//lista.add(tmp);
-		tmp = new postac(15, 4, "Sam Sep", this);  //done
+		tmp = new Postac(15, 4, "Sam Sep", this);  //done
 		lista.add(tmp);
-		tmp = new postac(16, 4, "Willy the Kid", this);  //done
+		tmp = new Postac(16, 4, "Willy the Kid", this);  //done
 		lista.add(tmp);	
 		
 		return lista;

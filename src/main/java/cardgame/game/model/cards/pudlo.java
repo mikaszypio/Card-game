@@ -4,7 +4,7 @@ import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.Gracz;
 
-public class pudlo extends karta{
+public class pudlo extends Card{
 
 	public pudlo(int id, String naz, int num, String col, Gra g) {
 		ID=id;
@@ -28,7 +28,7 @@ public class pudlo extends karta{
 	
 	public boolean zagraj() {
 		Gracz strzelec = gra.dajAktualnegoGracza();
-		postac p = strzelec.dajPostac();
+		Postac p = strzelec.dajPostac();
 		String name = p.dajNazwe();
 		if(name=="Calamity Janet") {
 			if(strzelec.czyStrzelal()==true)

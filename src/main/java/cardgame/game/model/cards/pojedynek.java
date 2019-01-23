@@ -4,7 +4,7 @@ import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.Gracz;
 
-public class pojedynek extends karta{
+public class pojedynek extends Card{
 	
 	public pojedynek(int id, String naz, int num, String col, Gra g) {
 		ID=id;

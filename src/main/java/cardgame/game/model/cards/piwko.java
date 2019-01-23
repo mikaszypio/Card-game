@@ -3,7 +3,7 @@ package cardgame.game.model.cards;
 import cardgame.game.Gra;
 import cardgame.game.model.Gracz;
 
-public class piwko extends karta {
+public class piwko extends Card {
 	
 	public piwko(int id, String naz, int num, String col, Gra g) {
 		ID=id;

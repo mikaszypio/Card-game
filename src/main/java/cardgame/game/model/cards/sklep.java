@@ -5,7 +5,7 @@ import cardgame.game.model.Gracz;
 import java.util.ArrayList;
 import java.util.List;
 
-public class sklep extends karta{
+public class sklep extends Card{
 	
 	public sklep(int id, String naz, int num, String col, Gra g) {
 		ID=id;
@@ -29,12 +29,12 @@ public class sklep extends karta{
 	
 	public boolean zagraj() {
 		int ile = gra.dajIleGraczy();
-		List<karta> karty = new ArrayList<karta>();
+		List<Card> karty = new ArrayList<Card>();
 		List<Gracz> gracze = gra.dajGraczy();
 		int aktualny = gra.dajNumerAktualnegoGracza();
 		
 		for(int x = 0; x<ile; x++) {
-			karta k = gra.dobiez();
+			Card k = gra.dobiez();
 			karty.add(k);
 		}
 		
@@ -43,7 +43,7 @@ public class sklep extends karta{
 		for(int x = 0; x<ile; x++) {
 			//karta wybrana = kontakt.wybiezKarte(karty);
 			//w tym momencie automatycznie wybiera si�, kto jak� kart� dostanie. Po ogarni�ciu clasy kontakt b�dzie mo�na korzysta� z jej funkcji by gracze wybierali
-			karta wybrana = karty.get(0);
+			Card wybrana = karty.get(0);
 			karty.remove(wybrana);
 			gracze.get(aktualny).doReki(wybrana);
 			if(aktualny<(ile-1)) {
@@ -56,8 +56,8 @@ public class sklep extends karta{
 		return true;
 	}
 	
-	public void wypisz(List<karta> karty) {
-		for(karta k : karty) {
+	public void wypisz(List<Card> karty) {
+		for(Card k : karty) {
 			System.out.print(k.dajNazwe()+ "\n");
 		}
 	}

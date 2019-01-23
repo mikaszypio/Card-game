@@ -4,7 +4,7 @@ import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.Gracz;
 
-public class dynamit extends karta{
+public class dynamit extends Card{
 	
 	public dynamit(int id, String naz, int num, String col, Gra g) {
 		ID=id;

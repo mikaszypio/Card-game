@@ -4,7 +4,7 @@ import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.Gracz;
 
-public class bang extends karta{
+public class bang extends Card{
 	
 	public bang(int id, String naz, int num, String col, Gra g) {
 		ID=id;
@@ -28,7 +28,7 @@ public class bang extends karta{
 	public boolean zagraj() {		
 		Gracz cel = kontakt.wybiezCel(gra);
 		Gracz strzelec = gra.dajAktualnegoGracza();
-		postac p = strzelec.dajPostac();
+		Postac p = strzelec.dajPostac();
 		String name = p.dajNazwe();
 		if(strzelec.czyStrzelal()==true)
 			if(strzelec.wielostrzal()==false && name!="Willy the Kid") {

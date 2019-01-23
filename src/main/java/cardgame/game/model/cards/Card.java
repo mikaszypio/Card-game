@@ -2,7 +2,7 @@ package cardgame.game.model.cards;
 
 import cardgame.game.Gra;
 
-public class karta {
+public class Card {
 
 	protected Gra gra;
 	protected int ID;

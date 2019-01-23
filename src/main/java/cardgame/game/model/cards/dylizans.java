@@ -3,7 +3,7 @@ package cardgame.game.model.cards;
 import cardgame.game.Gra;
 import cardgame.game.model.Gracz;
 
-public class dylizans extends karta{
+public class dylizans extends Card{
 	
 	public dylizans(int id, String naz, int num, String col, Gra g) {
 		ID=id;

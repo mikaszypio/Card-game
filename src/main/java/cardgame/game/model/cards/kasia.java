@@ -5,7 +5,7 @@ import cardgame.game.kontakt;
 import cardgame.game.model.Gracz;
 import java.util.List;
 
-public class kasia extends karta{
+public class kasia extends Card{
 	
 	public kasia(int id, String naz, int num, String col, Gra g) {
 		ID=id;
@@ -31,18 +31,18 @@ public class kasia extends karta{
 		Gracz cel = kontakt.wybiezCel(gra);
 		String co = kontakt.coChceszZniszczyc();
 		if(co=="bron") { 
-			eq bron = cel.dajBron();
+			Equipment bron = cel.dajBron();
 			cel.ustawBron(null);
 			gra.odzuc(bron);
 		}
 		if(co=="dodatek") { 
-			eq doda = cel.dajDodatek();
+			Equipment doda = cel.dajDodatek();
 			cel.ustawDodatek(null);
 			gra.odzuc(doda);
 		}
 		if(co=="karta") {
-			List<karta> reka = cel.dajReke();
-			karta odrzucona = kontakt.wybiezKarte(reka);
+			List<Card> reka = cel.dajReke();
+			Card odrzucona = kontakt.wybiezKarte(reka);
 			reka.remove(odrzucona);
 			gra.odzuc(odrzucona);		
 		}

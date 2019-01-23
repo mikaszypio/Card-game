@@ -4,7 +4,7 @@ import cardgame.game.Gra;
 import cardgame.game.model.Gracz;
 import java.util.List;
 
-public class gatling extends karta{
+public class gatling extends Card{
 	
 	public gatling(int id, String naz, int num, String col, Gra g) {
 		ID=id;

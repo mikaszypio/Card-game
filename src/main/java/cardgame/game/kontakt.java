@@ -1,6 +1,6 @@
 package cardgame.game;
 
-import cardgame.game.model.cards.karta;
+import cardgame.game.model.cards.Card;
 import cardgame.game.model.Gracz;
 import java.util.List;
 import java.util.Scanner;
@@ -8,10 +8,10 @@ import java.util.Scanner;
 public class kontakt {
 	//ca�a klasa jest �mieciem do testowania, finalnie zast�pi si� j� metodami ��cz�cymi si� z gui
 	//acz nawet teraz nie chce w pe�ni dzia�a� momentami
-	public static karta wybiezKarte(List<karta> reka) {
+	public static Card wybiezKarte(List<Card> reka) {
 		while(true) {
 			System.out.print("Twoja r�ka\n");
-			for(karta kar : reka) {
+			for(Card kar : reka) {
 				String wyjscie = kar.dajID() + "-" + kar.dajNazwe() + "\n";
 				System.out.print(wyjscie);
 			}
@@ -19,7 +19,7 @@ public class kontakt {
 			Scanner reader = new Scanner(System.in);
 			int id = reader.nextInt();
 			reader.close();
-			for(karta kar : reka) {
+			for(Card kar : reka) {
 				if(kar.dajID()==id) {
 					return kar;
 				}

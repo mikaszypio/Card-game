@@ -6,7 +6,7 @@ import cardgame.game.model.Gracz;
 import java.util.List;
 import java.util.Random;
 
-public class panika extends karta{
+public class panika extends Card{
 	
 	public panika(int id, String naz, int num, String col, Gra g) {
 		ID=id;
@@ -39,19 +39,19 @@ public class panika extends karta{
 		}else {
 			String co = kontakt.coChceszZniszczyc();
 			if(co=="bron") { 
-				eq bron = cel.dajBron();
+				Equipment bron = cel.dajBron();
 				cel.ustawBron(null);
 				strzelec.doReki(bron);
 			}
 			if(co=="dodatek") { 
-				eq doda = cel.dajDodatek();
+				Equipment doda = cel.dajDodatek();
 				cel.ustawDodatek(null);
 				strzelec.doReki(doda);
 			}
 			if(co=="karta") {
-				List<karta> reka = cel.dajReke();
+				List<Card> reka = cel.dajReke();
 				Random rand = new Random();
-				karta wynik = reka.get(rand.nextInt(reka.size()));
+				Card wynik = reka.get(rand.nextInt(reka.size()));
 				reka.remove(wynik);
 				strzelec.doReki(wynik);		
 			}

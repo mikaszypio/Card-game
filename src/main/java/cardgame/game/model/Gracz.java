@@ -2,9 +2,9 @@ package cardgame.game.model;
 
 import cardgame.game.Gra;
 import cardgame.game.kontakt;
-import cardgame.game.model.cards.eq;
-import cardgame.game.model.cards.karta;
-import cardgame.game.model.cards.postac;
+import cardgame.game.model.cards.Equipment;
+import cardgame.game.model.cards.Card;
+import cardgame.game.model.cards.Postac;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,21 +12,21 @@ import java.util.Random;
 public class Gracz {
 
 	private Gra gra;
-	private postac hero;
+	private Postac hero;
 	private String nick;
 	private Long ID;
 	private int rola;		//1=szeryf, 2=pomocnik, 3=renegat, 4=bandyta
-	private List<karta> reka;
+	private List<Card> reka;
 	private int hp;
-	private eq bron;
-	private eq dodatek;
+	private Equipment bron;
+	private Equipment dodatek;
 	private boolean strzelal;
 	private boolean czyDynamit;
 	private boolean czyWiezienie;
 
 	public Gracz(String a) {
 		nick=a;
-		reka = new ArrayList<karta>(); 
+		reka = new ArrayList<Card>(); 
 		bron=null;
 		dodatek=null;
 		czyDynamit=false;
@@ -39,7 +39,7 @@ public class Gracz {
 	public Gracz(String a, Long id) {
 		nick=a;
 		ID=id;
-		reka = new ArrayList<karta>(); 
+		reka = new ArrayList<Card>(); 
 		bron=null;
 		dodatek=null;
 		czyDynamit=false;
@@ -49,15 +49,23 @@ public class Gracz {
 		hp=5;
 	}
 	
+	public Long dajId() {
+		return ID;
+	}
+	
+	public int dajHp() {
+		return hp;
+	}
+	
 	public void ustawGre(Gra g) {
 		gra=g;
 	}
 	
-	public postac dajPostac() {
+	public Postac dajPostac() {
 		return hero;
 	}
 	
-	public void ustawPostac(postac p) {
+	public void ustawPostac(Postac p) {
 		hero=p;
 	}
 	
@@ -73,29 +81,29 @@ public class Gracz {
 		return nick;
 	}
 	
-	public List<karta> dajReke(){
+	public List<Card> dajReke(){
 		return reka;
 	}
 	
-	public eq dajBron() {
+	public Equipment dajBron() {
 		return bron;
 	}
 	
-	public eq dajDodatek() {
+	public Equipment dajDodatek() {
 		return dodatek;
 	}
 	
 	//t�pe funckje ustawiaj�ce bro�/dodatek - w praktyce u�ywanej chyba tylko z nullem przy kradzierzy
-	public void ustawBron(eq k) {
+	public void ustawBron(Equipment k) {
 		bron=k;
 	}
 	
-	public void ustawDodatek(eq k) {
+	public void ustawDodatek(Equipment k) {
 		dodatek=k;
 	}
 	
 	//bystra funkcja wywo�ywana gdy zagrywam bro�/dodatek 
-	public void wyposaz(eq cos){
+	public void wyposaz(Equipment cos){
 		if(cos.czyBron()==true){
 			if(bron!=null) {
 				gra.odzuc(bron);
@@ -180,23 +188,23 @@ public class Gracz {
 	}
 	
 	public void dobiezKarte() {
-		karta k;
+		Card k;
 		k=gra.dobiez();
 		reka.add(k);
 	}
 	
-	public void doReki(karta k) {
+	public void doReki(Card k) {
 		reka.add(k);
 	}
 	
-	public void zReki(karta k) {
+	public void zReki(Card k) {
 		reka.remove(k);
 	}
 	
 	//metoda sprawdza, czy masz dan� kart� na r�ce, je�li masz to odrzuca. W finalnej wersji powinna jeszcze pyta�, czy chcesz odrzuci�, ale... co� jest nie tak w kontakcie
 	public boolean testKarty(String nazwa, String zrodlo) {
 		System.out.print("Testuje gracz " + nick + "\n");
-		for(karta k : reka) {
+		for(Card k : reka) {
 			if(k.dajNazwe()==nazwa) {
 				reka.remove(k);
 				gra.odzuc(k);
@@ -289,7 +297,7 @@ public class Gracz {
 				barylki++;
 			}
 		}	
-		for(karta k : reka) {
+		for(Card k : reka) {
 			if(k.dajNazwe()=="Pudlo") {
 				pudla++;
 			}
@@ -309,7 +317,7 @@ public class Gracz {
 			if(pudla>1) {
 				//pytanie czy chcesz pud�owa�
 				int ile=2;
-				for(karta k : reka) {
+				for(Card k : reka) {
 					if(k.dajNazwe()=="Pudlo" && ile>0) {
 						ile--;
 						reka.remove(k);
@@ -347,7 +355,7 @@ public class Gracz {
 			case "Pedro Ramirez":
 				czy = kontakt.czyDobracInaczej();
 				if(czy==true) {
-					karta k = gra.dobiezCmentaz();
+					Card k = gra.dobiezCmentaz();
 					if(k==null) {
 						dobiezKarte();
 						dobiezKarte();
@@ -362,7 +370,7 @@ public class Gracz {
 				break;
 			case "Black Jack":
 				dobiezKarte();
-				karta k = gra.dobiez();
+				Card k = gra.dobiez();
 				if(k.dajKolor()=="kier" || k.dajKolor()=="karo") {
 					dobiezKarte();
 				}
@@ -372,9 +380,9 @@ public class Gracz {
 				czy = kontakt.czyDobracInaczej();
 				if(czy==true) {
 					Gracz cel = kontakt.wybiezCel(gra);
-					List<karta> reka = cel.dajReke();
+					List<Card> reka = cel.dajReke();
 					Random rand = new Random();
-					karta wynik = reka.get(rand.nextInt(reka.size()));
+					Card wynik = reka.get(rand.nextInt(reka.size()));
 					reka.remove(wynik);
 					doReki(wynik);
 					dobiezKarte();
@@ -384,15 +392,15 @@ public class Gracz {
 				}				
 				break;
 			case "Kit Carlson":
-				List<karta> wyciogniete = new ArrayList<karta>();
+				List<Card> wyciogniete = new ArrayList<Card>();
 				wyciogniete.add(gra.dobiez());
 				wyciogniete.add(gra.dobiez());
 				wyciogniete.add(gra.dobiez());
 				System.out.print("Wyci�gn��e� te trzy karty-wybierz kt�rej z nich nie chcesz");
-				karta smiec = kontakt.wybiezKarte(wyciogniete);
+				Card smiec = kontakt.wybiezKarte(wyciogniete);
 				wyciogniete.remove(smiec);
 				gra.naSzczyt(smiec);
-				for(karta ka : wyciogniete) {
+				for(Card ka : wyciogniete) {
 					doReki(ka);
 				}
 			default:
@@ -407,7 +415,7 @@ public class Gracz {
 		int ile = reka.size();
 		int ileMoze = zdrowie();
 		while(ile>ileMoze) {
-			karta k = kontakt.wybiezKarte(reka);
+			Card k = kontakt.wybiezKarte(reka);
 			gra.odzuc(k);	
 			ile--;
 		}

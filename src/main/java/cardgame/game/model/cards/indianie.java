@@ -4,7 +4,7 @@ import cardgame.game.Gra;
 import cardgame.game.model.Gracz;
 import java.util.List;
 
-public class indianie extends karta{
+public class indianie extends Card{
 	
 	public indianie(int id, String naz, int num, String col, Gra g) {
 		ID=id;

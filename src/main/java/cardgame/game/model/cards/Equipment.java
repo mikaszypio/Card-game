@@ -3,7 +3,7 @@ package cardgame.game.model.cards;
 import cardgame.game.Gra;
 import cardgame.game.model.Gracz;
 
-public class eq extends karta {
+public class Equipment extends Card {
 
 	private boolean bron;
 	
@@ -12,7 +12,7 @@ public class eq extends karta {
 	private boolean obrona;
 	private boolean miltistrzal;
 	
-	public eq(int id, String naz, int num, String col, boolean czyBron, int zasM, int obrM, boolean czyBroni, boolean czyWielo, Gra g){
+	public Equipment(int id, String naz, int num, String col, boolean czyBron, int zasM, int obrM, boolean czyBroni, boolean czyWielo, Gra g){
 		ID=id;
 		nazwa=naz;
 		numer=num;
