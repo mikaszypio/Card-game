@@ -13,12 +13,12 @@ function setConnected(connected) {
 }
 
 function connect() {
-	var socket = new SockJS('/card-game-websocket');
+	var socket = new SockJS('/game-socket');
 	stompClient = Stomp.over(socket);
 	stompClient.connect({}, function (frame) {
 		setConnected(true);
 		console.log('Connected: ' + frame);
-		stompClient.subscribe('/chat/1', function (message) {
+		stompClient.subscribe('/game/1', function (message) {
 			showUsername(JSON.parse(message.body).content);
 		});
 	});
@@ -33,7 +33,7 @@ function disconnect() {
 }
 
 function sendUsername() {
-	stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'username': $("#username").val()}));
+	stompClient.send("/app/activegames/1", {}, JSON.stringify({author: 'tom', content: 'hello' }));
 }
 
 function showUsername(message) {

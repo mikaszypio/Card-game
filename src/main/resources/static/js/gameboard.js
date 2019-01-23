@@ -352,7 +352,7 @@ document.addEventListener('readystatechange', event => {
 	draw();
 	var stompClient = null;
 	function connect() {
-		var socket = new SockJS('/card-game-websocket');
+		var socket = new SockJS('/chat-socket');
 		stompClient = Stomp.over(socket);
 		stompClient.connect({}, function (frame) {
 			//setConnected(true);
@@ -366,10 +366,11 @@ document.addEventListener('readystatechange', event => {
 	$( "#msg" ).off().on('keyup', function (e) {
 		if (e.keyCode == 13) {
 			console.log("\""+$( "#msg" ).val()+"\"");
-			stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'username': $( "#msg" ).val()}));
+			stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'author': 'tom' ,'content': $( "#msg" ).val()}));
 		}
 	});
 	function postMessage(message) {
+		console.log("run post");
 		let wiadomosc = document.createElement("div");
 		wiadomosc.classList.add("chat-msg");
 		let autor = document.createElement("span");
