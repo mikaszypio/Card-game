@@ -1,5 +1,6 @@
 #gameboard {
-	background-color: #061639;
+  background-image: url("../textures/gameboard/bg.jpg");
+  background-position: left top;
 	height: 600px; width: 800px;
 	position: relative;
 	overflow: hidden;
@@ -21,7 +22,10 @@
 }
 
 .gb-player {
-	background: rgba(0,0,0,.2);
+  background-image: url("../textures/gameboard/player.png");
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 100% auto;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -56,6 +60,10 @@
 	position: absolute;
 }
 .gb-r1 { background-image: url("../textures/roles/sheriff.png") }
+.gb-r2 { background-image: url("../textures/roles/deputy.png") }
+.gb-r3 { background-image: url("../textures/roles/renegade.png") }
+.gb-r4 { background-image: url("../textures/roles/outlaw.png") }
+
 
 .gb-portrait {
 	background-size: 100%;
@@ -92,11 +100,13 @@
 }
 
 .gb-name {
+  color: #ffefbe;
 	font-size: 13px;
 	font-weight: 700;
 	line-height: 20px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+  text-shadow: 1px 1px #000;
 	white-space: nowrap;
 }
 
@@ -142,8 +152,18 @@
 { background-image: url("../textures/card_icon/barrel.png"); }
 .gb-icon.gb-mustang 
 { background-image: url("../textures/card_icon/mustang.png"); }
+.gb-icon.gb-scope
+{ background-image: url("../textures/card_icon/scope.png"); }
 .gb-icon.gb-winchester 
 { background-image: url("../textures/card_icon/winchester.png"); }
+.gb-icon.gb-volcanic
+{ background-image: url("../textures/card_icon/volcanic.png"); }
+.gb-icon.gb-revcarabine
+{ background-image: url("../textures/card_icon/revcarbine.png"); }
+.gb-icon.gb-schofield
+{ background-image: url("../textures/card_icon/schofield.png"); }
+.gb-icon.gb-remington
+{ background-image: url("../textures/card_icon/remington.png"); }
 
 #gb-preview {
 	width: 220px;
@@ -164,9 +184,9 @@
 }
 
 .gb-card-desc, .gb-char-desc {
-	box-shadow: 0px 14px 30px -17px rgba(0,0,0,0.75);
+	box-shadow: 0px 3px 10px rgba(0,0,0,0.75);
 	color: #fff;
-	background-color: rgba(0,0,0,.5);
+	background-color: rgba(0,0,0,.75);
 	border-radius: 10px;
 	display: block;
 	margin: 0 auto;
@@ -186,6 +206,10 @@
 	margin-left: -150px;
 	position: absolute;
 	height: 100px; width: 300px;
+}
+
+#gb-hand .gb-card {
+  box-shadow: 16px 16px 20px #000;
 }
 
 #gb-stack {
@@ -254,3 +278,24 @@
 
 /* card pics */
 .gb-bang { background-image: url("../textures/card_img/bang.png"); }
+.gb-saloon { background-image: url("../textures/card_img/saloon.png"); }
+.gb-duel { background-image: url("../textures/card_img/duel.png"); }
+.gb-catbalou { background-image: url("../textures/card_img/catbalou.png"); }
+.gb-indians { background-image: url("../textures/card_img/indians.png"); }
+.gb-gatling { background-image: url("../textures/card_img/gatling.png"); }
+.gb-wellsfargo { background-image: url("../textures/card_img/wellsfargo.png"); }
+.gb-stagecoach { background-image: url("../textures/card_img/stagecoach.png"); }
+.gb-beer { background-image: url("../textures/card_img/beer.png"); }
+.gb-panic { background-image: url("../textures/card_img/panic.png"); }
+.gb-missed { background-image: url("../textures/card_img/missed.png"); }
+.gb-generalstore { background-image: url("../textures/card_img/generalstore.png"); }
+.gb-mustang { background-image: url("../textures/card_img/mustang.png"); }
+.gb-volcanic { background-image: url("../textures/card_img/volcanic.png"); }
+.gb-schofield { background-image: url("../textures/card_img/schofield.png"); }
+.gb-remington { background-image: url("../textures/card_img/remington.png"); }
+.gb-winchester { background-image: url("../textures/card_img/winchester.png"); }
+.gb-revcarabine { background-image: url("../textures/card_img/revcarbine.png"); }
+.gb-scope { background-image: url("../textures/card_img/scope.png"); }
+.gb-dynamite { background-image: url("../textures/card_img/dynamite.png"); }
+.gb-barrel { background-image: url("../textures/card_img/barrel.png"); }
+.gb-jail { background-image: url("../textures/card_img/jail.png"); }

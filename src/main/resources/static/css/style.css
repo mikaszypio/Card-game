@@ -206,7 +206,7 @@ html, body {
 	padding-right: 6px;
 }
 
-.chat-input textarea {
+.chat-input input#msg {
 	background-color: transparent;
 	border-color: #ccc;
 	border-style: solid;
@@ -216,8 +216,11 @@ html, body {
 	min-height: 40px;
 	max-height: 160px;
 	padding: 8px 12px;
-	resize: vertical;
 	width: 100%;
+}
+
+.chat-input input#msg:focus {
+  box-shadow: none;
 }
 
 #loginForm, #registerForm {
