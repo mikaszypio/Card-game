@@ -278,6 +278,9 @@ function draw(){
 	drawPlayers();
 	drawHand();
 	drawStack();
+	if(turnID === players[0].id){
+		myTurn();
+	}
 }
 
 
