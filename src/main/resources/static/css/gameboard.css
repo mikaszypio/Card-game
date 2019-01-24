@@ -188,9 +188,10 @@
 	color: #fff;
 	background-color: rgba(0,0,0,.75);
 	border-radius: 10px;
-	display: block;
+	display: flex;
+  flex-direction: column;
 	margin: 0 auto;
-	padding: 8px 4px;
+	padding: 8px 12px;
 	position: absolute;
 	text-align: center;
 	left: 0; top: 190px; right: 0;
@@ -199,6 +200,18 @@
 
 .gb-char-desc {
 	top: 159px;
+}
+
+.gb-card-name, .gb-char-name {
+  color: #ffefbe;
+  font-size: 700;
+  margin-bottom: 3px;
+}
+
+.gb-card-usage, .gb-char-perk {
+  color: #ddd;
+  font-size: smaller;
+  text-align: justify;
 }
 
 #gb-hand {

@@ -64,19 +64,60 @@ document.addEventListener("DOMContentLoaded", event => {
 		}
 	};
 	var hand = [
-		{ name: "bang", b: "orange", suit: "tiles", symbol: "Q" },
-		{ name: "bang", b: "orange", suit: "hearts", symbol: "Q" },
-		{ name: "bang", b: "orange", suit: "pikes", symbol: "10" },
-		{ name: "bang", b: "orange", suit: "clovers", symbol: "2" },
-		{ name: "bang", b: "orange", suit: "hearts", symbol: "J" }
+		{ name: "mustang", b: "orange", suit: "tiles", symbol: "Q" },
+		{ name: "barrel", b: "orange", suit: "hearts", symbol: "Q" },
+		{ name: "dynamite", b: "orange", suit: "pikes", symbol: "10" },
+		{ name: "volcanic", b: "orange", suit: "clovers", symbol: "2" },
+		{ name: "winchester", b: "orange", suit: "hearts", symbol: "J" }
 	];
 	var stack = [
 		{ name: "bang", b: "orange", suit: "tiles", symbol: "Q" }
 	];
 	var turnID = 1;
-	var bangCard = { name: "bang", b: "orange", suit: "hearts", symbol: "8" };
-	var cardDesc = "Zadaje jeden punkt obrażeń wybranemu graczowi.";
-	var charDesc = "Brzydki Bill";
+  
+  var charDictionary = {
+    1: { name: "Bart Cassady", desc: "Za każdym razem, gdy Bart zostanie trafiony, dobiera kartę."},
+    2: { name: "Black Jack", desc: "Pokazuje drugą kartę, którą dobrał. Jeśli jest to kier lub karo, dobiera kolejną kartę."},
+    3: { name: "Calamity Janet", desc: "Może używać kart Bang! jako Pudło! i na odwrót"},
+    4: { name: "El Gringo", desc: "Za każdym razem, gdy zostanie trafiony przez gracza, zabiera mu losową kartę z ręki."},
+    5: { name: "Jesse Jones", desc: "Pierwszą dobieraną kartę może wziąć z ręki dowolnego gracza."},
+    6: { name: "Jourdonnais", desc: "Jeżeli odkryje kier podczas Pokera!, unika trafienia."},
+    7: { name: "Kit Carlson", desc: "Przy dobieraniu kart ogląda trzy górne karty i zachowuje dwie z nich."},
+    8: { name: "Lucky Duke", desc: "Przy Pokerze!, odkrywa dwie karty i wybiera tę, która mu bardziej odpowiada."},
+    9: { name: "Paul Regret", desc: "Zasięg pomiędzy nim, a innymi graczami zostaje zwiększony o 1."},
+    10: { name: "Pedro Ramirez", desc: "Może wybrać wierzchnią kartę ze stosu kart odrzuconych, zamiast pierwszej z dobieranych kart."},
+    11: { name: "Rose Doolan", desc: "Widzi wszystkich graczy w zasięgu obniżonym o 1."},
+    12: { name: "Sid Ketchum", desc: "Może odrzucić dwie karty z ręki, aby odzyskać punkt zdrowia."},
+    13: { name: "Slab Zabojca", desc: "Inni gracze potrzebują dwóch kart Pudła!, aby anulować zagrany przez niego Bang!"},
+    14: { name: "Suzy Lafayette", desc: "Kiedy zabraknie jej kart na ręce, dobiera kartę z talii."},
+    15: { name: "Sam Sęp", desc: "Otrzymuje wszystkie karty wyeliminowanego gracza."},
+    16: { name: "Willy the Kid", desc: "Może zagrać dowolną liczbę kart Bang! w swojej turze."}
+  }
+  
+  var cardDictionary = {
+    "bang": { name: "Bang!", desc: "Zadaje <b>1</b> punkt życia wybranemu graczowi." },
+    "saloon": { name: "Saloon", desc: "Przywraca <b>2</b> punkty życia rzucającemu Saloon oraz <b>1</b> punkt pozostałym graczom." },
+    "duel": { name: "Pojedynek", desc: "Rzuca pojedynek wybranemu graczowi. Pojedynkujący się rzucają nawzajem karty Bang! Pierwszy gracz, który nie będzie w stanie rzucić karty Bang!, przegrywa pojedynek i traci <b>1</b> punkt życia." },
+    "catbalou": { name: "Kasia Balou", desc: "Niszczy dowolną kartę u wybranego gracza." },
+    "indians": { name: "Indianie", desc: "Wszyscy oprócz rzucającego muszą wyrzucić kartę Pudło! inaczej tracą <b>1</b> punkt życia." },
+    "gatling": { name: "Gatling", desc: "Wszyscy oprócz rzucającego muszą wyrzucić kartę Bang! inaczej tracą <b>1</b> punkt życia." },
+    "wellsfargo": { name: "Wells Fargo", desc: "Pozwala dobrać <b>3</b> karty z talii." },
+    "stagecoach": { name: "Dyliżans", desc: "Pozwala dobrać <b>2</b> karty z talii." },
+    "beer": { name: "Piwko", desc: "Przywraca <b>1</b> punkt życia." },
+    "panic": { name: "Panika", desc: "Zabiera dowolną kartę u dowolnego gracza w zasięgu <b>1</b>." },
+    "missed": { name: "Pudło!", desc: "Anuluje efekt Bang!" },
+    "generalstore": { name: "Sklep", desc: "Odkrywa tyle kart z talii ilu graczy uczestniczy w rozgrywce. Następnie, zaczynając od siebie, każdy gracz dobiera <b>1</b> kartę z odkrytego stosu." },
+    "mustang": { name: "Mustang", desc: "Zwiększa zasięg pomiędzy rzucającym, a innymi graczami o <b>1</b>." },
+    "volcanic": { name: "Volcanic", desc: "Zasięg: <b>1</b><br>Pozwala zagrać dowolną ilość kart Bang! podczas jednej tury." },
+    "schofield": { name: "Schofield", desc: "Zasięg: <b>2</b>" },
+    "remington": { name: "Remington", desc: "Zasięg: <b>3</b>" },
+    "winchester": { name: "Winchester", desc: "Zasięg: <b>5</b>" },
+    "revcarabine": { name: "Rev. Carbine", desc: "Zasięg: <b>4</b>" },
+    "scope": { name: "Luneta", desc: "Pozwala dostrzec wszystkich graczy w zasięgu obniżonym o <b>1</b>." },
+    "dynamite": { name: "Dynamit", desc: "" },
+    "barrel": { name: "Baryłka", desc: "Kiedy gracz jest celem karty Bang!, może sprawdzić Poker! w celu uniknięcia obrażeń." },
+    "jail": { name: "Więzienie", desc: "Pozwala uwięzić dowolnego gracza oprócz szerfya. Uwięziony gracz musi sprawdzić Poker! zanim rozpocznie swoją turę. Jeżeli odkryje karo, jego tura przebiega w normalny sposób, inaczej traci turę. Po sprawdzeniu odrzuca Więzienie." },
+  }
 	
 
 	$(document).off('mousemove', '.gb-card').on('mousemove', '.gb-card', function(e) {
@@ -94,6 +135,14 @@ document.addEventListener("DOMContentLoaded", event => {
 	$(document).off('mouseout', '.gb-portrait').on('mouseout', '.gb-portrait', function(e) {
 		$( "#gb-preview" ).empty();
 	});
+  
+	$(document).off('mousemove', '.gb-icon').on('mousemove', '.gb-icon', function(e) {
+		previewItem(e, this);
+	});
+
+	$(document).off('mouseout', '.gb-icon').on('mouseout', '.gb-icon', function(e) {
+		$( "#gb-preview" ).empty();
+	});  
 
 	$( "#btt1" ).click(function() {
 		 addCardToHand(bangCard);
@@ -149,15 +198,25 @@ function previewCard(e, cardNode) {
 	prevBox.innerHTML = "";
 
 	var prevCard = cardNode.cloneNode(true);
+  var cardName = prevCard.classList.item(1).split("-").pop();
 
 	prevCard.classList.remove("gb-small");
 	prevCard.classList.add("gb-medium");
 	prevCard.removeAttribute("style");
 
 	var prevDesc = document.createElement("div");
-
 	prevDesc.classList.add("gb-card-desc");
-	prevDesc.innerHTML = cardDesc;
+  
+  var prevName = document.createElement("span");
+  prevName.classList.add("gb-card-name");
+	prevName.innerHTML = cardDictionary[cardName].name;
+  
+  var prevUsage = document.createElement("span");
+  prevUsage.classList.add("gb-card-usage");
+  prevUsage.innerHTML = cardDictionary[cardName].desc;
+  
+  prevDesc.appendChild(prevName);
+  prevDesc.appendChild(prevUsage);
 	
 	prevBox.appendChild(prevCard);
 	prevBox.appendChild(prevDesc);
@@ -169,15 +228,55 @@ function previewCharacter(e, charNode) {
 	prevBox.innerHTML = "";
 
 	var prevChar = charNode.cloneNode(true);
+  var charID = String(prevChar.className.match(/gb-ch\d+/)).split("ch").pop();
 
 	prevChar.classList.add("gb-large");
 
 	var prevDesc = document.createElement("div");
-
 	prevDesc.classList.add("gb-char-desc");
-	prevDesc.innerHTML = charDesc;
+  
+  var prevName = document.createElement("span");
+  prevName.classList.add("gb-char-name");
+	prevName.innerHTML = charDictionary[charID].name;
+  
+  var prevPerk = document.createElement("span");
+  prevPerk.classList.add("gb-char-perk");
+  prevPerk.innerHTML = charDictionary[charID].desc;
+  
+  prevDesc.appendChild(prevName);
+  prevDesc.appendChild(prevPerk);
 
 	prevBox.appendChild(prevChar);
+	prevBox.appendChild(prevDesc);
+
+	calculatePreviewPosition(e);
+}
+
+function previewItem(e, itemNode) {
+	prevBox.innerHTML = "";
+
+	var prevItem = itemNode.cloneNode(true);
+  var itemName = prevItem.classList.item(0).split("-").pop();
+
+	prevItem.classList.remove("gb-small", "gb-icon");
+	prevItem.classList.add("gb-medium", "gb-card");
+  prevItem.getElementsByClassName("gb-card-symbol")[0].removeAttribute("style");
+
+	var prevDesc = document.createElement("div");
+	prevDesc.classList.add("gb-card-desc");
+  
+  var prevName = document.createElement("span");
+  prevName.classList.add("gb-card-name");
+	prevName.innerHTML = cardDictionary[itemName].name;
+  
+  var prevUsage = document.createElement("span");
+  prevUsage.classList.add("gb-card-usage");
+  prevUsage.innerHTML = cardDictionary[itemName].desc;
+  
+  prevDesc.appendChild(prevName);
+  prevDesc.appendChild(prevUsage);
+	
+	prevBox.appendChild(prevItem);
 	prevBox.appendChild(prevDesc);
 
 	calculatePreviewPosition(e);
