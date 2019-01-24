@@ -11,11 +11,11 @@ public class GameboardViewModel {
 	private List<PartialCard> hand;
 	private long turnId;
 	
-	public GameboardViewModel(List<Gracz> players, int active, int playerIndex) {
+	public GameboardViewModel(List<Gracz> players, int active, int playerId) {
 		
 		Gracz receiver = null;
 		for(Gracz player : players) {
-			if ((long)player.dajId() == playerIndex) {
+			if ((long)player.dajId() == playerId) {
 				receiver = player;
 				break;
 			}
@@ -29,7 +29,7 @@ public class GameboardViewModel {
 			short lastIndex = 1;
 			int size = this.players.size();
 			if (players.indexOf(player) < players.indexOf(receiver)) {
-				int newIndex = this.players.size() - 1;
+				int newIndex = this.players.size();
 				this.players.add(newIndex, new PartialPlayer(player));
 			} else if (players.indexOf(player) == players.indexOf(receiver)) {
 				continue;
