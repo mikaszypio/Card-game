@@ -1,5 +1,6 @@
 package cardgame.controllers;
 
+import cardgame.game.Gra;
 import cardgame.game.model.Gracz;
 import cardgame.game.model.cards.Equipment;
 import cardgame.game.model.cards.Postac;
@@ -42,6 +43,21 @@ public class GameController {
 		GameboardViewModel viewModel = new GameboardViewModel(players, active, playerId, 2, new PartialCard(new salon(52, "Saloon", 5, "kier", null)));
 		String response = gson.toJson(viewModel);
 		return response;
+	}
+	
+	@MessageMapping("/activegames/start")
+	public void start(ChatMessage message) {
+		Gracz gracz1 = new Gracz("Ja", (long) 1);
+		Gracz gracz2 = new Gracz("On", (long) 2);
+		Gracz gracz3 = new Gracz("Ona", (long) 3);
+		Gracz gracz4 = new Gracz("Ono", (long) 4);
+		ArrayList<Gracz> list = new ArrayList<>();
+		list.add(gracz1);
+		list.add(gracz2);
+		list.add(gracz3);
+		list.add(gracz4);
+		Gra gra = new Gra(list, 1);
+		gra.start();
 	}
 	
 	@SendTo("/game/{gameId}/{playerId}")

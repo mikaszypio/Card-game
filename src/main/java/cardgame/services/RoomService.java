@@ -80,7 +80,7 @@ public class RoomService implements IRoomService {
 	
 	@Override
 	public void startGame() {
-		Gra game = new Gra(new ArrayList<> ());
+		Gra game = new Gra(new ArrayList<> (), 1);
 		game.start();
 	}
 	

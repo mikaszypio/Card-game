@@ -22,10 +22,22 @@ import cardgame.game.model.Gracz;
 import cardgame.services.IRoomService;
 import cardgame.viewmodel.GameboardViewModel;
 import cardgame.viewmodel.PartialCard;
+import com.google.gson.Gson;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandler;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
+import org.springframework.web.socket.sockjs.client.SockJsClient;
+import org.springframework.web.socket.sockjs.client.Transport;
+import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 public class Gra extends Thread {
 
@@ -36,15 +48,33 @@ public class Gra extends Thread {
 	private List<Gracz> martwi;
 	private int ileGraczy;
 	private int aktualny;
-	private Long id;
+	private long id;
 	
 	@Autowired
 	IRoomService roomService;
+
+	private WebSocketClient simpleWebSocketClient;
+	private List<Transport> transports;
+	private SockJsClient sockJsClient;
+	private WebSocketStompClient client;
+	private StompSessionHandler sessionHandler;
+	private StompSession session;
+	private Gson gson;
 	
-	@Autowired
-	GameController controller;
-	
-	public Gra(List<Gracz> gracze) {
+	public Gra(List<Gracz> gracze, long id) {
+		gson = new Gson();
+		try {
+			simpleWebSocketClient = new StandardWebSocketClient();
+			transports = new ArrayList<>(1);
+			transports.add(new WebSocketTransport(simpleWebSocketClient));
+			sockJsClient = new SockJsClient(transports);
+			client = new WebSocketStompClient(sockJsClient);
+			String url = "ws://localhost:8080/game-socket";
+			sessionHandler = new GameStompSessionHandler(id);
+			session = client.connect(url, sessionHandler).get();
+		} catch(InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
 		this.gracze = gracze;
 		for(Gracz g : gracze) {
 			g.ustawGre(this);
@@ -56,6 +86,7 @@ public class Gra extends Thread {
 		martwi = new ArrayList<Gracz>();
 		cmentaz = new ArrayList<Card>();
 		ileGraczy = gracze.size();
+		System.out.print(ileGraczy);
 		aktualny=0;	
 
 		for(int x=0; x<ileGraczy; x++) {
@@ -100,7 +131,7 @@ public class Gra extends Thread {
 				break;
 			default:
 				gramy=false;
-				System.out.print("Z�a ilo�� graczy");
+				System.out.print("Zła ilość graczy");
 				break;
 		}
 		if(gramy==true) {
@@ -173,9 +204,18 @@ public class Gra extends Thread {
 	
 	public void tura(Gracz g){
 		for(Gracz gracz : gracze) {
-			GameboardViewModel viewModel = new GameboardViewModel(gracze, aktualny, (long) g.dajId(), cmentaz.size(), new PartialCard(cmentaz.get(0)));
+			PartialCard szczyt = null;
+			if (cmentaz.size() != 0) {
+				szczyt = new PartialCard(cmentaz.get(0));
+			}
+			GameboardViewModel viewModel = new GameboardViewModel(gracze, aktualny, (long) g.dajId(), cmentaz.size(), szczyt);
 			try {
-				controller.sendViewModel(ileGraczy, ileGraczy, viewModel);
+				byte[] msg = gson.toJson(viewModel).getBytes(StandardCharsets.UTF_8);
+				//controller.sendViewModel(1, 2, viewModel);
+				session.send("/app/activegames/"+1+"/"+2, msg);
+				//session.send("/app/activegames/"+1+"/"+2, viewModel);
+				//session.send("/app/activegames/"+1+"/"+2, gson.toJson(viewModel));
+				//session.send("/app/activegames/"+1+"/"+2, viewModel.toBytes());
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
