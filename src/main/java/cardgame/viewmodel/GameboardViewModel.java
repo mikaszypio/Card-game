@@ -25,22 +25,26 @@ public class GameboardViewModel {
 				break;
 			}
 		}
-
-		this.players = new ArrayList<>();
-		this.players.add(new PartialPlayer(receiver));
 		
-		for(Gracz player : players) {
+		List<Gracz> playersBeforeReceiver = null;
+		if (players.indexOf(receiver) > 0) {
+			playersBeforeReceiver = players.subList(0, players.indexOf(receiver));
+		}
+		
+		List<Gracz> playersAfterReceiver = players.subList(players.indexOf(receiver), players.size());
+		this.players = new ArrayList<>();
+		
+		for(Gracz player : playersAfterReceiver) {
 			
-			short lastIndex = 1;
-			int size = this.players.size();
-			if (players.indexOf(player) < players.indexOf(receiver)) {
-				int newIndex = this.players.size();
-				this.players.add(newIndex, new PartialPlayer(player));
-			} else if (players.indexOf(player) == players.indexOf(receiver)) {
-				continue;
-			} else {
-				this.players.add(lastIndex, new PartialPlayer(player));
-				lastIndex++;
+			PartialPlayer partial = new PartialPlayer(player);
+			this.players.add(partial);
+		}
+		
+		if (playersBeforeReceiver != null) {
+			for(Gracz player : playersBeforeReceiver) {
+			
+				PartialPlayer partial = new PartialPlayer(player);
+				this.players.add(partial);
 			}
 		}
 		
