@@ -12,7 +12,7 @@ public class SocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/chat", "/game", "/user", "/room");
+		config.enableSimpleBroker("/chat", "/game", "/user", "/room", "/topic");
 		config.setApplicationDestinationPrefixes("/app");
 	}
 	
@@ -20,5 +20,5 @@ public class SocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		
 		registry.addEndpoint("chat-socket", "game-socket", "user-socket", "room-socket").withSockJS();
-	}
+	}	
 }
