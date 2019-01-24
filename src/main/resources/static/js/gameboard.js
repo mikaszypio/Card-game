@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", event => {
 	var stack = [
 		{ name: "bang", b: "orange", suit: "tiles", symbol: "Q" }
 	];
-	var turnID = 2;
+	var turnID = 23;
 	var bangCard = { name: "bang", b: "orange", suit: "hearts", symbol: "8" };
 	var cardDesc = "Zadaje jeden punkt obrażeń wybranemu graczowi.";
 	var charDesc = "Brzydki Bill";
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", event => {
 		removeCardFromHand();
 	});
 	$( "#btt3" ).click(function() {
-		changeTurnRNG();
+		nextTurn();
 	});
 	$( "#btt4" ).click(function() {
 		targetPlayer();
@@ -116,7 +116,22 @@ function removeCardFromHand() {
 	hand.pop();
 	drawHand();
 }
-
+function nextTurn(){
+	var i=0;
+	while(turnID !== players[i].id || i >= players.length){
+		i++;
+	}
+	if(i+1<players.length){
+		turnID = players[i+1].id;
+	}else{
+		turnID = players[0].id;
+	}
+	draw();
+	
+	if(turnID === players[0].id){
+		myTurn();
+	}
+}
 function changeTurnRNG(){
 	var playerID =  Math.floor(Math.random() * players.length);
 	turnID = players[playerID].id;
@@ -265,27 +280,7 @@ function draw(){
 	drawStack();
 }
 
-function myTurn(){
-	draw();
-	let container = document.querySelector('#gb-hand');
-	let element = container.querySelectorAll('.gb-card');
-	element.forEach(function(el) {
-		el.onclick = function () {
-		console.log(hand[whichChild(this)].name);
-		};
-	});
-}
 
-
-function targetPlayer(){
-	draw();
-	let element = document.querySelectorAll('.gb-player');
-	element.forEach(function(el) {
-		el.onclick = function () {
-		console.log(players[whichChild(this)].name);
-		};
-	});
-}
 
 function drawPlayers() {
 	playersBox.innerHTML = "";
@@ -369,18 +364,40 @@ function drawPlayers() {
 		playersBox.appendChild(playerNode);
 	}
 }
+function myTurn(){
+	draw();
+	let container = document.querySelector('#gb-hand');
+	let element = container.querySelectorAll('.gb-card');
+	element.forEach(function(el) {
+		el.onclick = function () {
+		console.log(hand[whichChild(this)].name);
+		stompClient.send("/app/activegames/1/"+players[0].id, {}, JSON.stringify({'author': players[0].name ,'content': hand[whichChild(this)].name}));
+		};
+	});
+}
+
+
+function targetPlayer(){
+	draw();
+	let element = document.querySelectorAll('.gb-player');
+	element.forEach(function(el) {
+		el.onclick = function () {
+		console.log(players[whichChild(this)].name);
+		};
+	});
+}
 
 	$( "#msg" ).off().on('keyup', function (e) {
 		if (e.keyCode == 13) {
 			console.log("\""+$( "#msg" ).val()+"\"");
-			stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'author': 'tom' ,'content': $( "#msg" ).val()}));
+			stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'author': players[0].name ,'content': $( "#msg" ).val()}));
 		}
 	});
 draw();
 });
 
 var stompClient = null;
-function connect() {
+function connect_chat() {
 	var socket = new SockJS('/chat-socket');
 	stompClient = Stomp.over(socket);
 	stompClient.connect({}, function (frame) {		
@@ -389,6 +406,19 @@ function connect() {
 		stompClient.subscribe('/chat/1', function (message) {
 			
 			postMessage(JSON.parse(message.body));
+			
+		});}catch(e){};
+	});
+}
+function connect_game() {
+	var socket = new SockJS('/game-socket');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function (frame) {		
+		//console.log('Connected: ' + frame);
+		try{
+		stompClient.subscribe("/game/1/"+players[0].id, function (message) {
+			
+			game_response(JSON.parse(message.body));
 			
 		});}catch(e){};
 	});
@@ -405,5 +435,9 @@ function postMessage(message) {
 	wiadomosc.appendChild(autor);
 	wiadomosc.appendChild(tresc);
 	$(".chat-list").append(wiadomosc);
-}	
-connect();
+}
+function game_response(message) {
+	console.log(message);
+}
+connect_chat();
+connect_game();
