@@ -29,7 +29,7 @@ public class indianie extends Card{
 	public boolean zagraj() {
 		List<Gracz> gracze = gra.dajGraczy();
 		for(Gracz g : gracze) {
-			boolean czy = g.testKarty("Bang", "Indianie");
+			boolean czy = g.testKarty("bang", "Indianie");
 			if(czy==false) {
 				g.zran(1);
 			}

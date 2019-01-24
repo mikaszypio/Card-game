@@ -272,7 +272,7 @@ public class Gracz {
 				return;
 			}
 		}		
-		boolean czy = testKarty("Pudlo", "Bang");
+		boolean czy = testKarty("missed", "Bang");
 		if(czy==true){
 			System.out.print("Spud�owa�\n");
 		}else {
@@ -298,7 +298,7 @@ public class Gracz {
 			}
 		}	
 		for(Card k : reka) {
-			if(k.dajNazwe()=="Pudlo") {
+			if(k.dajNazwe()=="missed") {
 				pudla++;
 			}
 		}
@@ -308,7 +308,7 @@ public class Gracz {
 			return;
 		}
 		if(barylki==1) {
-			boolean czy = testKarty("Pudlo", "Bang");
+			boolean czy = testKarty("missed", "Bang");
 			if(czy==true){
 				System.out.print("Spud�owa� dzi�ki pomocy bary�ki/�wietno�ci Jourdonnaisa\n");
 			}
@@ -318,7 +318,7 @@ public class Gracz {
 				//pytanie czy chcesz pud�owa�
 				int ile=2;
 				for(Card k : reka) {
-					if(k.dajNazwe()=="Pudlo" && ile>0) {
+					if(k.dajNazwe()=="missed" && ile>0) {
 						ile--;
 						reka.remove(k);
 						gra.odzuc(k);
@@ -340,7 +340,7 @@ public class Gracz {
 			}
 		}
 		while(hp<1) {
-			if(testKarty("Piwko", "Zgon")==true) {
+			if(testKarty("beer", "Zgon")==true) {
 				hp++;
 			}else {
 				gra.zgon(this);

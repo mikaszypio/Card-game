@@ -33,14 +33,14 @@ public class pojedynek extends Card{
 		boolean toczySie = true;
 		while(toczySie==true) {
 			if(odbito==true) {
-				if(wyzywajacy.testKarty("Bang", "Pojedynek")==true) {
+				if(wyzywajacy.testKarty("bang", "Pojedynek")==true) {
 					odbito=false;
 				}else {
 					wyzywajacy.zran(1);
 					toczySie=false;
 				}
 			}else {
-				if(cel.testKarty("Bang", "Pojedynek")==true) {
+				if(cel.testKarty("bang", "Pojedynek")==true) {
 					odbito=true;
 				}else {
 					cel.zran(1);
