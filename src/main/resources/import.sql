@@ -1,2 +1,2 @@
 insert into app_role (name) values ('administrator'), ('player'), ('temporary');
-insert into app_user (username, role_id) values ('administrator', 1);
+insert into app_user (username, password, role_id) values ('administrator', 'poweruser', 1);
