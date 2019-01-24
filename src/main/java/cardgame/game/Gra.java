@@ -255,7 +255,7 @@ public class Gra extends Thread {
 			int skomplikowany = pierwszy + (ileGraczy-drugi);
 			if(prosty>skomplikowany) {
 				return skomplikowany; 
-			}else {
+			} else {
 				return prosty;
 			}
 		}		

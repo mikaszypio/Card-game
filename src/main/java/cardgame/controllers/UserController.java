@@ -7,7 +7,11 @@ import cardgame.services.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class UserController {
 	
 	@Autowired
@@ -31,32 +35,28 @@ public class UserController {
 		return userService.getRanking();
 	}
 	
-	public Long logIn(String username, String password) {
-		List<User> allUsers = getAllUsers();
-		
-		for (User user : allUsers) {
-			if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-				return user.getUserId(); 
-			}
+	@PostMapping("/login")
+	public Long logIn(String login, String password) {
+		System.out.println("Nadeszło: " + login);
+		User user = userRepository.findByUsername(login);
+
+		if (user != null) {
+			return user.getUserId();
 		}
 		return 0L;
 	}
 	
-	public Long registerUser(String username, String password) throws Exception {
+	@PostMapping("/register")
+	public Long registerUser(String login, String password) throws Exception {
+		Long id = 0L;
 		try {
-			userService.createUser(username, password);
-			
-			List<User> allUsers = getAllUsers();
-			
-			for(User user : allUsers) {
-				if (user.getUsername().equals(username)) {
-					return user.getUserId(); 
-				}
-			}
+			userService.createUser(login, password);
+			User user = userRepository.findByUsername(login);
+			id = user.getUserId();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		return 0L;
+		return id;
 	}
 	
 	public User findTemporaryUserWithNoRoom() {
