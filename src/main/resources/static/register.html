@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="register-page">
+	<div class="container">
+		<div class="login-navbar nav-bar">
+			<div><a class="nav-link" href="lobby.html">< Strona Główna</a></div>
+		</div>
+		<h1>Rejestracja</h1>
+		<form  id="registerForm" action="/register.html" method="post">
+			<div class="form-group">
+				<label for="login">Login</label>
+				<input type="text" id="login" class="long" name="login" required>
+			</div>
+
+			<div class="form-group">
+				<label for="password">Hasło</label>
+				<input type="password" id="password" class="long" name="password" required>
+				<label for="password2">Powtórz hasło</label>
+				<input type="password" id="password2" class="long" name="password2" required>
+			</div>
+
+			<button class="nav-btn" type="submit" name="submit">Wyślij</button>
+		</form>
+		<div class="login-note">
+			<span class="note">Masz już konto? <a class="nav-link" href="login.html">Zaloguj się!</a></span>
+		</div>
+
+	</div>
+</body>
+</html>

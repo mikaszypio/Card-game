@@ -4,12 +4,12 @@ document.addEventListener("DOMContentLoaded", event => {
 	var handBox = document.getElementById("gb-hand");
 	var stackBox = document.getElementById("gb-stack");
 
-	var boardPts = {
-		left: 114, 	center: 400, 	right: 686,
-		top: 30, 		middle: 230, 	bottom: 390,
-		left33: 256, left66: 544,
-		middleUp: 148, middleDown: 302,
-	};
+  var boardPts = {
+    left: 114, 	center: 400, 	right: 686,
+    top: 30, 		middle: 230, 	bottom: 370,
+    left33: 256, left66: 544,
+    middleUp: 148, middleDown: 302,
+  };
 	var dummyItems = [
 		{ name: "winchester", b: "blue", suit: "tiles", symbol: "7" },
 		{ name: "mustang", b: "blue", suit: "hearts", symbol: "4" },
@@ -76,19 +76,19 @@ document.addEventListener("DOMContentLoaded", event => {
 	var charDesc = "Brzydki Bill";
 	
 
-	$(document).off('mouseover', '.gb-card').on('mouseover', '.gb-card', function(event) {
-		previewCard(this);
+	$(document).off('mousemove', '.gb-card').on('mousemove', '.gb-card', function(e) {
+		previewCard(e, this);
 	});
 
-	$(document).off('mouseout', '.gb-card').on('mouseout', '.gb-card', function(event) {
+	$(document).off('mouseout', '.gb-card').on('mouseout', '.gb-card', function(e) {
 		$( "#gb-preview" ).empty();
 	});
 
-	$(document).off('mouseover', '.gb-portrait').on('mouseover', '.gb-portrait', function(event) {
-		previewCharacter(this);
+	$(document).off('mousemove', '.gb-portrait').on('mousemove', '.gb-portrait', function(e) {
+		previewCharacter(e, this);
 	});
 
-	$(document).off('mouseout', '.gb-portrait').on('mouseout', '.gb-portrait', function(event) {
+	$(document).off('mouseout', '.gb-portrait').on('mouseout', '.gb-portrait', function(e) {
 		$( "#gb-preview" ).empty();
 	});
 
@@ -126,7 +126,10 @@ function changeTurnRNG(){
 		myTurn();
 	}
 }
-function previewCard(cardNode) {
+
+function previewCard(e, cardNode) {
+	prevBox.innerHTML = "";
+
 	var prevCard = cardNode.cloneNode(true);
 
 	prevCard.classList.remove("gb-small");
@@ -140,9 +143,13 @@ function previewCard(cardNode) {
 	
 	prevBox.appendChild(prevCard);
 	prevBox.appendChild(prevDesc);
+
+	calculatePreviewPosition(e);
 }
 
-function previewCharacter(charNode) {
+function previewCharacter(e, charNode) {
+	prevBox.innerHTML = "";
+
 	var prevChar = charNode.cloneNode(true);
 
 	prevChar.classList.add("gb-large");
@@ -154,7 +161,44 @@ function previewCharacter(charNode) {
 
 	prevBox.appendChild(prevChar);
 	prevBox.appendChild(prevDesc);
+
+	calculatePreviewPosition(e);
 }
+
+function calculatePreviewPosition(e) {
+	var offset = $('#gameboard').offset();
+	var cursor = {
+		x: e.clientX - offset.left,
+		y: e.clientY - offset.top
+	}
+	var prevBoxHeight = calculatePreviewHeight();
+	var prevBoxWidth = prevBox.offsetWidth;
+	var margin = 4;
+
+	var prevBoxLeft = cursor.x;
+	var prevBoxTop = cursor.y;
+
+	if(cursor.x > 400)
+		prevBoxLeft -= (prevBoxWidth + margin);
+	else
+		prevBoxLeft += margin;
+
+	if(cursor.y > 300)
+		prevBoxTop -= (prevBoxHeight + margin);
+	else
+		prevBoxTop += margin;
+
+	prevBox.style.left = prevBoxLeft + "px";
+	prevBox.style.top = prevBoxTop + "px";
+}
+
+function calculatePreviewHeight() {
+	var descTop = parseInt($("#gb-preview div[class$='desc']").css('top'), 10);
+	var descHeight = $("#gb-preview div[class$='desc']").outerHeight(true);
+
+	return descTop + descHeight;
+}
+
 function drawCard(card, size = "small"){
 	var cardNode = document.createElement("div");
 
@@ -210,21 +254,8 @@ function drawHand() {
 function drawStack(card = stack[0],size = "small") {
 	stackBox.style.left = boardPts.center + "px";
 	stackBox.style.top = boardPts.middle + "px";
-	var cardNode = document.createElement("div");
-
-	var cardName = "gb-" + card.name;
-	var cardBorder = "gb-b-" + card.b;
-	var cardSuit = "gb-" + card.suit;
-	var cardSize = "gb-" + size;
-
-	cardNode.classList.add("gb-card", 
-		cardName, cardBorder, cardSuit, cardSize);
-
-	var cardSymbolNode = document.createElement("span");
-	cardSymbolNode.classList.add("gb-card-symbol");
-	cardSymbolNode.innerHTML = card.symbol;
-
-	cardNode.appendChild(cardSymbolNode);
+  
+	var cardNode = drawCard(card);
 	stackBox.appendChild(cardNode);
 }
 

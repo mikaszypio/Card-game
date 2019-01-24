@@ -4,6 +4,12 @@
 	<meta charset="utf-8">
 	<title></title>
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/gameboard.css">
+	<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/gameboard.js"></script>
 </head>
 <body class="room-page">
 	<div class="container">
@@ -15,14 +21,13 @@
 		</div>
 		<div class="room-content">
 			<div class="left-col">
-				<div class="players-list">
-					<div class="player-cell">Player1</div>
-					<div class="player-cell">Player2</div>
-					<div class="player-cell">Player3</div>
-				</div>
-				<div class="nav-bottom">
-					<a class="nav-btn disabled">Start</a>
-					<a class="nav-btn">Start</a>
+				<div id="gameboard">
+					<div id="gb-timer">15</div>
+					<div id="gb-preview"></div>
+					<div id="gb-players"></div>
+					<div id="gb-hand"></div>
+					<div id="gb-stack"></div>
+					<div id="gb-deck"></div>
 				</div>
 			</div>
 			<div class="chat">
@@ -43,5 +48,12 @@
 			</div>
 		</div>
 	</div>
+	<script src="js/gameboard.js"></script>
+	<!-- Przyciski do testowania -->
+	<input id = "btt1" type = "button" value = "Dodaj karte" />
+	<input id = "btt2" type = "button" value = "Usuń karte" />
+	<input id = "btt3" type = "button" value = "Zmień ture randomowo" />
+	<input id = "btt4" type = "button" value = "Celuj w gracza" />
+	<!-- ====================== -->
 </body>
 </html>
