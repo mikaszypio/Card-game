@@ -15,6 +15,8 @@ public class GameboardViewModel {
 	
 	public GameboardViewModel(List<Gracz> players, int active, long playerId, int stackSize, PartialCard lastOfStack) {
 		
+		this.stackSize = stackSize;
+		this.lastOfStack = lastOfStack;
 		
 		Gracz receiver = null;
 		for(Gracz player : players) {

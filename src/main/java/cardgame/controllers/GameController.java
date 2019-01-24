@@ -25,6 +25,7 @@ public class GameController {
 		@DestinationVariable int playerId,
 		ChatMessage message) throws Exception {
 
+		System.out.println("Triggered");
 		Gracz player1 = new Gracz("Ja", (long) 1);
 		player1.dajReke().add(new bang(21, "Bang", 12, "kier", null));
 		player1.ustawBron(new Equipment(1, "Volcanic", 10, "pik", true, 1, 0, false, true, null));
