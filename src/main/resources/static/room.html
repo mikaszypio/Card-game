@@ -5,6 +5,8 @@
 	<title></title>
 	<link rel="stylesheet" href="css/style.css">
 	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
 </head>
 <body class="room-page">
 	<div class="container">
@@ -33,7 +35,7 @@
 					</div>
 				</div>
 				<div class="chat-input">
-					<textarea placeholder="Wyślij wiadomość" maxlength="255"></textarea>
+					<input type="text" id="msg" class="form-control" placeholder="Nowa widomosc">
 				</div>
 			</div>
 		</div>
