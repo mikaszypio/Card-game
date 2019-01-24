@@ -45,9 +45,42 @@ document.addEventListener("DOMContentLoaded", event => {
         playersListNode.appendChild(playerNode);
     });
   }
-
+  $( "#msg" ).off().on('keyup', function (e) {
+		if (e.keyCode == 13) {
+			console.log("\""+$( "#msg" ).val()+"\"");
+			stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'author': players[0].name ,'content': $( "#msg" ).val()}));
+		}
+	});
 
   function refreshStartBtn() {}
 
   refresh();
 });
+var stompClient = null;
+function connect_chat() {
+	var socket = new SockJS('/chat-socket');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function (frame) {		
+		//console.log('Connected: ' + frame);
+		try{
+		stompClient.subscribe('/chat/1', function (message) {
+			
+			postMessage(JSON.parse(message.body));
+			
+		});}catch(e){};
+	});
+}
+function postMessage(message) {
+	let wiadomosc = document.createElement("div");
+	wiadomosc.classList.add("chat-msg");
+	let autor = document.createElement("span");
+	autor.classList.add("chat-msg-username");
+	autor.innerHTML = message.author;
+	let tresc = document.createElement("span");
+	tresc.classList.add("chat-msg-text");
+	tresc.innerHTML = message.content;
+	wiadomosc.appendChild(autor);
+	wiadomosc.appendChild(tresc);
+	$(".chat-list").append(wiadomosc);
+}
+connect_chat();
