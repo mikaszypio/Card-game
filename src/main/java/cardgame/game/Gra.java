@@ -1,24 +1,23 @@
 package cardgame.game;
 
-import cardgame.controllers.GameController;
+import cardgame.game.model.Gracz;
+import cardgame.game.model.cards.Card;
+import cardgame.game.model.cards.Equipment;
+import cardgame.game.model.cards.Postac;
 import cardgame.game.model.cards.bang;
 import cardgame.game.model.cards.dylizans;
 import cardgame.game.model.cards.dynamit;
-import cardgame.game.model.cards.Equipment;
 import cardgame.game.model.cards.gatling;
 import cardgame.game.model.cards.indianie;
-import cardgame.game.model.cards.Card;
 import cardgame.game.model.cards.kasia;
 import cardgame.game.model.cards.panika;
 import cardgame.game.model.cards.piwko;
 import cardgame.game.model.cards.pojedynek;
-import cardgame.game.model.cards.Postac;
 import cardgame.game.model.cards.pudlo;
 import cardgame.game.model.cards.salon;
 import cardgame.game.model.cards.sklep;
 import cardgame.game.model.cards.welsfargo;
 import cardgame.game.model.cards.wiezienie;
-import cardgame.game.model.Gracz;
 import cardgame.services.IRoomService;
 import cardgame.viewmodel.GameboardViewModel;
 import cardgame.viewmodel.PartialCard;
@@ -31,7 +30,6 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
@@ -62,6 +60,7 @@ public class Gra extends Thread {
 	private Gson gson;
 	
 	public Gra(List<Gracz> gracze, long id) {
+		this.id = id;
 		gson = new Gson();
 		try {
 			simpleWebSocketClient = new StandardWebSocketClient();
@@ -211,11 +210,8 @@ public class Gra extends Thread {
 			GameboardViewModel viewModel = new GameboardViewModel(gracze, aktualny, (long) g.dajId(), cmentaz.size(), szczyt);
 			try {
 				byte[] msg = gson.toJson(viewModel).getBytes(StandardCharsets.UTF_8);
-				//controller.sendViewModel(1, 2, viewModel);
-				session.send("/app/activegames/"+1+"/"+2, msg);
-				//session.send("/app/activegames/"+1+"/"+2, viewModel);
-				//session.send("/app/activegames/"+1+"/"+2, gson.toJson(viewModel));
-				//session.send("/app/activegames/"+1+"/"+2, viewModel.toBytes());
+				System.out.println("/app/activegames/"+(long)id+"/"+(long)gracz.dajId());
+				session.send("/app/activegames/"+(long)id+"/"+(long)gracz.dajId(), msg);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
