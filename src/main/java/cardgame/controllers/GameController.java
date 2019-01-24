@@ -35,9 +35,7 @@ public class GameController {
 		players.add(player2);
 		int active = 0;
 		Gson gson = new Gson();
-		System.out.println("Tworzę viewmodel " + playerId);
 		GameboardViewModel viewModel = new GameboardViewModel(players, active, playerId);
-		System.out.println("Stworzony");
 		String response = gson.toJson(viewModel);
 		return response;
 	}
