@@ -1,10 +1,13 @@
 package cardgame.controllers;
 
 import cardgame.game.model.Gracz;
+import cardgame.game.model.cards.Equipment;
 import cardgame.game.model.cards.Postac;
 import cardgame.game.model.cards.bang;
+import cardgame.game.model.cards.salon;
 import cardgame.model.ChatMessage;
 import cardgame.viewmodel.GameboardViewModel;
+import cardgame.viewmodel.PartialCard;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,6 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.util.HtmlUtils;
 
 @Controller
 public class GameController {
@@ -25,6 +27,7 @@ public class GameController {
 
 		Gracz player1 = new Gracz("Ja", (long) 1);
 		player1.dajReke().add(new bang(21, "Bang", 12, "kier", null));
+		player1.ustawBron(new Equipment(1, "Volcanic", 10, "pik", true, 1, 0, false, true, null));
 		Gracz player2 = new Gracz("On", (long) 2);
 		Postac character1 = new Postac(1, 4, "p1", null);
 		Postac character2 = new Postac(2, 4, "p2", null);
@@ -35,7 +38,7 @@ public class GameController {
 		players.add(player2);
 		int active = 0;
 		Gson gson = new Gson();
-		GameboardViewModel viewModel = new GameboardViewModel(players, active, playerId);
+		GameboardViewModel viewModel = new GameboardViewModel(players, active, playerId, 2, new PartialCard(new salon(52, "Saloon", 5, "kier", null)));
 		String response = gson.toJson(viewModel);
 		return response;
 	}

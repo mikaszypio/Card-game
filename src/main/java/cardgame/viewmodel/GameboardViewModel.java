@@ -10,8 +10,11 @@ public class GameboardViewModel {
 	private List<PartialPlayer> players;
 	private List<PartialCard> hand;
 	private long turnId;
+	private int stackSize;
+	private PartialCard lastOfStack;
 	
-	public GameboardViewModel(List<Gracz> players, int active, int playerId) {
+	public GameboardViewModel(List<Gracz> players, int active, long playerId, int stackSize, PartialCard lastOfStack) {
+		
 		
 		Gracz receiver = null;
 		for(Gracz player : players) {
@@ -56,5 +59,13 @@ public class GameboardViewModel {
 	
 	public long getTurnId() {
 		return turnId;
+	}
+	
+	public int getStackSize() {
+		return stackSize;
+	}
+	
+	public PartialCard getLastOfStack() {
+		return lastOfStack;
 	}
 }

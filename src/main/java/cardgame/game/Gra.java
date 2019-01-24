@@ -21,6 +21,7 @@ import cardgame.game.model.cards.wiezienie;
 import cardgame.game.model.Gracz;
 import cardgame.services.IRoomService;
 import cardgame.viewmodel.GameboardViewModel;
+import cardgame.viewmodel.PartialCard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -172,7 +173,7 @@ public class Gra extends Thread {
 	
 	public void tura(Gracz g){
 		for(Gracz gracz : gracze) {
-			GameboardViewModel viewModel = new GameboardViewModel(gracze, aktualny, gracze.indexOf(g));
+			GameboardViewModel viewModel = new GameboardViewModel(gracze, aktualny, (long) g.dajId(), cmentaz.size(), new PartialCard(cmentaz.get(0)));
 			try {
 				controller.sendViewModel(ileGraczy, ileGraczy, viewModel);
 			} catch(Exception e) {
