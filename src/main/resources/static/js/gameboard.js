@@ -1,3 +1,18 @@
+var dummyItems = [
+	{ name: "winchester", b: "blue", suit: "tiles", symbol: "7" },
+	{ name: "mustang", b: "blue", suit: "hearts", symbol: "4" },
+	{ name: "barrel", b: "blue", suit: "pikes", symbol: "J" },
+];
+var players = [
+	{ id: 1, name: "Player2", role:1, ch: 1, hp: 5, cards: 5, items: [dummyItems[0]] },
+	{ id: 30, name: "Player4", ch: 2, hp: 0, cards: 4, items: [] },
+	{ id: 19, name: "James", ch: 3, hp: 4, cards: 4, items: [dummyItems[2], dummyItems[0],dummyItems[2], dummyItems[0],dummyItems[2], dummyItems[0]] },
+	{ id: 2, name: "Billy", ch: 5, hp: 3, cards: 3, items: [] },
+	{ id: 127, name: "Player121", ch: 4, hp: 3, cards: 2, items: [] },
+	{ id: 34, name: "Xx_CounterStriker_xX", ch: 9, hp: 4, cards: 3, items: [dummyItems[1]] },
+	{ id: 55, name: "Username33", ch: 10, hp: 1, cards: 0, items: [] }
+];
+
 document.addEventListener("DOMContentLoaded", event => {
 	var prevBox = document.getElementById("gb-preview");
 	var playersBox = document.getElementById("gb-players");
@@ -10,21 +25,9 @@ document.addEventListener("DOMContentLoaded", event => {
     left33: 256, left66: 544,
     middleUp: 148, middleDown: 302,
   };
-	var dummyItems = [
-		{ name: "winchester", b: "blue", suit: "tiles", symbol: "7" },
-		{ name: "mustang", b: "blue", suit: "hearts", symbol: "4" },
-		{ name: "barrel", b: "blue", suit: "pikes", symbol: "J" },
-	];
+
 	// juz posortowana kolejnosc graczy gdzie 1 rekord to widok pierwszej osoby
-	var players = [
-		{ id: 23, name: "Player2", role:1, ch: 1, hp: 5, cards: 5, items: [dummyItems[0]] },
-		{ id: 30, name: "Player4", ch: 2, hp: 0, cards: 4, items: [] },
-		{ id: 19, name: "James", ch: 3, hp: 4, cards: 4, items: [dummyItems[2], dummyItems[0],dummyItems[2], dummyItems[0],dummyItems[2], dummyItems[0]] },
-		{ id: 2, name: "Billy", ch: 5, hp: 3, cards: 3, items: [] },
-		{ id: 127, name: "Player121", ch: 4, hp: 3, cards: 2, items: [] },
-		{ id: 34, name: "Xx_CounterStriker_xX", ch: 9, hp: 4, cards: 3, items: [dummyItems[1]] },
-		{ id: 55, name: "Username33", ch: 10, hp: 1, cards: 0, items: [] }
-	];
+
 	var playersPos = {
 		2: {
 			p2: { x: boardPts.center, y: boardPts.top}
@@ -70,7 +73,7 @@ document.addEventListener("DOMContentLoaded", event => {
 	var stack = [
 		{ name: "bang", b: "orange", suit: "tiles", symbol: "Q" }
 	];
-	var turnID = 23;
+	var turnID = 1;
 	var bangCard = { name: "bang", b: "orange", suit: "hearts", symbol: "8" };
 	var cardDesc = "Zadaje jeden punkt obrażeń wybranemu graczowi.";
 	var charDesc = "Brzydki Bill";
@@ -371,7 +374,7 @@ function myTurn(){
 	element.forEach(function(el) {
 		el.onclick = function () {
 		console.log(hand[whichChild(this)].name);
-		stompClient.send("/app/activegames/1/"+players[0].id, {}, JSON.stringify({'author': players[0].name ,'content': hand[whichChild(this)].name}));
+		stompClient2.send("/app/activegames/1/"+players[0].id, {}, JSON.stringify({'author': players[0].name ,'content': hand[whichChild(this)].name}));
 		};
 	});
 }
@@ -390,7 +393,7 @@ function targetPlayer(){
 	$( "#msg" ).off().on('keyup', function (e) {
 		if (e.keyCode == 13) {
 			console.log("\""+$( "#msg" ).val()+"\"");
-			stompClient.send("/app/chatterbox/1", {}, JSON.stringify({'author': players[0].name ,'content': $( "#msg" ).val()}));
+			stompClient1.send("/app/chatterbox/1", {}, JSON.stringify({'author': players[0].name ,'content': $( "#msg" ).val()}));
 		}
 	});
 draw();
@@ -399,14 +402,15 @@ if(turnID === players[0].id){
 }
 });
 
-var stompClient = null;
+var stompClient1 = null;
+var stompClient2 = null;
 function connect_chat() {
 	var socket = new SockJS('/chat-socket');
-	stompClient = Stomp.over(socket);
-	stompClient.connect({}, function (frame) {		
+	stompClient1 = Stomp.over(socket);
+	stompClient1.connect({}, function (frame) {		
 		//console.log('Connected: ' + frame);
 		try{
-		stompClient.subscribe('/chat/1', function (message) {
+		stompClient1.subscribe('/chat/1', function (message) {
 			
 			postMessage(JSON.parse(message.body));
 			
@@ -415,11 +419,11 @@ function connect_chat() {
 }
 function connect_game() {
 	var socket = new SockJS('/game-socket');
-	stompClient = Stomp.over(socket);
-	stompClient.connect({}, function (frame) {		
+	stompClient2 = Stomp.over(socket);
+	stompClient2.connect({}, function (frame) {		
 		//console.log('Connected: ' + frame);
 		try{
-		stompClient.subscribe("/game/1/"+players[0].id, function (message) {
+		stompClient2.subscribe("/game/1/"+players[0].id, function (message) {
 			
 			game_response(JSON.parse(message.body));
 			
