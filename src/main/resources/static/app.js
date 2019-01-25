@@ -36,7 +36,7 @@ function disconnect() {
 }
 
 function sendUsername() {
-	stompClient.send("/app/activegames/1/2", {}, JSON.stringify({author: 'tom', content: 'hello' }));
+	stompClient.send("/app/activegames/start", {}, JSON.stringify({author: 'tom', content: 'hello' }));
 	//stompClient.send("/app/activegames/1/1", {}, JSON.stringify({author: 'tom', content: 'hello' }));
 }
 
