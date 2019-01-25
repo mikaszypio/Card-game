@@ -1,6 +1,5 @@
 package cardgame;
 
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -11,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import cardgame.model.Room;
-import cardgame.repositories.RoleRepository;
 import cardgame.repositories.RoomRepository;
 
 @RunWith(SpringRunner.class)
