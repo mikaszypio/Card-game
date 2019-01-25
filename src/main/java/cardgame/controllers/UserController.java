@@ -5,6 +5,9 @@ import cardgame.model.Role;
 import cardgame.repositories.UserRepository;
 import cardgame.services.UserService;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -36,11 +39,14 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public Long logIn(String login, String password) {
+	public Long logIn(String login, String password, HttpSession session) {
 		System.out.println("Nadeszło: " + login);
 		User user = userRepository.findByUsername(login);
 
 		if (user != null) {
+			Long userId = user.getUserId();
+			session.setAttribute("Id", userId);
+			System.out.println(session.getAttribute("Id"));
 			return user.getUserId();
 		}
 		return 0L;
