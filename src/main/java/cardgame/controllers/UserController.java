@@ -1,20 +1,16 @@
 package cardgame.controllers;
 
 import cardgame.model.User;
-import cardgame.model.Role;
 import cardgame.repositories.UserRepository;
 import cardgame.services.UserService;
 import java.util.List;
-
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class UserController {
