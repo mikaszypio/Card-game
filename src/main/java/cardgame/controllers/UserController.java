@@ -11,10 +11,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class UserController {
 	
 	@Autowired
@@ -39,17 +41,26 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public Long logIn(String login, String password, HttpSession session) {
+	public String logIn(String login, String password, HttpSession session) {
 		System.out.println("Nadeszło: " + login);
 		User user = userRepository.findByUsername(login);
 
 		if (user != null) {
 			Long userId = user.getUserId();
-			session.setAttribute("Id", userId);
-			System.out.println(session.getAttribute("Id"));
-			return user.getUserId();
+			if(password.equals(user.getPassword())) {
+				session.setAttribute("userId", Long.toString(userId));
+				return "redirect:lobby.html";
+			}
 		}
-		return 0L;
+		
+		return "redirect:login.html";
+	}
+	
+	@GetMapping("/session")
+	@ResponseBody
+	public String getSession(HttpSession session) {
+		System.out.println("Uzyskano:" + session.getAttribute("userId").toString());
+		return session.getAttribute("userId").toString();
 	}
 	
 	@PostMapping("/register")
@@ -62,6 +73,7 @@ public class UserController {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+		
 		return id;
 	}
 	
@@ -71,8 +83,7 @@ public class UserController {
 		if (temporaryList.size() > 0) {
 			temporaryUserWithNoRoom = temporaryList.get(0);
 		}
+		
 		return temporaryUserWithNoRoom;
 	}
-	
-	
 }
