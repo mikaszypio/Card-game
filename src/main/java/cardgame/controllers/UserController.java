@@ -38,14 +38,13 @@ public class UserController {
 	
 	@PostMapping("/login")
 	public String logIn(String login, String password, HttpSession session) {
-		System.out.println("Nadeszło: " + login);
 		User user = userRepository.findByUsername(login);
 
 		if (user != null) {
 			Long userId = user.getUserId();
 			if(password.equals(user.getPassword())) {
 				session.setAttribute("userId", Long.toString(userId));
-				return "redirect:lobby.html";
+				return "redirect:";
 			}
 		}
 		
@@ -55,7 +54,6 @@ public class UserController {
 	@GetMapping("/session")
 	@ResponseBody
 	public String getSession(HttpSession session) {
-		System.out.println("Uzyskano:" + session.getAttribute("userId").toString());
 		return session.getAttribute("userId").toString();
 	}
 	
@@ -67,7 +65,7 @@ public class UserController {
 			User user = userRepository.findByUsername(login);
 			id = user.getUserId();
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		
 		return id;
