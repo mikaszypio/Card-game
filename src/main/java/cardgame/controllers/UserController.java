@@ -44,7 +44,7 @@ public class UserController {
 			Long userId = user.getUserId();
 			if(password.equals(user.getPassword())) {
 				session.setAttribute("userId", Long.toString(userId));
-				return "redirect:";
+				return "redirect:lobby.html";
 			}
 		}
 		
