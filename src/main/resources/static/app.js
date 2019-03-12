@@ -14,17 +14,24 @@ function setConnected(connected) {
 
 function connect() {
 	var socket = new SockJS('/game-socket');
-	stompClient = Stomp.over(socket);
-	stompClient.connect({}, function (frame) {
-		setConnected(true);
-		console.log('Connected: ' + frame);
-		stompClient.subscribe('/game/1/2', function (message) {
-			showUsername(JSON.parse(message.body).content);
-		});
+	console.log("Session checking...:");
+	var session_val = "null"
+	$.get("/session",
+	function(data, status){
+		session_val = console.log("Session id:" + data);
+	});
+	//$("#messages").append("<tr><td>" + session_val + "</td></tr>");
+	//stompClient = Stomp.over(socket);
+	//stompClient.connect({}, function (frame) {
+		//setConnected(true);
+		//console.log('Connected: ' + frame);
+		//stompClient.subscribe('/game/1/2', function (message) {
+		//	showUsername(JSON.parse(message.body).content);
+		//});
 		//stompClient.subscribe('/game/1/1', function (message) {
 		//	showUsername(JSON.parse(message.body).content);
 		//});
-	});
+	//});
 }
 
 function disconnect() {
@@ -36,7 +43,7 @@ function disconnect() {
 }
 
 function sendUsername() {
-	stompClient.send("/app/activegames/1/2", {}, JSON.stringify({author: 'tom', content: 'hello' }));
+	stompClient.send("/app/activegames/start", {}, JSON.stringify({author: 'tom', content: 'hello' }));
 	//stompClient.send("/app/activegames/1/1", {}, JSON.stringify({author: 'tom', content: 'hello' }));
 }
 
