@@ -1,3 +1,12 @@
-insert into app_role (name) values ('administrator'), ('player'), ('temporary');
+insert into app_role (name) values ('administrator'), ('player'), ('unregistered');
 insert into app_user (username, password, role_id) values ('administrator', 'poweruser', 1);
-insert into app_user (username, password, role_id) values ('user01', 'pass01', 2), ('user02', 'pass02', 2), ('user03', 'pass03', 2), ('user04', 'pass04', 2), ('user05', 'pass05', 2), ('user06', 'pass06', 2), ('user07', 'pass07', 2), ('user08', 'pass08', 2), ('user09', 'pass09', 2);
+insert into app_user (username, password, role_id) values ('anon01', 'pass01', 3);
+insert into app_user (username, password, role_id) values ('anon02', 'pass02', 3);
+insert into app_user (username, password, role_id) values ('anon03', 'pass03', 3);
+insert into app_user (username, password, role_id) values ('anon04', 'pass04', 3);
+insert into app_user (username, password, role_id) values ('anon05', 'pass05', 3);
+insert into app_user (username, password, role_id) values ('anon06', 'pass06', 3);
+insert into app_user (username, password, role_id) values ('anon07', 'pass07', 3);
+insert into app_user (username, password, role_id) values ('anon08', 'pass08', 3);
+insert into app_user (username, password, role_id) values ('anon09', 'pass09', 3);
+insert into app_user (username, password, role_id) values ('anon10', 'pass10', 3);
