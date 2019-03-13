@@ -28,6 +28,11 @@ public class RoomService implements IRoomService {
 		return room.getReadiness() == getRoomUsers(room).size();
 	}
 	
+	public List<Room> getActiveRooms() {
+		return roomRepository.findByActive(true);
+		
+	}
+	
 	@Override
 	public Room getEmptyRoom(String name) {
 		

@@ -20,6 +20,15 @@ public class UserService implements IUserService {
 	UserRepository userRepository;
 
 	@Override
+	public User createAnon() {
+		Role role = roleRepository.findById(3).get();
+		List<User> anons = userRepository.findAllTemporaryUsers(Sort.by("username").ascending());
+		int number = anons.size() + 1;
+		User anon = new User("anon" + number, "pass" + number, role);
+		return userRepository.save(anon);
+	}
+	
+	@Override
 	public User createUser(String username, String password) {
 		
 		Role role = roleRepository.findById(2).get();
@@ -37,6 +46,16 @@ public class UserService implements IUserService {
 	public List<User> getRanking() {
 
 		return userRepository.findAllPlayers(Sort.by("score").descending());
+	}
+	
+	@Override
+	public User getUnregistered() {
+		List<User> unregistered = userRepository.findTemporaryUsers(Sort.by("username").ascending());
+		if (!unregistered.isEmpty()) {
+			return unregistered.get(0);
+		}
+		
+		return null;
 	}
 	
 	public float recalculateScore(User user) {

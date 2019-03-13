@@ -204,13 +204,13 @@ public class Gra extends Thread {
 	public void tura(Gracz g){
 		for(Gracz gracz : gracze) {
 			PartialCard szczyt = null;
-			if (cmentaz.size() != 0) {
+			if (!cmentaz.isEmpty()) {
 				szczyt = new PartialCard(cmentaz.get(0));
 			}
 			GameboardViewModel viewModel = new GameboardViewModel(gracze, aktualny, (long) gracz.dajId(), cmentaz.size(), szczyt);
 			try {
 				byte[] msg = gson.toJson(viewModel).getBytes(StandardCharsets.UTF_8);
-				System.out.println("/app/activegames/"+(long)id+"/"+(long)gracz.dajId());
+				// System.out.println("/app/activegames/"+(long)id+"/"+(long)gracz.dajId());
 				session.send("/app/activegames/"+(long)id+"/"+(long)gracz.dajId(), msg);
 			} catch(Exception e) {
 				e.printStackTrace();

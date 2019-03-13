@@ -5,9 +5,11 @@ import java.util.List;
 
 public interface IUserService {
 
+	public User createAnon();
 	public User createUser(String username, String password);
 	public List<User> findAllPlayers();
 	public List<User> getRanking();
+	public User getUnregistered();
 	public void increaseScore(List<User> usersLost, List<User> usersWon);
 	public User save(User user);
 	public User updateUser(User user, String plainPassword);

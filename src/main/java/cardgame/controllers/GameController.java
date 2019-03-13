@@ -2,16 +2,9 @@ package cardgame.controllers;
 
 import cardgame.game.Gra;
 import cardgame.game.model.Gracz;
-import cardgame.game.model.cards.Equipment;
-import cardgame.game.model.cards.Postac;
-import cardgame.game.model.cards.bang;
-import cardgame.game.model.cards.salon;
 import cardgame.model.ChatMessage;
 import cardgame.viewmodel.GameboardViewModel;
-import cardgame.viewmodel.PartialCard;
-import com.google.gson.Gson;
 import java.util.ArrayList;
-import java.util.List;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -26,7 +19,6 @@ public class GameController {
 		@DestinationVariable int playerId,
 		String inGameMessage) throws Exception {
 
-		System.out.println("Triggered");
 		return inGameMessage;
 	}
 	

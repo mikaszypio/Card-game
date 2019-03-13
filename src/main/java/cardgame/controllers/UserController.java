@@ -1,5 +1,6 @@
 package cardgame.controllers;
 
+import cardgame.model.Role;
 import cardgame.model.User;
 import cardgame.repositories.UserRepository;
 import cardgame.services.UserService;
@@ -42,6 +43,8 @@ public class UserController {
 
 		if (user != null) {
 			Long userId = user.getUserId();
+			Role role = user.getRole();
+			int roleId = role.getRoleId(); // Will be used to disable using anons
 			if(password.equals(user.getPassword())) {
 				session.setAttribute("userId", Long.toString(userId));
 				return "redirect:lobby.html";
@@ -58,17 +61,23 @@ public class UserController {
 	}
 	
 	@PostMapping("/register")
-	public Long registerUser(String login, String password) throws Exception {
-		Long id = 0L;
+	public String registerUser(String login, String password, HttpSession session) throws Exception {
+		Long userId = 0L;
 		try {
 			userService.createUser(login, password);
 			User user = userRepository.findByUsername(login);
-			id = user.getUserId();
+			userId = user.getUserId();
+			session.setAttribute("userId", Long.toString(userId));
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "redirect:register.html";
 		}
 		
-		return id;
+		if (userId != 0){
+			return "redirect:lobby.html";
+		}
+		
+		return "redirect:register.html";
 	}
 	
 	public User findTemporaryUserWithNoRoom() {

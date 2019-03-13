@@ -1,6 +1,5 @@
 package cardgame.game;
 
-import cardgame.model.ChatMessage;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
