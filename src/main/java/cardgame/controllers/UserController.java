@@ -44,14 +44,16 @@ public class UserController {
 		if (user != null) {
 			Long userId = user.getUserId();
 			Role role = user.getRole();
-			int roleId = role.getRoleId(); // Will be used to disable using anons
+			int roleId = role.getRoleId(); // Will be used to disable login as annon
 			if(password.equals(user.getPassword())) {
 				session.setAttribute("userId", Long.toString(userId));
-				return "redirect:lobby.html";
+				//return "redirect:lobby.html";
+				return userId.toString();
 			}
 		}
 		
-		return "redirect:login.html";
+		//return "redirect:login.html";
+		return "0";
 	}
 	
 	@GetMapping("/session")
@@ -70,14 +72,17 @@ public class UserController {
 			session.setAttribute("userId", Long.toString(userId));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "redirect:register.html";
+			//return "redirect:register.html";
+			return "0";
 		}
 		
 		if (userId != 0){
-			return "redirect:lobby.html";
+			//return "redirect:lobby.html";
+			return userId.toString();
 		}
 		
-		return "redirect:register.html";
+		//return "redirect:register.html";
+		return "0";
 	}
 	
 	public User findTemporaryUserWithNoRoom() {
