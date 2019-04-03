@@ -44,7 +44,10 @@ public class UserController {
 		if (user != null) {
 			Long userId = user.getUserId();
 			Role role = user.getRole();
-			int roleId = role.getRoleId(); // Will be used to disable login as annon
+			
+			// Will be used to disable login as annon
+			int roleId = role.getRoleId();
+			
 			if(password.equals(user.getPassword())) {
 				session.setAttribute("userId", Long.toString(userId));
 				//return "redirect:lobby.html";
@@ -59,11 +62,20 @@ public class UserController {
 	@GetMapping("/session")
 	@ResponseBody
 	public String getSession(HttpSession session) {
-		return session.getAttribute("userId").toString();
+		String userId = (String) session.getAttribute("userId");
+		if(userId != null && !userId.isEmpty()) {
+			return userId;
+		}
+		
+		User anon = userService.findFreeAnon();
+		Long anonId = anon.getUserId();
+		session.setAttribute("userId", Long.toString(anonId));
+		return anonId.toString();
 	}
 	
 	@PostMapping("/register")
-	public String registerUser(String login, String password, HttpSession session) throws Exception {
+	public String registerUser(String login, String password, HttpSession session) 
+		throws Exception {
 		Long userId = 0L;
 		try {
 			userService.createUser(login, password);
@@ -83,15 +95,5 @@ public class UserController {
 		
 		//return "redirect:register.html";
 		return "0";
-	}
-	
-	public User findTemporaryUserWithNoRoom() {
-		List<User> temporaryList = userRepository.findTemporaryUsers(Sort.by("username").ascending());
-		User temporaryUserWithNoRoom = new User();
-		if (temporaryList.size() > 0) {
-			temporaryUserWithNoRoom = temporaryList.get(0);
-		}
-		
-		return temporaryUserWithNoRoom;
 	}
 }

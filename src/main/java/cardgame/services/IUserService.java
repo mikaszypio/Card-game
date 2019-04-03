@@ -14,4 +14,5 @@ public interface IUserService {
 	public User save(User user);
 	public User updateUser(User user, String plainPassword);
 	public User updateUser(User user, String username, String plainPassword);
+	public User findFreeAnon();
 }

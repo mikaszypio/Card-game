@@ -109,4 +109,14 @@ public class UserService implements IUserService {
 		user.setPassword(plainPassword);
 		return userRepository.save(user);
 	}
+	
+	@Override
+	public User findFreeAnon() {
+		User unregistered = getUnregistered();
+		if (unregistered == null) {
+			unregistered = createAnon();
+		}
+		
+		return unregistered;
+	}
 }
