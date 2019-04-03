@@ -7,7 +7,6 @@ import cardgame.services.UserService;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +56,12 @@ public class UserController {
 		
 		//return "redirect:login.html";
 		return "0";
+	}
+	
+	@PostMapping("/logout")
+	public String logOut(HttpSession session) {
+		session.invalidate();
+		return Integer.toString(-1);
 	}
 	
 	@GetMapping("/session")
