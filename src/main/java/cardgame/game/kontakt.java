@@ -40,8 +40,8 @@ public class kontakt {
 		}
 	}
 	
-	public static Gracz wybiezCel(Gra gra) {
-		List<Gracz> gracze = gra.dajGraczy();
+	public static Gracz wybiezCel(List<Gracz> players) {
+		List<Gracz> gracze = players;
 		while(true) {
 			System.out.print("Lista graczy\n");
 			for(Gracz g : gracze) {

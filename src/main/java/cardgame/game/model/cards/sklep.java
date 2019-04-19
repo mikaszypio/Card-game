@@ -1,40 +1,40 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.Gra;
+import cardgame.game.model.Deck;
 import cardgame.game.model.Gracz;
 import java.util.ArrayList;
 import java.util.List;
 
 public class sklep extends Card{
 	
-	public sklep(int id, String naz, int num, String col, Gra g) {
+	public sklep(int id, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
 		opis = "Brak opisu";
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public sklep(int id, String obraz, String opek, String naz, int num, String col, Gra g) {
+	public sklep(int id, String obraz, String opek, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
 		opis = opek;
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public boolean zagraj() {
-		int ile = gra.dajIleGraczy();
+	@Override
+	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
+		int ile = players.size();
 		List<Card> karty = new ArrayList<Card>();
-		List<Gracz> gracze = gra.dajGraczy();
-		int aktualny = gra.dajNumerAktualnegoGracza();
+		List<Gracz> gracze = players;
+		//int aktualny = gra.dajNumerAktualnegoGracza();
+		int aktualny = players.indexOf(currentPlayer);
 		
 		for(int x = 0; x<ile; x++) {
-			Card k = gra.dobiez();
+			Card k = deck.getCard();
 			karty.add(k);
 		}
 		

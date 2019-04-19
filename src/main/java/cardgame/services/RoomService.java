@@ -1,6 +1,6 @@
 package cardgame.services;
 
-import cardgame.game.Gra;
+import cardgame.game.Game;
 import cardgame.game.model.Gracz;
 import cardgame.model.Room;
 import cardgame.model.User;
@@ -85,7 +85,7 @@ public class RoomService implements IRoomService {
 	
 	@Override
 	public void startGame() {
-		Gra game = new Gra(new ArrayList<> (), 1);
+		Game game = new Game(new ArrayList<> (), 1);
 		game.start();
 	}
 	

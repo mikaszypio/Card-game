@@ -1,37 +1,37 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.Gra;
+import cardgame.game.Game;
 import cardgame.game.kontakt;
+import cardgame.game.model.Deck;
 import cardgame.game.model.Gracz;
 import java.util.List;
 import java.util.Random;
 
 public class panika extends Card{
 	
-	public panika(int id, String naz, int num, String col, Gra g) {
+	public panika(int id, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
 		opis = "Brak opisu";
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public panika(int id, String obraz, String opek, String naz, int num, String col, Gra g) {
+	public panika(int id, String obraz, String opek, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
 		opis = opek;
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public boolean zagraj() {
-		Gracz cel = kontakt.wybiezCel(gra);
-		Gracz strzelec = gra.dajAktualnegoGracza();
-		int dystans = gra.policzDystans(strzelec, cel);
+	@Override
+	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
+		Gracz cel = kontakt.wybiezCel(players);
+		Gracz strzelec = currentPlayer;
+		int dystans = policzDystans(strzelec, cel, players);
 		int zasieg = strzelec.zasiegCzysty() - cel.modZasiegu();
 		if(dystans>zasieg) {
 			System.out.print("Nie si�gniesz");

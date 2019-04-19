@@ -1,6 +1,6 @@
 package cardgame.controllers;
 
-import cardgame.game.Gra;
+import cardgame.game.Game;
 import cardgame.game.model.Gracz;
 import cardgame.model.ChatMessage;
 import cardgame.viewmodel.GameboardViewModel;
@@ -33,7 +33,7 @@ public class GameController {
 		list.add(gracz2);
 		list.add(gracz3);
 		list.add(gracz4);
-		Gra gra = new Gra(list, 1);
+		Game gra = new Game(list, 1);
 		gra.start();
 	}
 	

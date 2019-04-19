@@ -1,6 +1,5 @@
 package cardgame.game.model;
 
-import cardgame.game.Gra;
 import cardgame.game.kontakt;
 import cardgame.game.model.cards.Equipment;
 import cardgame.game.model.cards.Card;
@@ -11,7 +10,6 @@ import java.util.Random;
 
 public class Gracz {
 
-	private Gra gra;
 	private Postac hero;
 	private String nick;
 	private Long ID;
@@ -26,7 +24,7 @@ public class Gracz {
 
 	public Gracz(String a) {
 		nick=a;
-		reka = new ArrayList<Card>(); 
+		reka = new ArrayList<>(); 
 		bron=null;
 		dodatek=null;
 		czyDynamit=false;
@@ -39,7 +37,7 @@ public class Gracz {
 	public Gracz(String a, Long id) {
 		nick=a;
 		ID=id;
-		reka = new ArrayList<Card>(); 
+		reka = new ArrayList<>(); 
 		bron=null;
 		dodatek=null;
 		czyDynamit=false;
@@ -55,10 +53,6 @@ public class Gracz {
 	
 	public int dajHp() {
 		return hp;
-	}
-	
-	public void ustawGre(Gra g) {
-		gra=g;
 	}
 	
 	public Postac dajPostac() {
@@ -103,17 +97,21 @@ public class Gracz {
 	}
 	
 	//bystra funkcja wywo�ywana gdy zagrywam bro�/dodatek 
-	public void wyposaz(Equipment cos){
-		if(cos.czyBron()==true){
-			if(bron!=null) {
-				gra.odzuc(bron);
+	public void wyposaz(Equipment equipment, Deck deck){
+		if(equipment.czyBron()){
+			if(bron != null) {
+				//gra.odzuc(bron);
+				deck.rejectCard(bron);
 			}
-			bron=cos;
-		}else {
-			if(dodatek!=null) {
-				gra.odzuc(dodatek);
+			
+			bron = equipment;
+		} else {
+			if(dodatek != null) {
+				//gra.odzuc(dodatek);
+				deck.rejectCard(dodatek);
 			}
-			dodatek=cos;
+			
+			dodatek = equipment;
 		}
 	}
 	
@@ -123,6 +121,14 @@ public class Gracz {
 	
 	public void ustawStrzelanie(boolean s) {
 		strzelal=s;
+	}
+	
+	public boolean gotDynamite() {
+		return czyDynamit;
+	}
+	
+	public boolean inPrison() {
+		return czyWiezienie;
 	}
 	
 	public void dostanDynamit() {
@@ -138,7 +144,7 @@ public class Gracz {
 		int wynik=1;
 		if(bron!=null) {wynik=wynik+bron.dajZasiegMod(); }
 		if(dodatek!=null) {wynik=wynik+dodatek.dajZasiegMod(); }
-		if(hero.dajNazwe()=="Rose Doolan") {wynik=wynik+1; }
+		if(hero.dajNazwe().equals("Rose Doolan")) {wynik=wynik+1; }
 		return wynik;
 	}
 	
@@ -146,7 +152,7 @@ public class Gracz {
 	public int zasiegCzysty() {
 		int wynik=1;
 		if(dodatek!=null) {wynik=wynik+dodatek.dajZasiegMod(); }
-		if(hero.dajNazwe()=="Rose Doolan") {wynik=wynik+1; }
+		if(hero.dajNazwe().equals("Rose Doolan")) {wynik=wynik+1; }
 		return wynik;
 	}
 	
@@ -154,7 +160,7 @@ public class Gracz {
 	public int modZasiegu() {
 		int wynik=0;
 		if(dodatek!=null) {wynik=wynik+dodatek.dajObronaMod(); }
-		if(hero.dajNazwe()=="Paul Regret") {wynik=wynik+1; }
+		if(hero.dajNazwe().equals("Paul Regret")) {wynik=wynik+1; }
 		return wynik;
 	}
 	
@@ -173,7 +179,7 @@ public class Gracz {
 	public boolean obrona() {
 		if(dodatek!=null) {
 			return dodatek.czyObrona();
-		}else {
+		} else {
 			return false;
 		}
 	}
@@ -187,10 +193,8 @@ public class Gracz {
 		}
 	}
 	
-	public void dobiezKarte() {
-		Card k;
-		k=gra.dobiez();
-		reka.add(k);
+	public void dobiezKarte(Deck deck) {
+		reka.add(deck.getCard());
 	}
 	
 	public void doReki(Card k) {
@@ -202,13 +206,14 @@ public class Gracz {
 	}
 	
 	//metoda sprawdza, czy masz dan� kart� na r�ce, je�li masz to odrzuca. W finalnej wersji powinna jeszcze pyta�, czy chcesz odrzuci�, ale... co� jest nie tak w kontakcie
-	public boolean testKarty(String nazwa, String zrodlo) {
+	public boolean testKarty(String nazwa, String zrodlo, Deck deck) {
 		System.out.print("Testuje gracz " + nick + "\n");
 		for(Card k : reka) {
-			if(k.dajNazwe()==nazwa) {
+			if(k.dajNazwe().equals(nazwa)) {
 				reka.remove(k);
-				gra.odzuc(k);
-				System.out.print("Odrzucoco kart� " + nazwa + "\n");
+				//gra.odzuc(k);
+				deck.rejectCard(k);
+				//System.out.print("Odrzucoco kart� " + nazwa + "\n");
 				return true;
 				
 				/*  wersja z zapytaniem
@@ -224,31 +229,28 @@ public class Gracz {
 						
 			}				
 		}
-		System.out.print("Brak karty " + nazwa + "-to zaboli. \n");
+		//System.out.print("Brak karty " + nazwa + "- to zaboli.\n");
 		return false;
 	}
 
 	//ogarnia dynamit, je�li jest-wywo�ywa� zawsze na start tury
-	public void sprawdzDynamit() {
-		if(czyDynamit==true) {
-			czyDynamit=false;
-			boolean wybuch = gra.poker("pik", 2, 9); 
-			if(wybuch==true) {
-				zran(3);
-			}else {
-				Gracz g = gra.dajNastepnegoGracza();
-				g.dostanDynamit();
-			}
+	public boolean sprawdzDynamit(Deck deck) {
+		czyDynamit=false;
+		if(deck.checkCard("pik", 2, 9)) {
+			zran(3, deck);
+			return true;
 		}
+		
+		return false;
 	}
 	
 	//ogarnia wiezienie, je�li jest-wywo�ywa� zawsze na start tury
-	public boolean sprawdzWiezienie() {
-		if(czyWiezienie==true) {
-			boolean wyjscie = gra.poker("kier");
-			return wyjscie;
+	public boolean sprawdzWiezienie(Deck deck) {
+		if(deck.checkCard("kier")) {
+			czyWiezienie = false;
 		}
-		return true;
+		
+		return !czyWiezienie;
 	}
 	
 	public void lecz(int ile) {
@@ -259,46 +261,50 @@ public class Gracz {
 	}
 	
 	//funcja wywo�ywana dostaniem banga
-	public void postrzel() {
-		if(hero.dajNazwe()=="Jourdonnais") {
-			if(gra.poker("kier")==true) {
+	public void postrzel(Deck deck) {
+		if(hero.dajNazwe().equals("Jourdonnais")) {
+			//if(gra.poker("kier")==true) {
+			if(deck.checkCard("kier")) {
 				System.out.print("Epicko�� Jourdonnaisa ochroni�a\n");
 				return;
 			}
 		}
 		if(obrona()==true) {
-			if(gra.poker("kier")==true) {
+			//if(gra.poker("kier")==true) {
+			if(deck.checkCard("kier")) {
 				System.out.print("Bary�ka ochroni�a\n");
 				return;
 			}
 		}		
-		boolean czy = testKarty("missed", "Bang");
+		boolean czy = testKarty("missed", "Bang", deck);
 		if(czy==true){
 			System.out.print("Spud�owa�\n");
 		}else {
-			zran(1);
+			zran(1, deck);
 		}
 	}
 	
 	//funcja wywo�ywana dostaniem banga od postaci kt�r� trzeba podw�jnie pud�owa�
-	public void postrzelBardziej() {
-		int barylki=0;
-		int pudla=0;
+	public void postrzelBardziej(Deck deck) {
+		int barylki = 0;
+		int pudla = 0;
 		
-		if(hero.dajNazwe()=="Jourdonnais") {
-			if(gra.poker("kier")==true) {
+		if(hero.dajNazwe().equals("Jourdonnais")) {
+			//if(gra.poker("kier")==true) {
+			if(deck.checkCard("kier")) {
 				System.out.print("Epicko�� Jourdonnaisa pomaga uskoczy�\n");
 				barylki++;
 			}
 		}
 		if(obrona()==true) {
-			if(gra.poker("kier")==true) {
+			//if(gra.poker("kier")==true) {
+			if(deck.checkCard("kier")) {
 				System.out.print("Bary�ka pomaga uskoczy�\n");
 				barylki++;
 			}
 		}	
 		for(Card k : reka) {
-			if(k.dajNazwe()=="missed") {
+			if(k.dajNazwe().equals("missed")) {
 				pudla++;
 			}
 		}
@@ -308,7 +314,7 @@ public class Gracz {
 			return;
 		}
 		if(barylki==1) {
-			boolean czy = testKarty("missed", "Bang");
+			boolean czy = testKarty("missed", "Bang", deck);
 			if(czy==true){
 				System.out.print("Spud�owa� dzi�ki pomocy bary�ki/�wietno�ci Jourdonnaisa\n");
 			}
@@ -318,105 +324,111 @@ public class Gracz {
 				//pytanie czy chcesz pud�owa�
 				int ile=2;
 				for(Card k : reka) {
-					if(k.dajNazwe()=="missed" && ile>0) {
+					if(k.dajNazwe().equals("missed") && ile>0) {
 						ile--;
 						reka.remove(k);
-						gra.odzuc(k);
+						//gra.odzuc(k);
+						deck.rejectCard(k);
 					}
 				}
 				System.out.print("Jakim� cudem spud�owa� \n");
 				return;
 			}
 		}
-		zran(1);
+		zran(1, deck);
 	}
 	
-	public void zran(int ile) {
-		hp=hp-ile;
-		if(hero.dajNazwe()=="Bart Cassady") {
+	public void zran(int ile, Deck deck) {
+		hp -= ile;
+		if(hero.dajNazwe().equals("Bart Cassady")) {
 			while(ile>0) {
-				dobiezKarte();
+				//dobiezKarte();
+				reka.add(deck.getCard());
 				ile--;
 			}
 		}
+		
 		while(hp<1) {
-			if(testKarty("beer", "Zgon")==true) {
+			if(testKarty("beer", "Zgon", deck)) {
 				hp++;
-			}else {
-				gra.zgon(this);
+			} else {
+				return;
 			}
 		}
 	}
 	
 	//wywo�ywane na pocz�tku tury
-	public void wezKarty() {	
+	public void wezKarty(Deck deck, List<Gracz> gracze) {	
 		boolean czy;
 		switch(hero.dajNazwe()) {
 			case "Pedro Ramirez":
 				czy = kontakt.czyDobracInaczej();
-				if(czy==true) {
-					Card k = gra.dobiezCmentaz();
-					if(k==null) {
-						dobiezKarte();
-						dobiezKarte();
-					}else {
+				if(czy == true) {
+					Card k = deck.getRejectedCard();
+					if(k == null) {
+						reka.add(deck.getCard());
+						reka.add(deck.getCard());
+					} else {
 						doReki(k);
-						dobiezKarte();
+						reka.add(deck.getCard());
 					}
-				}else {
-					dobiezKarte();
-					dobiezKarte();
-				}			
+				} else {
+					reka.add(deck.getCard());
+					reka.add(deck.getCard());
+				}
+				
 				break;
 			case "Black Jack":
-				dobiezKarte();
-				Card k = gra.dobiez();
-				if(k.dajKolor()=="kier" || k.dajKolor()=="karo") {
-					dobiezKarte();
+				reka.add(deck.getCard());
+				Card k = deck.getCard();
+				if(k.dajKolor().equals("kier") || k.dajKolor().equals("karo")) {
+					reka.add(deck.getCard());
 				}
+				
 				doReki(k);
 				break;
 			case "Jesse Jones":
 				czy = kontakt.czyDobracInaczej();
 				if(czy==true) {
-					Gracz cel = kontakt.wybiezCel(gra);
+					Gracz cel = kontakt.wybiezCel(gracze);
 					List<Card> reka = cel.dajReke();
 					Random rand = new Random();
 					Card wynik = reka.get(rand.nextInt(reka.size()));
 					reka.remove(wynik);
 					doReki(wynik);
-					dobiezKarte();
+					reka.add(deck.getCard());
 				}else {
-					dobiezKarte();
-					dobiezKarte();
+					reka.add(deck.getCard());
+					reka.add(deck.getCard());
 				}				
 				break;
 			case "Kit Carlson":
-				List<Card> wyciogniete = new ArrayList<Card>();
-				wyciogniete.add(gra.dobiez());
-				wyciogniete.add(gra.dobiez());
-				wyciogniete.add(gra.dobiez());
+				List<Card> wyciogniete = new ArrayList<>();
+				wyciogniete.add(deck.getCard());
+				wyciogniete.add(deck.getCard());
+				wyciogniete.add(deck.getCard());
 				System.out.print("Wyci�gn��e� te trzy karty-wybierz kt�rej z nich nie chcesz");
 				Card smiec = kontakt.wybiezKarte(wyciogniete);
 				wyciogniete.remove(smiec);
-				gra.naSzczyt(smiec);
+				//gra.naSzczyt(smiec);
+				deck.toTop(smiec);
 				for(Card ka : wyciogniete) {
 					doReki(ka);
 				}
 			default:
-				dobiezKarte();
-				dobiezKarte();
+				reka.add(deck.getCard());
+				reka.add(deck.getCard());
 				break;
 		}			
 	}
 
 	//wywo�ywane na koniec tury
-	public void odzucKarty() {
+	public void odzucKarty(Deck deck) {
 		int ile = reka.size();
 		int ileMoze = zdrowie();
-		while(ile>ileMoze) {
+		while(ile > ileMoze) {
 			Card k = kontakt.wybiezKarte(reka);
-			gra.odzuc(k);	
+			deck.rejectCard(k);
 			ile--;
 		}
 	}

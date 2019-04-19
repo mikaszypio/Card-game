@@ -1,7 +1,8 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.Gra;
+import cardgame.game.model.Deck;
 import cardgame.game.model.Gracz;
+import java.util.List;
 
 public class Equipment extends Card {
 
@@ -12,7 +13,7 @@ public class Equipment extends Card {
 	private boolean obrona;
 	private boolean miltistrzal;
 	
-	public Equipment(int id, String naz, int num, String col, boolean czyBron, int zasM, int obrM, boolean czyBroni, boolean czyWielo, Gra g){
+	public Equipment(int id, String naz, int num, String col, boolean czyBron, int zasM, int obrM, boolean czyBroni, boolean czyWielo){
 		ID=id;
 		nazwa=naz;
 		numer=num;
@@ -22,7 +23,7 @@ public class Equipment extends Card {
 		obronaMod=obrM;
 		obrona=czyBroni;
 		miltistrzal=czyWielo;
-		gra=g;
+		//gra=g;
 	}
 	
 	public boolean czyBron() {
@@ -45,9 +46,10 @@ public class Equipment extends Card {
 		return miltistrzal;
 	}
 	
-	public boolean zagraj() {
-		Gracz g = gra.dajAktualnegoGracza();
-		g.wyposaz(this);
+	@Override
+	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
+		Gracz g = currentPlayer;
+		g.wyposaz(this, deck);
 		return true;
 	}
 }
