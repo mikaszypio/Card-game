@@ -8,13 +8,13 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 	
-	@Query("select u from User u where u.role.name = player")
+	@Query("select u from User u where u.role = 2")
 	public List<User> findAllPlayers(Sort sort);
 	
-	@Query("select u from User u where u.role.name = unregistered")
+	@Query("select u from User u where u.role = 3")
 	public List<User> findAllTemporaryUsers(Sort sort);
 	
-	@Query("select u from User u where u.role.name = unregistered and u.room.roomId = null")
+	@Query("select u from User u where u.role = 3 and u.room = null")
 	public List<User> findTemporaryUsers(Sort sort);
 	
 	public User findByUsername(String username);
