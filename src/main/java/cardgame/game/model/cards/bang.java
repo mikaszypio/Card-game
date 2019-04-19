@@ -2,7 +2,7 @@ package cardgame.game.model.cards;
 
 import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class bang extends Card {
@@ -14,7 +14,6 @@ public class bang extends Card {
 		opis = "Brak opisu";
 		numer=num;
 		kolor=col;
-		//gra=g;
 	}
 	
 	public bang(int id, String obraz, String opek, String naz, int num, String col) {
@@ -27,13 +26,13 @@ public class bang extends Card {
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {		
-		Gracz cel = kontakt.wybiezCel(players);
-		Gracz strzelec = currentPlayer;
-		Postac p = strzelec.dajPostac();
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {		
+		Player cel = kontakt.wybiezCel(players);
+		Player strzelec = currentPlayer;
+		Hero p = strzelec.getHero();
 		String name = p.dajNazwe();
-		if(strzelec.czyStrzelal()==true)
-			if(strzelec.wielostrzal()==false && name!="Willy the Kid") {
+		if(strzelec.hasShot()==true)
+			if(strzelec.isMultipleShooter()==false && name!="Willy the Kid") {
 			System.out.print("Nie mo�esz strzela� ponownie");
 			return false;				
 		}

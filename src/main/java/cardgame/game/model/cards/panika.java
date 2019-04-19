@@ -3,7 +3,7 @@ package cardgame.game.model.cards;
 import cardgame.game.Game;
 import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 import java.util.Random;
 
@@ -28,9 +28,9 @@ public class panika extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
-		Gracz cel = kontakt.wybiezCel(players);
-		Gracz strzelec = currentPlayer;
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+		Player cel = kontakt.wybiezCel(players);
+		Player strzelec = currentPlayer;
 		int dystans = policzDystans(strzelec, cel, players);
 		int zasieg = strzelec.zasiegCzysty() - cel.modZasiegu();
 		if(dystans>zasieg) {
@@ -39,21 +39,21 @@ public class panika extends Card{
 		}else {
 			String co = kontakt.coChceszZniszczyc();
 			if(co=="bron") { 
-				Equipment bron = cel.dajBron();
-				cel.ustawBron(null);
-				strzelec.doReki(bron);
+				Equipment bron = cel.getWeapon();
+				cel.setWeapon(null);
+				strzelec.addToHand(bron);
 			}
 			if(co=="dodatek") { 
-				Equipment doda = cel.dajDodatek();
-				cel.ustawDodatek(null);
-				strzelec.doReki(doda);
+				Equipment doda = cel.getSupportItem();
+				cel.setSupportItem(null);
+				strzelec.addToHand(doda);
 			}
 			if(co=="karta") {
 				List<Card> reka = cel.dajReke();
 				Random rand = new Random();
 				Card wynik = reka.get(rand.nextInt(reka.size()));
 				reka.remove(wynik);
-				strzelec.doReki(wynik);		
+				strzelec.addToHand(wynik);		
 			}
 			return true;
 		}

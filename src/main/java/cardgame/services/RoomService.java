@@ -1,7 +1,7 @@
 package cardgame.services;
 
 import cardgame.game.Game;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import cardgame.model.Room;
 import cardgame.model.User;
 import cardgame.repositories.RoomRepository;
@@ -90,14 +90,14 @@ public class RoomService implements IRoomService {
 	}
 	
 	@Override
-	public Gracz userToPlayer(User user) {
-		Gracz player = new Gracz(user.getUsername(), user.getUserId());
+	public Player userToPlayer(User user) {
+		Player player = new Player(user.getUsername(), user.getUserId());
 		return player;
 	}
 	
 	@Override
-	public List<Gracz> listOfPlayers(Room room){
-		List<Gracz> playersList = new ArrayList<>();
+	public List<Player> listOfPlayers(Room room){
+		List<Player> playersList = new ArrayList<>();
 		List<User> usersList = getRoomUsers(room);
 		for(User user : usersList) {
 			playersList.add(userToPlayer(user));

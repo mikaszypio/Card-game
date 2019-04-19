@@ -1,7 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class gatling extends Card{
@@ -25,10 +25,10 @@ public class gatling extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
-		List<Gracz> gracze = players;
-		Gracz aktualny = currentPlayer;
-		for(Gracz g : gracze) {
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+		List<Player> gracze = players;
+		Player aktualny = currentPlayer;
+		for(Player g : gracze) {
 			if(g!=aktualny) {
 				g.postrzel(deck);
 			}

@@ -1,7 +1,7 @@
 package cardgame.controllers;
 
 import cardgame.game.Game;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import cardgame.model.ChatMessage;
 import cardgame.viewmodel.GameboardViewModel;
 import java.util.ArrayList;
@@ -24,11 +24,11 @@ public class GameController {
 	
 	@MessageMapping("/activegames/start")
 	public void start(ChatMessage message) {
-		Gracz gracz1 = new Gracz("Ja", (long) 1);
-		Gracz gracz2 = new Gracz("On", (long) 2);
-		Gracz gracz3 = new Gracz("Ona", (long) 3);
-		Gracz gracz4 = new Gracz("Ono", (long) 4);
-		ArrayList<Gracz> list = new ArrayList<>();
+		Player gracz1 = new Player("Ja", (long) 1);
+		Player gracz2 = new Player("On", (long) 2);
+		Player gracz3 = new Player("Ona", (long) 3);
+		Player gracz4 = new Player("Ono", (long) 4);
+		ArrayList<Player> list = new ArrayList<>();
 		list.add(gracz1);
 		list.add(gracz2);
 		list.add(gracz3);

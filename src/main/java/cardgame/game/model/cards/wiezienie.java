@@ -2,7 +2,7 @@ package cardgame.game.model.cards;
 
 import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class wiezienie extends Card{
@@ -26,9 +26,9 @@ public class wiezienie extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
-		Gracz g = kontakt.wybiezCel(players);
-		g.doPaki();
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+		Player g = kontakt.wybiezCel(players);
+		g.setInJail();
 		return true;
 	}
 

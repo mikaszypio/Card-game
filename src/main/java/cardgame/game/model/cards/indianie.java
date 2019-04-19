@@ -1,7 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class indianie extends Card{
@@ -25,12 +25,12 @@ public class indianie extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
-		List<Gracz> gracze = players;
-		for(Gracz g : gracze) {
-			boolean czy = g.testKarty("bang", "Indianie", deck);
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+		List<Player> gracze = players;
+		for(Player g : gracze) {
+			boolean czy = g.testCard("bang", "Indianie", deck);
 			if(czy==false) {
-				g.zran(1, deck);
+				g.hurt(1, deck);
 			}
 		}	
 		return true;

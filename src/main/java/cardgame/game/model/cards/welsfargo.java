@@ -1,7 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class welsfargo extends Card{
@@ -25,11 +25,11 @@ public class welsfargo extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
-		Gracz g = currentPlayer;
-		g.dobiezKarte(deck);
-		g.dobiezKarte(deck);
-		g.dobiezKarte(deck);
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+		Player g = currentPlayer;
+		g.getExtraCard(deck);
+		g.getExtraCard(deck);
+		g.getExtraCard(deck);
 		return true;
 	}
 }

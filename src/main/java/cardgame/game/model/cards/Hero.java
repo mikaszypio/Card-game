@@ -2,23 +2,22 @@ package cardgame.game.model.cards;
 
 import cardgame.game.Game;
 
-public class Postac {
+public class Hero {
 
-	private Game gra;
 	private int maxHp;
 	private String nazwa;
 	private int ID;
 	private String obrazek;
 	private String opis;
 	
-	public Postac(int id, int hp, String name) {
+	public Hero(int id, int hp, String name) {
 		ID=id;
 		maxHp=hp;
 		nazwa=name;
 		//gra=g;
 	}
 	
-	public Postac(int id, int hp, String name, String pic, String opek) {
+	public Hero(int id, int hp, String name, String pic, String opek) {
 		ID=id;
 		maxHp=hp;
 		nazwa=name;

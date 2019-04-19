@@ -23,23 +23,25 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 public class Game extends Thread {
 
-	private Deck deck;
-	private List<Gracz> gracze;
-	private List<Gracz> martwi;
-	private int ileGraczy;
-	private int aktualny;
-	private long id;
-	
 	@Autowired
 	private IRoomService roomService;
-
-	private StompSession session;
-	private Gson gson;
 	
-	public Game(List<Gracz> gracze, long id) {
+	private Gson gson;
+	private StompSession session;
+	
+	private long id;
+	private Deck deck;
+	private List<Player> players;
+	private List<Player> deadPlayers;
+	private int activePlayerIndex;
+	
+	public Game(List<Player> players, long id) {
 		this.id = id;
-		this.gracze = gracze;
+		this.players = players;
 		deck = new Deck();
+		
+		deadPlayers = new ArrayList<>();
+		activePlayerIndex = 0;
 		
 		try {
 			session = createStompSession(id);
@@ -53,84 +55,77 @@ public class Game extends Thread {
 	
 	@Override
 	public void run() {
-		martwi = new ArrayList<>();
-		ileGraczy = gracze.size();
-		System.out.print(ileGraczy);
-		aktualny=0;	
-
-		for(int x=0; x<ileGraczy; x++) {
-			Gracz g=gracze.get(0);
+		for(int x = 0; x < players.size(); x++) {
+			Player player = players.get(0);
+			
 			//tu powinno wys�a� list� "gracze" do poszczeg�lnego klienta-tego będącego aktualnie graczem g
-			gracze.remove(g);
-			gracze.add(g);
+			
+			players.remove(player);
+			players.add(player);
 		}
 		
-		List<Postac> postacie = listaPostaci();
-		for(Gracz g : gracze) {
+		List<Hero> heros = createHeros();
+		for(Player player : players) {
 			Random rand = new Random();
-			Postac wybrana = postacie.get(rand.nextInt(postacie.size()));
-			postacie.remove(wybrana);
-			g.ustawPostac(wybrana);
+			Hero selected = heros.get(rand.nextInt(heros.size()));
+			heros.remove(selected);
+			player.setHero(selected);
 		}
 		
-		List<String> role = new ArrayList<>();
-		boolean gramy=true;
-		role.add("szeryf");
-		role.add("renegat");
-		role.add("bandyta");
-		switch(ileGraczy) {
-			case 4:
-				role.add("bandyta");
-				break;
-			case 5:
-				role.add("bandyta");
-				role.add("zast");
-				break;
-			case 6:
-				role.add("bandyta");
-				role.add("bandyta");
-				role.add("zast");
-				break;
-			case 7:
-				role.add("bandyta");
-				role.add("bandyta");
-				role.add("zast");
-				role.add("zast");
-				break;
-			default:
-				gramy=false;
-				System.out.print("Zła ilość graczy");
-				break;
+		List<String> roles = createRoles();
+		boolean canStart = true;
+		if(roles.isEmpty()) {
+			canStart = false;
 		}
-		if(gramy==true) {
-			for(Gracz g : gracze) {
-				Random rand = new Random();
-				String s = role.get(rand.nextInt(role.size()));
-				role.remove(s);
-				switch(s) {
+		
+		if(canStart) {
+			for(Player player : players) {
+				Random random = new Random();
+				String role = roles.get(random.nextInt(roles.size()));
+				roles.remove(role);
+				switch(role) {
 					case "szeryf":
-						g.ustawRole(1);
+						player.setRole(1);
 						break;
 					case "bandyta":
-						g.ustawRole(4);
+						player.setRole(4);
 						break;
 					case "renegat":
-						g.ustawRole(3);
+						player.setRole(3);
 						break;
 					case "zast":
-						g.ustawRole(2);
+						player.setRole(2);
 						break;
 				}
 			}
 		}
 		
-		while(gramy==true) {
-			Gracz tmp = gracze.get(aktualny);
-			tura(tmp);
-			if(aktualny<(ileGraczy-1)) {
-				aktualny++;
-			}else {
-				aktualny=0;
+		while(canStart) {
+			Player player = players.get(activePlayerIndex);
+			playTurn(player);
+			if(activePlayerIndex < (players.size() - 1)) {
+				activePlayerIndex++;
+			} else {
+				activePlayerIndex = 0;
+			}
+		}
+	}
+	
+	private void broadcastViewModel() {
+		for(Player player : players) {
+			PartialCard topRejectedCard = null;
+			if (!deck.withoutRejectedCards()) {
+				topRejectedCard = new PartialCard(deck.getRejectedCard(false));
+			}
+			
+			GameboardViewModel viewModel = new GameboardViewModel(players, activePlayerIndex,
+				(long) player.getId(), deck.getRejectedCardsSize(), topRejectedCard);
+			
+			try {
+				byte[] msg = gson.toJson(viewModel).getBytes(StandardCharsets.UTF_8);
+				session.send("/app/activegames/"+(long)id+"/"+(long)player.getId(), msg);
+			} catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -147,89 +142,44 @@ public class Game extends Thread {
 		return stompSession;
 	}
 	
-	public List<Gracz> dajGraczy() {
-		return gracze;
+	private Player getNextPlayer() {
+		int index = (activePlayerIndex + 1) % players.size();
+		return players.get(index);
 	}
 	
-	public Gracz dajAktualnegoGracza() {
-		return gracze.get(aktualny);
-	}
-	
-	public Gracz dajNastepnegoGracza() {
-		int x = aktualny+1;
-		if(x==ileGraczy) {x=0;}
-		return gracze.get(x);
-	}
-	
-	public int dajNumerGracza(Gracz g) {
-		for(int x=0; x<gracze.size(); x++) {
-			if(gracze.get(x)==g) {
-				//gracze.indexOf(g);
-				return x;
-			}
-		}
-		return -1;
-	}
-	
-	public int dajIleGraczy() {
-		return ileGraczy;
-	}
-	public int dajNumerAktualnegoGracza() {
-		return aktualny; 
-	}
-	
-	public void tura(Gracz g){
-		for(Gracz gracz : gracze) {
-			PartialCard topRejectedCard = null;
-			if (!deck.withoutRejectedCards()) {
-				topRejectedCard = new PartialCard(deck.getRejectedCard(false));
-			}
-			
-			GameboardViewModel viewModel = new GameboardViewModel(gracze, aktualny,
-				(long) gracz.dajId(), deck.getRejectedCardsSize(), topRejectedCard);
-			
-			try {
-				byte[] msg = gson.toJson(viewModel).getBytes(StandardCharsets.UTF_8);
-				session.send("/app/activegames/"+(long)id+"/"+(long)gracz.dajId(), msg);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
+	private void playTurn(Player player){
+		broadcastViewModel();
+		player.setShotStatus(false);
 		
-		g.ustawStrzelanie(false);
-		
-		if(g.gotDynamite()) {
-			boolean boom = g.sprawdzDynamit(deck);
+		if(player.gotDynamite()) {
+			boolean boom = player.checkDynamite(deck);
 			if(!boom) {
-				Gracz next = dajNastepnegoGracza();
-				next.dostanDynamit();
-			} else {
-				if (g.dajHp() < 1) {
-					zgon(g);
-				}
+				Player nextPlayer = getNextPlayer();
+				nextPlayer.setDynamite();
+			} else if(player.getHitPoints() < 1) {
+				makeDead(player);
 			}
 		}
 		
 		boolean isFree = true;
-		if(g.inPrison()) {
-			isFree = g.sprawdzWiezienie(deck);
+		if(player.inPrison()) {
+			isFree = player.checkPrison(deck);
 		}
 		
 		//boolean czy = g.sprawdzWiezienie();
 		//if(czy == true) {
 		if(isFree) {
-			g.wezKarty(deck, gracze);
-			boolean dalej = true;
-			while(dalej==true) {
-				Card k = kontakt.wybiezKarte(gracze.get(aktualny).dajReke());
+			player.getCards(deck, players);
+			boolean isPlaying = true;
+			while(isPlaying) {
+				Card k = kontakt.wybiezKarte(players.get(activePlayerIndex).dajReke());
 				if(k==null) {
 					//prymitywna wersja sygna�u zako�czenia tury
-					dalej=false;
+					isPlaying=false;
 				} else {
-					boolean czyWyszlo = k.zagraj(deck, gracze, g);
-					// Sprawdź zgony
-					if(czyWyszlo==true) {
-						gracze.get(aktualny).zReki(k);
+					boolean result = k.zagraj(deck, players, player);
+					if(result) {
+						players.get(activePlayerIndex).removeFromHand(k);
 						//odzuc(k);
 						deck.rejectCard(k);
 						checkDeaths();
@@ -237,58 +187,61 @@ public class Game extends Thread {
 				}
 			}
 			
-			g.odzucKarty(deck);
+			player.rejectCards(deck);
 		}
 	}
 	
 	private void checkDeaths() {
-		for(Gracz player : gracze) {
-			if(player.dajHp() < 1) {
-				zgon(player);
+		for(Player player : players) {
+			if(player.getHitPoints() < 1) {
+				makeDead(player);
 			}
 		}
 	}
 	
-	public void zgon(Gracz g) {
-		Gracz akt = dajAktualnegoGracza();
-		gracze.remove(g);
-		ileGraczy--;
-		aktualny = dajNumerGracza(akt);
-		if(g.dajBron()!=null) {
-			g.doReki(g.dajBron());
-			g.ustawBron(null);
+	private void makeDead(Player g) {
+		Player akt = players.get(activePlayerIndex);
+		players.remove(g);
+		activePlayerIndex = players.indexOf(akt);
+		if(g.getWeapon()!=null) {
+			g.addToHand(g.getWeapon());
+			g.setWeapon(null);
 		}
-		if(g.dajDodatek()!=null) {
-			g.doReki(g.dajDodatek());
-			g.ustawDodatek(null);
+		
+		if(g.getSupportItem()!=null) {
+			g.addToHand(g.getSupportItem());
+			g.setSupportItem(null);
 		}
-		Gracz sep = null;
-		for(Gracz zywy : gracze) {
-			if(zywy.dajPostac().dajNazwe().equals("Sam Sep")) {
+		
+		Player sep = null;
+		for(Player zywy : players) {
+			if(zywy.getHero().dajNazwe().equals("Sam Sep")) {
 				sep=zywy;
 			}
 		}
-		if(sep==null) {
+		
+		if(sep == null) {
 			for(Card k : g.dajReke()) {
 				//odzuc(k);
 				deck.rejectCard(k);
-				g.zReki(k);
+				g.removeFromHand(k);
 			}
-		}else {
+		} else {
 			for(Card k : g.dajReke()) {
-				sep.doReki(k);
-				g.zReki(k);
+				sep.addToHand(k);
+				g.removeFromHand(k);
 			}
 		}
-		martwi.add(g);
+		
+		deadPlayers.add(g);
 		sprawdzKoniec();
 	}	
 	
-	public void sprawdzKoniec() {
+	private void sprawdzKoniec() {
 		int zlo = 0;
 		boolean szeryf = false;
-		for(Gracz g : gracze) {
-			switch(g.dajRole()) {
+		for(Player g : players) {
+			switch(g.getRole()) {
 				case 1:
 					szeryf = true;
 					break;
@@ -302,39 +255,42 @@ public class Game extends Thread {
 					break;
 			}
 		}
-		if(szeryf==false) {
-			if(gracze.size()==1 && gracze.get(0).dajRole()==3) {
-				zakoncz(3);
-			}else {
-				zakoncz(4);
+		
+		if(szeryf == false) {
+			if(players.size() == 1 && players.get(0).getRole() == 3) {
+				finalizeGame(3);
+			} else {
+				finalizeGame(4);
 			}		
 		}
-		if(zlo==0) {
-			zakoncz(1);
+		
+		if(zlo == 0) {
+			finalizeGame(1);
 		}
 		
 	}	
 	
-	public void zakoncz(int kto) {
-		for(Gracz g : martwi) {
-			gracze.add(g);
+	private void finalizeGame(int winningRoles) {
+		for(Player player : deadPlayers) {
+			players.add(player);
 		}
-		List<Gracz> wygrali = new ArrayList<>();
-		List<Gracz> przegrali = new ArrayList<>();
-		if(kto==1) {
-			for(Gracz g : gracze) {
-				if(g.dajRole()<3) {
-					wygrali.add(g);
-				}else {
-					przegrali.add(g);
+		
+		List<Player> winners = new ArrayList<>();
+		List<Player> losers = new ArrayList<>();
+		if(winningRoles == 1) {
+			for(Player player : players) {
+				if(player.getRole() < 3) {
+					winners.add(player);
+				} else {
+					losers.add(player);
 				}
 			}
-		}else {
-			for(Gracz g : gracze) {
-				if(g.dajRole()==kto) {
-					wygrali.add(g);
-				}else {
-					przegrali.add(g);
+		} else {
+			for(Player player : players) {
+				if(player.getRole() == winningRoles) {
+					winners.add(player);
+				} else {
+					losers.add(player);
 				}
 			}
 		}
@@ -343,26 +299,59 @@ public class Game extends Thread {
 		//System.exit(0);
 	}
 	
-	public List<Postac> listaPostaci(){
-		List<Postac> lista = new ArrayList<>();
+	private List<Hero> createHeros() {
+		List<Hero> heros = new ArrayList<>();
 		
-		lista.add(new Postac(1, 4, "Bart Cassady"));  //done
-		lista.add(new Postac(2, 4, "Black Jack"));  //done
-		lista.add(new Postac(3, 4, "Calamity Janet"));  //done
-		//lista.add(new Postac(4, 3, "El Gringo", this));  //gdy oberwie, zabiera kart� z �apy tego, co go zrani� (nie dzia�a przy wybuchu dynamitu)
-		lista.add(new Postac(5, 4, "Jesse Jones"));  //done
-		lista.add(new Postac(6, 4, "Jourdonnais"));  //done
-		lista.add(new Postac(7, 4, "Kit Carlson"));  //done
-		//lista.add(new Postac(8, 4, "Lusky Duke", this));  //sprawdza pokera dwa razy
-		lista.add(new Postac(9, 3, "Paul Regret"));  //done
-		lista.add(new Postac(10, 4, "Pedro Ramirez"));  //done
-		lista.add(new Postac(11, 4, "Rose Doolan"));  //done
-		//lista.add(new Postac(12, 4, "Sid Ketchum", this));  //W DOWOLNYM MOMENCIE mo�e spali� dwie karty z �apy by wylezy� 1hp.
-		lista.add(new Postac(13, 4, "Slab Zabojca"));  //done
-		//tmp = new Postac(14, 4, "Suzy Lafayette", this));  //gdy ma pust� r�k�, dobieta kart� z talii
-		lista.add(new Postac(15, 4, "Sam Sep"));  //done
-		lista.add(new Postac(16, 4, "Willy the Kid"));  //done
+		heros.add(new Hero(1, 4, "Bart Cassady"));  //done
+		heros.add(new Hero(2, 4, "Black Jack"));  //done
+		heros.add(new Hero(3, 4, "Calamity Janet"));  //done
+		//heros.add(new Hero(4, 3, "El Gringo"));  //gdy oberwie, zabiera kart� z �apy tego, co go zrani� (nie dzia�a przy wybuchu dynamitu)
+		heros.add(new Hero(5, 4, "Jesse Jones"));  //done
+		heros.add(new Hero(6, 4, "Jourdonnais"));  //done
+		heros.add(new Hero(7, 4, "Kit Carlson"));  //done
+		//heros.add(new Hero(8, 4, "Lusky Duke"));  //sprawdza pokera dwa razy
+		heros.add(new Hero(9, 3, "Paul Regret"));  //done
+		heros.add(new Hero(10, 4, "Pedro Ramirez"));  //done
+		heros.add(new Hero(11, 4, "Rose Doolan"));  //done
+		//heros.add(new Hero(12, 4, "Sid Ketchum"));  //W DOWOLNYM MOMENCIE mo�e spali� dwie karty z �apy by wylezy� 1hp.
+		heros.add(new Hero(13, 4, "Slab Zabojca"));  //done
+		//heros.add(new Hero(14, 4, "Suzy Lafayette"));  //gdy ma pust� r�k�, dobieta kart� z talii
+		heros.add(new Hero(15, 4, "Sam Sep"));  //done
+		heros.add(new Hero(16, 4, "Willy the Kid"));  //done
 		
-		return lista;
+		return heros;
+	}
+	
+	private List<String> createRoles() {
+		List<String> roles = new ArrayList<>();
+		roles.add("szeryf");
+		roles.add("renegat");
+		roles.add("bandyta");
+		switch(players.size()) {
+			case 4:
+				roles.add("bandyta");
+				break;
+			case 5:
+				roles.add("bandyta");
+				roles.add("zast");
+				break;
+			case 6:
+				roles.add("bandyta");
+				roles.add("bandyta");
+				roles.add("zast");
+				break;
+			case 7:
+				roles.add("bandyta");
+				roles.add("bandyta");
+				roles.add("zast");
+				roles.add("zast");
+				break;
+			default:
+				roles.clear();
+				System.out.print("Zła ilość graczy");
+				break;
+		}
+		
+		return roles;
 	}
 }

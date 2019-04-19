@@ -1,7 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class Card {
@@ -37,16 +37,15 @@ public class Card {
 		return kolor;
 	}
 	
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
 		return false;
 	}
 	
-	//liczy odleg�o�� mi�dzy graczami
-	public int policzDystans(Gracz jeden, Gracz dwa, List<Gracz> gracze) {
+	public int policzDystans(Player jeden, Player dwa, List<Player> gracze) {
 		int pierwszy = gracze.indexOf(jeden);
 		int drugi = gracze.indexOf(dwa);
 		if(pierwszy ==-1 || drugi==-1) {
-			System.out.print("liczenie dystansu-przysz�y z�e dane");
+			//System.out.print("liczenie dystansu-przysz�y z�e dane");
 			return 0;
 		} else {
 			if(pierwszy>drugi) {
@@ -61,7 +60,7 @@ public class Card {
 			} else {
 				return prosty;
 			}
-		}		
+		}
 	}
 	
 }

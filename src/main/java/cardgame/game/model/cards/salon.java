@@ -1,7 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class salon extends Card{
@@ -25,10 +25,10 @@ public class salon extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
-		List<Gracz> gracze = players;
-		for(Gracz g : gracze) {
-			g.lecz(1);
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+		List<Player> gracze = players;
+		for(Player g : gracze) {
+			g.heal(1);
 		}		
 		return true;
 	}

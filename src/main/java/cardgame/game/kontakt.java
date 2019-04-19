@@ -1,26 +1,31 @@
 package cardgame.game;
 
 import cardgame.game.model.cards.Card;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 import java.util.Scanner;
 
 public class kontakt {
-	//ca�a klasa jest �mieciem do testowania, finalnie zast�pi si� j� metodami ��cz�cymi si� z gui
-	//acz nawet teraz nie chce w pe�ni dzia�a� momentami
+	//caa klasa jest mieciem do testowania, finalnie zastpi si j metodami czcymi si z gui
+	//acz nawet teraz nie chce w peni dziaa momentami
 	public static Card wybiezKarte(List<Card> reka) {
 		while(true) {
-			System.out.print("Twoja r�ka\n");
+			System.out.print("Twoja reka\n");
 			for(Card kar : reka) {
 				String wyjscie = kar.dajID() + "-" + kar.dajNazwe() + "\n";
 				System.out.print(wyjscie);
 			}
-			System.out.print("Wybiez kart� (wpisz numer)\n");
+			System.out.print("Wybiez karte (wpisz numer)\n");
 			Scanner reader = new Scanner(System.in);
-			int id = reader.nextInt();
+			int id = -1;
+			try {
+				id = Integer.parseInt(reader.nextLine());
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
 			reader.close();
 			for(Card kar : reka) {
-				if(kar.dajID()==id) {
+				if(kar.dajID() == id) {
 					return kar;
 				}
 			}		
@@ -29,7 +34,7 @@ public class kontakt {
 	
 	public static String coChceszZniszczyc() {
 		while(true) {
-			System.out.print("Co chcesz mu zniszczy�? Kart� z r�ki, bro� czy dodatek? (R/B/D)");			
+			System.out.print("Co chcesz mu zniszczy? Kart z rki, bro czy dodatek? (R/B/D)");			
 			Scanner reader = new Scanner(System.in);
 			String wynik = reader.nextLine();
 			reader.close();
@@ -40,20 +45,20 @@ public class kontakt {
 		}
 	}
 	
-	public static Gracz wybiezCel(List<Gracz> players) {
-		List<Gracz> gracze = players;
+	public static Player wybiezCel(List<Player> players) {
+		List<Player> gracze = players;
 		while(true) {
 			System.out.print("Lista graczy\n");
-			for(Gracz g : gracze) {
-				String wyjscie = g.dajNick() + "\n";
+			for(Player g : gracze) {
+				String wyjscie = g.getNickname() + "\n";
 				System.out.print(wyjscie);
 			}
-			System.out.print("Wybiez gracza (wpisz nick)/n");
+			System.out.print("Wybiez gracza (wpisz nick)\n");
 			Scanner reader = new Scanner(System.in);
 			String nazwa = reader.nextLine();
 			reader.close();
-			for(Gracz g : gracze) {
-				if(g.dajNick()==nazwa) {
+			for(Player g : gracze) {
+				if(g.getNickname()==nazwa) {
 					return g;
 				}
 			}		
@@ -61,10 +66,15 @@ public class kontakt {
 	}
 	
 	public static boolean czyOdzucic(String nazwa, String zrodlo) {
-		System.out.print("Czy chcesz zu�y� kart� " + nazwa + " by ustrzec si� przed " + zrodlo + "(1/0)\n");
+		System.out.print("Czy chcesz zuy kart " + nazwa + " by ustrzec si przed " + zrodlo + "(1/0)\n");
 		while(true) {
 			Scanner reader = new Scanner(System.in);
-			int wynik = reader.nextInt();
+			int wynik = -1;
+			try {
+				wynik = Integer.parseInt(reader.nextLine());
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
 			reader.close();
 			if(wynik==1) {
 				return true;
@@ -72,15 +82,20 @@ public class kontakt {
 			if(wynik==0) {
 				return false;
 			}
-			System.out.print("Nie rozpoznano odpowiedzi, spr�buj jeszcze raz. \n");
+			System.out.print("Nie rozpoznano odpowiedzi, sprbuj jeszcze raz. \n");
 		}
 	}
 	
 	public static boolean czyDobracInaczej() {
-		System.out.print("Czy chcesz dobra� kart� w inny spos�b ni� z talii (1/0)\n");
+		System.out.print("Czy chcesz dobra kart w inny sposb ni z talii (1/0)\n");
 		while(true) {
 			Scanner reader = new Scanner(System.in);
-			int wynik = reader.nextInt();
+			int wynik = -1;
+			try {
+				wynik = Integer.parseInt(reader.nextLine());
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
 			reader.close();
 			if(wynik==1) {
 				return true;
@@ -88,7 +103,7 @@ public class kontakt {
 			if(wynik==0) {
 				return false;
 			}
-			System.out.print("Nie rozpoznano odpowiedzi, spr�buj jeszcze raz. \n");
+			System.out.print("Nie rozpoznano odpowiedzi, sprbuj jeszcze raz. \n");
 		}
 	}
 }

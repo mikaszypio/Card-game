@@ -2,7 +2,7 @@ package cardgame.game.model.cards;
 
 import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class pudlo extends Card{
@@ -26,17 +26,17 @@ public class pudlo extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
-		Gracz strzelec = currentPlayer;
-		Postac p = strzelec.dajPostac();
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+		Player strzelec = currentPlayer;
+		Hero p = strzelec.getHero();
 		String name = p.dajNazwe();
 		if(name=="Calamity Janet") {
-			if(strzelec.czyStrzelal()==true)
-				if(strzelec.wielostrzal()==false) {
+			if(strzelec.hasShot()==true)
+				if(strzelec.isMultipleShooter()==false) {
 				System.out.print("Nie mo�esz strzela� ponownie");
 				return false;				
 			}
-			Gracz cel = kontakt.wybiezCel(players);
+			Player cel = kontakt.wybiezCel(players);
 			int dystans = policzDystans(strzelec, cel, players);
 			int zasieg = strzelec.zasieg() - cel.modZasiegu();
 			if(dystans>zasieg) {

@@ -3,7 +3,7 @@ package cardgame.game.model.cards;
 import cardgame.game.Game;
 import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class kasia extends Card{
@@ -27,18 +27,18 @@ public class kasia extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
-		Gracz cel = kontakt.wybiezCel(players);
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+		Player cel = kontakt.wybiezCel(players);
 		String co = kontakt.coChceszZniszczyc();
 		if(co=="bron") { 
-			Equipment bron = cel.dajBron();
-			cel.ustawBron(null);
+			Equipment bron = cel.getWeapon();
+			cel.setWeapon(null);
 			//gra.odzuc(bron);
 			deck.rejectCard(bron);
 		}
 		if(co=="dodatek") { 
-			Equipment doda = cel.dajDodatek();
-			cel.ustawDodatek(null);
+			Equipment doda = cel.getSupportItem();
+			cel.setSupportItem(null);
 			//gra.odzuc(doda);
 			deck.rejectCard(doda);
 		}

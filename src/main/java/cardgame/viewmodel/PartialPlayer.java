@@ -1,6 +1,6 @@
 package cardgame.viewmodel;
 
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import cardgame.game.model.cards.Equipment;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +17,16 @@ public class PartialPlayer {
 	
 	private List<Equipment> items;
 	
-	public PartialPlayer(Gracz gracz) {
-		id = gracz.dajId();
-		name = gracz.dajNick();
-		role = gracz.dajRole();
-		ch = gracz.dajPostac().dajID();
-		hp = gracz.dajHp();
+	public PartialPlayer(Player gracz) {
+		id = gracz.getId();
+		name = gracz.getNickname();
+		role = gracz.getRole();
+		ch = gracz.getHero().dajID();
+		hp = gracz.getHitPoints();
 		cards = gracz.dajReke().size();
 		items = new ArrayList<>();
-		items.add(gracz.dajBron());
-		items.add(gracz.dajDodatek());
+		items.add(gracz.getWeapon());
+		items.add(gracz.getSupportItem());
 		
 	}
 	

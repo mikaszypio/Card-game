@@ -1,7 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.model.Deck;
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +26,10 @@ public class sklep extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Gracz> players, Gracz currentPlayer) {
+	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
 		int ile = players.size();
 		List<Card> karty = new ArrayList<Card>();
-		List<Gracz> gracze = players;
+		List<Player> gracze = players;
 		//int aktualny = gra.dajNumerAktualnegoGracza();
 		int aktualny = players.indexOf(currentPlayer);
 		
@@ -45,7 +45,7 @@ public class sklep extends Card{
 			//w tym momencie automatycznie wybiera si�, kto jak� kart� dostanie. Po ogarni�ciu clasy kontakt b�dzie mo�na korzysta� z jej funkcji by gracze wybierali
 			Card wybrana = karty.get(0);
 			karty.remove(wybrana);
-			gracze.get(aktualny).doReki(wybrana);
+			gracze.get(aktualny).addToHand(wybrana);
 			if(aktualny<(ile-1)) {
 				aktualny++;
 			}else {
