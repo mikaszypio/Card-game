@@ -1,6 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.Game;
+import cardgame.game.Interactions;
 import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
@@ -27,8 +28,9 @@ public class kasia extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
-		Player cel = kontakt.wybiezCel(players);
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
+		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
 		String co = kontakt.coChceszZniszczyc();
 		if(co=="bron") { 
 			Equipment bron = cel.getWeapon();
@@ -43,8 +45,8 @@ public class kasia extends Card{
 			deck.rejectCard(doda);
 		}
 		if(co=="karta") {
-			List<Card> reka = cel.dajReke();
-			Card odrzucona = kontakt.wybiezKarte(reka);
+			List<Card> reka = cel.getHand();
+			Card odrzucona = interactions.selectCard(reka, currentPlayer.getId());
 			reka.remove(odrzucona);
 			//gra.odzuc(odrzucona);
 			deck.rejectCard(odrzucona);

@@ -1,5 +1,6 @@
 package cardgame.game.model.cards;
 
+import cardgame.game.Interactions;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
 import java.util.List;
@@ -25,7 +26,8 @@ public class indianie extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
 		List<Player> gracze = players;
 		for(Player g : gracze) {
 			boolean czy = g.testCard("bang", "Indianie", deck);

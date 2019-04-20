@@ -1,6 +1,7 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.Game;
+import cardgame.game.Interactions;
 import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
@@ -28,8 +29,9 @@ public class panika extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
-		Player cel = kontakt.wybiezCel(players);
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
+		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
 		Player strzelec = currentPlayer;
 		int dystans = policzDystans(strzelec, cel, players);
 		int zasieg = strzelec.zasiegCzysty() - cel.modZasiegu();
@@ -49,7 +51,7 @@ public class panika extends Card{
 				strzelec.addToHand(doda);
 			}
 			if(co=="karta") {
-				List<Card> reka = cel.dajReke();
+				List<Card> reka = cel.getHand();
 				Random rand = new Random();
 				Card wynik = reka.get(rand.nextInt(reka.size()));
 				reka.remove(wynik);

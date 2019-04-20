@@ -50,7 +50,7 @@ public class GameboardViewModel {
 		
 		this.turnId = players.get(active).getId();
 		hand = new ArrayList<>();
-		for(Card card : players.get(0).dajReke()) {
+		for(Card card : players.get(0).getHand()) {
 			hand.add(new PartialCard(card));
 		}
 	}

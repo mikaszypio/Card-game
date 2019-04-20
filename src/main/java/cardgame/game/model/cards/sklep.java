@@ -1,5 +1,6 @@
 package cardgame.game.model.cards;
 
+import cardgame.game.Interactions;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ public class sklep extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
 		int ile = players.size();
 		List<Card> karty = new ArrayList<Card>();
 		List<Player> gracze = players;

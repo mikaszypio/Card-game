@@ -1,5 +1,6 @@
 package cardgame.game.model.cards;
 
+import cardgame.game.Interactions;
 import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
@@ -26,7 +27,8 @@ public class pudlo extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
 		Player strzelec = currentPlayer;
 		Hero p = strzelec.getHero();
 		String name = p.dajNazwe();
@@ -36,7 +38,7 @@ public class pudlo extends Card{
 				System.out.print("Nie mo�esz strzela� ponownie");
 				return false;				
 			}
-			Player cel = kontakt.wybiezCel(players);
+			Player cel = interactions.selectTargetPlayer(currentPlayer, players);
 			int dystans = policzDystans(strzelec, cel, players);
 			int zasieg = strzelec.zasieg() - cel.modZasiegu();
 			if(dystans>zasieg) {

@@ -1,6 +1,6 @@
 package cardgame.game.model;
 
-import cardgame.game.kontakt;
+import cardgame.game.Interactions;
 import cardgame.game.model.cards.Equipment;
 import cardgame.game.model.cards.Card;
 import cardgame.game.model.cards.Hero;
@@ -70,7 +70,7 @@ public class Player {
 		role = roleIndex;
 	}
 	
-	public List<Card> dajReke(){
+	public List<Card> getHand(){
 		return reka;
 	}
 	
@@ -171,11 +171,11 @@ public class Player {
 	}
 	
 	//wywoywane na pocztku tury
-	public void getCards(Deck deck, List<Player> players) {	
+	public void getCards(Deck deck, List<Player> players, Interactions interactions) {	
 		boolean czy;
 		switch(hero.dajNazwe()) {
 			case "Pedro Ramirez":
-				czy = kontakt.czyDobracInaczej();
+				czy = interactions.selectAlternativeCardGetting();
 				if(czy == true) {
 					Card k = deck.getRejectedCard();
 					if(k == null) {
@@ -201,10 +201,10 @@ public class Player {
 				addToHand(k);
 				break;
 			case "Jesse Jones":
-				czy = kontakt.czyDobracInaczej();
+				czy = interactions.selectAlternativeCardGetting();
 				if(czy==true) {
-					Player cel = kontakt.wybiezCel(players);
-					List<Card> reka = cel.dajReke();
+					Player cel = interactions.selectTargetPlayer(this, players);
+					List<Card> reka = cel.getHand();
 					Random rand = new Random();
 					Card wynik = reka.get(rand.nextInt(reka.size()));
 					reka.remove(wynik);
@@ -221,7 +221,7 @@ public class Player {
 				wyciogniete.add(deck.getCard());
 				wyciogniete.add(deck.getCard());
 				System.out.print("Wycigne te trzy karty-wybierz ktrej z nich nie chcesz");
-				Card smiec = kontakt.wybiezKarte(wyciogniete);
+				Card smiec = interactions.selectCard(reka, id);
 				wyciogniete.remove(smiec);
 				//gra.naSzczyt(smiec);
 				deck.toTop(smiec);
@@ -236,10 +236,10 @@ public class Player {
 	}
 
 	//wywoywane na koniec tury
-	public void rejectCards(Deck deck) {
+	public void rejectCards(Deck deck, Interactions interactions) {
 		int ile = reka.size();
 		while(ile > hitPoints) {
-			Card k = kontakt.wybiezKarte(reka);
+			Card k = interactions.selectCard(reka, id);
 			deck.rejectCard(k);
 			ile--;
 		}

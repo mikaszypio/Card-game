@@ -23,7 +23,7 @@ public class PartialPlayer {
 		role = gracz.getRole();
 		ch = gracz.getHero().dajID();
 		hp = gracz.getHitPoints();
-		cards = gracz.dajReke().size();
+		cards = gracz.getHand().size();
 		items = new ArrayList<>();
 		items.add(gracz.getWeapon());
 		items.add(gracz.getSupportItem());

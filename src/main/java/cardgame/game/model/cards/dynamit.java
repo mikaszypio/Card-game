@@ -1,6 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.kontakt;
+import cardgame.game.Interactions;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
 import java.util.List;
@@ -26,8 +26,9 @@ public class dynamit extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
-		Player g =kontakt.wybiezCel(players);
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
+		Player g =interactions.selectTargetPlayer(currentPlayer, players);
 		g.setDynamite();
 		return true;
 	}

@@ -1,5 +1,6 @@
 package cardgame.game.model.cards;
 
+import cardgame.game.Interactions;
 import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
@@ -26,8 +27,9 @@ public class pojedynek extends Card{
 	}
 	
 	@Override
-	public boolean zagraj(Deck deck, List<Player> players, Player currentPlayer) {
-		Player cel = kontakt.wybiezCel(players);
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
+		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
 		Player wyzywajacy = currentPlayer;
 		boolean odbito = false;
 		boolean toczySie = true;

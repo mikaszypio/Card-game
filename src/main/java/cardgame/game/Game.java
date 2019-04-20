@@ -3,31 +3,17 @@ package cardgame.game;
 import cardgame.game.model.*;
 import cardgame.game.model.cards.*;
 import cardgame.services.IRoomService;
-import cardgame.viewmodel.GameboardViewModel;
-import cardgame.viewmodel.PartialCard;
-import com.google.gson.Gson;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandler;
-import org.springframework.web.socket.client.WebSocketClient;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.Transport;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 public class Game extends Thread {
 
 	@Autowired
 	private IRoomService roomService;
 	
-	private Gson gson;
-	private StompSession session;
+	private Interactions interactions;
 	
 	private long id;
 	private Deck deck;
@@ -43,14 +29,7 @@ public class Game extends Thread {
 		deadPlayers = new ArrayList<>();
 		activePlayerIndex = 0;
 		
-		try {
-			session = createStompSession(id);
-		} catch(InterruptedException | ExecutionException e) {
-			e.printStackTrace();
-		}
-		
-		gson = new Gson();
-		
+		interactions = new Interactions(this.id);
 	}
 	
 	@Override
@@ -111,44 +90,13 @@ public class Game extends Thread {
 		}
 	}
 	
-	private void broadcastViewModel() {
-		for(Player player : players) {
-			PartialCard topRejectedCard = null;
-			if (!deck.withoutRejectedCards()) {
-				topRejectedCard = new PartialCard(deck.getRejectedCard(false));
-			}
-			
-			GameboardViewModel viewModel = new GameboardViewModel(players, activePlayerIndex,
-				(long) player.getId(), deck.getRejectedCardsSize(), topRejectedCard);
-			
-			try {
-				byte[] msg = gson.toJson(viewModel).getBytes(StandardCharsets.UTF_8);
-				session.send("/app/activegames/"+(long)id+"/"+(long)player.getId(), msg);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	private StompSession createStompSession(long id) throws InterruptedException, ExecutionException {
-		WebSocketClient simpleWebSocketClient = new StandardWebSocketClient();
-		List<Transport> transports = new ArrayList<>(1);
-		transports.add(new WebSocketTransport(simpleWebSocketClient));
-		SockJsClient sockJsClient = new SockJsClient(transports);
-		WebSocketStompClient client = new WebSocketStompClient(sockJsClient);
-		String url = "ws://localhost:8080/game-socket";
-		StompSessionHandler sessionHandler = new GameStompSessionHandler(id);
-		StompSession stompSession = client.connect(url, sessionHandler).get();
-		return stompSession;
-	}
-	
 	private Player getNextPlayer() {
 		int index = (activePlayerIndex + 1) % players.size();
 		return players.get(index);
 	}
 	
 	private void playTurn(Player player){
-		broadcastViewModel();
+		interactions.broadcastViewModel(players, activePlayerIndex, deck);
 		player.setShotStatus(false);
 		
 		if(player.gotDynamite()) {
@@ -169,25 +117,26 @@ public class Game extends Thread {
 		//boolean czy = g.sprawdzWiezienie();
 		//if(czy == true) {
 		if(isFree) {
-			player.getCards(deck, players);
+			player.getCards(deck, players, interactions);
 			boolean isPlaying = true;
 			while(isPlaying) {
-				Card k = kontakt.wybiezKarte(players.get(activePlayerIndex).dajReke());
-				if(k==null) {
+				List<Card> cardsInHand = player.getHand();
+				Card card = interactions.selectCard(cardsInHand, player.getId());
+				if(card == null) {
 					//prymitywna wersja sygna�u zako�czenia tury
 					isPlaying=false;
 				} else {
-					boolean result = k.zagraj(deck, players, player);
+					boolean result = card.zagraj(deck, players, player, interactions);
 					if(result) {
-						players.get(activePlayerIndex).removeFromHand(k);
+						players.get(activePlayerIndex).removeFromHand(card);
 						//odzuc(k);
-						deck.rejectCard(k);
+						deck.rejectCard(card);
 						checkDeaths();
 					}
 				}
 			}
 			
-			player.rejectCards(deck);
+			player.rejectCards(deck, interactions);
 		}
 	}
 	
@@ -221,13 +170,13 @@ public class Game extends Thread {
 		}
 		
 		if(sep == null) {
-			for(Card k : g.dajReke()) {
+			for(Card k : g.getHand()) {
 				//odzuc(k);
 				deck.rejectCard(k);
 				g.removeFromHand(k);
 			}
 		} else {
-			for(Card k : g.dajReke()) {
+			for(Card k : g.getHand()) {
 				sep.addToHand(k);
 				g.removeFromHand(k);
 			}
