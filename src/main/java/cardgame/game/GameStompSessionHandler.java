@@ -10,8 +10,8 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
 public class GameStompSessionHandler extends StompSessionHandlerAdapter {
 	
-	private long roomId;
-	private List<Interaction> interactions;
+	private final long roomId;
+	private final List<Interaction> interactions;
 	
 	public GameStompSessionHandler(long roomId, List<Interaction> interactions) {
 		this.roomId = roomId;
@@ -32,13 +32,15 @@ public class GameStompSessionHandler extends StompSessionHandlerAdapter {
 	}
 	
 	@Override
-	public void handleFrame(StompHeaders headers, Object payload) {
-		Interaction interaction = (Interaction) payload;
-		interactions.add(interaction);	
+	public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
+		exception.printStackTrace();
 	}
 	
 	@Override
-	public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
-		exception.printStackTrace();
+	public void handleFrame(StompHeaders headers, Object payload) {
+		Interaction interaction = (Interaction) payload;
+		System.out.println("Odebrano " + interaction.getType() + " " + interaction.getSelection());
+		interactions.add(interaction);
+		System.out.println("Interactions size: " + interactions.size());
 	}
 }

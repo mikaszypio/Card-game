@@ -4,10 +4,10 @@ import cardgame.game.model.cards.Card;
 
 public class PartialCard {
 	
-	private int id;
-	private String name;
-	private int symbol;
-	private String suit;
+	private final int id;
+	private final String name;
+	private final int symbol;
+	private final String suit;
 	
 	public PartialCard(Card card) {
 		

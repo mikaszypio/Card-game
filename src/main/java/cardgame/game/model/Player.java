@@ -121,10 +121,10 @@ public class Player {
 	}
 	
 	// "Cards" methods
-	public boolean checkDynamite(Deck deck) {
+	public boolean checkDynamite(Deck deck, Interactions interactions) {
 		gotDynamite=false;
 		if(deck.checkCard("pik", 2, 9)) {
-			hurt(3, deck);
+			hurt(3, deck, interactions);
 			return true;
 		}
 		
@@ -175,7 +175,7 @@ public class Player {
 		boolean czy;
 		switch(hero.dajNazwe()) {
 			case "Pedro Ramirez":
-				czy = interactions.selectAlternativeCardGetting();
+				czy = interactions.getCardsAlternativeWay(id, players);
 				if(czy == true) {
 					Card k = deck.getRejectedCard();
 					if(k == null) {
@@ -201,7 +201,7 @@ public class Player {
 				addToHand(k);
 				break;
 			case "Jesse Jones":
-				czy = interactions.selectAlternativeCardGetting();
+				czy = interactions.getCardsAlternativeWay(id, players);
 				if(czy==true) {
 					Player cel = interactions.selectTargetPlayer(this, players);
 					List<Card> reka = cel.getHand();
@@ -220,8 +220,8 @@ public class Player {
 				wyciogniete.add(deck.getCard());
 				wyciogniete.add(deck.getCard());
 				wyciogniete.add(deck.getCard());
-				System.out.print("Wycigne te trzy karty-wybierz ktrej z nich nie chcesz");
-				Card smiec = interactions.selectCard(reka, id);
+				System.out.println("Wycigne te trzy karty-wybierz ktrej z nich nie chcesz");
+				Card smiec = interactions.selectCard(wyciogniete, id);
 				wyciogniete.remove(smiec);
 				//gra.naSzczyt(smiec);
 				deck.toTop(smiec);
@@ -246,30 +246,24 @@ public class Player {
 	}
 	
 	//metoda sprawdza, czy masz dan kart na rce, jeli masz to odrzuca. W finalnej wersji powinna jeszcze pyta, czy chcesz odrzuci, ale... co jest nie tak w kontakcie
-	public boolean testCard(String nazwa, String zrodlo, Deck deck) {
+	public boolean testCard(String nazwa, String zrodlo, Deck deck, Interactions interactions) {
 		System.out.print("Testuje gracz " + nickname + "\n");
-		for(Card k : reka) {
-			if(k.dajNazwe().equals(nazwa)) {
-				reka.remove(k);
-				//gra.odzuc(k);
-				deck.rejectCard(k);
-				//System.out.print("Odrzucoco kart " + nazwa + "\n");
-				return true;
-				
-				/*  wersja z zapytaniem
-				boolean czy = kontakt.czyOdzucic(nazwa, zrodlo);
-				if(czy==false) {
-					return false;
-				}else {
-					reka.remove(k);
-					gra.odzuc(k);
-					return true;
-				}
-				*/
-						
-			}				
+		if(!reka.isEmpty()) {
+			for(Card k : reka) {
+				String cardName = k.dajNazwe();
+				if(cardName.equals(nazwa)) {
+					boolean useCard = interactions.useCounterCard(this, cardName, zrodlo);
+					if(useCard) {
+						reka.remove(k);
+						deck.rejectCard(k);
+						return true;
+					} else {
+						return false;
+					}
+				}		
+			}
 		}
-		//System.out.print("Brak karty " + nazwa + "- to zaboli.\n");
+		
 		return false;
 	}
 	
@@ -314,7 +308,7 @@ public class Player {
 		}
 	}
 	
-	public void hurt(int damage, Deck deck) {
+	public void hurt(int damage, Deck deck, Interactions interactions) {
 		hitPoints -= damage;
 		if(hero.dajNazwe().equals("Bart Cassady")) {
 			while(damage > 0) {
@@ -325,7 +319,7 @@ public class Player {
 		}
 		
 		while(hitPoints < 1) {
-			if(testCard("beer", "Zgon", deck)) {
+			if(testCard("beer", "Zgon", deck, interactions)) {
 				hitPoints++;
 			} else {
 				return;
@@ -352,7 +346,7 @@ public class Player {
 	}
 	
 	//funcja wywoywana dostaniem banga
-	public void postrzel(Deck deck) {
+	public void postrzel(Deck deck, Interactions interactions) {
 		if(hero.dajNazwe().equals("Jourdonnais")) {
 			//if(gra.poker("kier")==true) {
 			if(deck.checkCard("kier")) {
@@ -367,16 +361,16 @@ public class Player {
 				return;
 			}
 		}		
-		boolean czy = testCard("missed", "Bang", deck);
+		boolean czy = testCard("missed", "Bang", deck, interactions);
 		if(czy==true){
 			System.out.print("Spudowa\n");
 		}else {
-			hurt(1, deck);
+			hurt(1, deck, interactions);
 		}
 	}
 	
 	//funcja wywoywana dostaniem banga od postaci ktr trzeba podwjnie pudowa
-	public void postrzelBardziej(Deck deck) {
+	public void postrzelBardziej(Deck deck, Interactions interactions) {
 		int barylki = 0;
 		int pudla = 0;
 		
@@ -405,7 +399,7 @@ public class Player {
 			return;
 		}
 		if(barylki==1) {
-			boolean czy = testCard("missed", "Bang", deck);
+			boolean czy = testCard("missed", "Bang", deck, interactions);
 			if(czy==true){
 				System.out.print("Spudowa dziki pomocy baryki/wietnoci Jourdonnaisa\n");
 			}
@@ -427,6 +421,6 @@ public class Player {
 			}
 		}
 		
-		hurt(1, deck);
+		hurt(1, deck, interactions);
 	}
 }

@@ -31,11 +31,10 @@ public class GameController {
 	@SendTo("/game/{gameId}")
 	public Interaction interactionMessage(@DestinationVariable int gameId,
 		Interaction interaction) throws Exception {
+		System.out.println(interaction.getType());
 		int selection = -1;
-//		try (Scanner scanner = new Scanner(System.in)) {
 		String string = scanner.nextLine();
 		selection = Integer.parseInt(string);
-//		}
 		
 		interaction.setSelection(selection);
 		System.out.println("Wybrano: " + interaction.getSelection());

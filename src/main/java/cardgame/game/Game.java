@@ -13,12 +13,12 @@ public class Game extends Thread {
 	@Autowired
 	private IRoomService roomService;
 	
-	private Interactions interactions;
+	private final Interactions interactions;
 	
-	private long id;
-	private Deck deck;
-	private List<Player> players;
-	private List<Player> deadPlayers;
+	private final long id;
+	private final Deck deck;
+	private final List<Player> players;
+	private final List<Player> deadPlayers;
 	private int activePlayerIndex;
 	
 	public Game(List<Player> players, long id) {
@@ -100,7 +100,7 @@ public class Game extends Thread {
 		player.setShotStatus(false);
 		
 		if(player.gotDynamite()) {
-			boolean boom = player.checkDynamite(deck);
+			boolean boom = player.checkDynamite(deck, interactions);
 			if(!boom) {
 				Player nextPlayer = getNextPlayer();
 				nextPlayer.setDynamite();
@@ -141,16 +141,20 @@ public class Game extends Thread {
 	}
 	
 	private void checkDeaths() {
+		List<Player> deadOnes = new ArrayList<>();
 		for(Player player : players) {
 			if(player.getHitPoints() < 1) {
-				makeDead(player);
+				//makeDead(player);
+				deadOnes.add(player);
 			}
 		}
+		
+		deadOnes.forEach((p) -> { makeDead(p); players.remove(p); });
 	}
 	
 	private void makeDead(Player g) {
 		Player akt = players.get(activePlayerIndex);
-		players.remove(g);
+		//players.remove(g);
 		activePlayerIndex = players.indexOf(akt);
 		if(g.getWeapon()!=null) {
 			g.addToHand(g.getWeapon());
@@ -171,17 +175,15 @@ public class Game extends Thread {
 		
 		if(sep == null) {
 			for(Card k : g.getHand()) {
-				//odzuc(k);
 				deck.rejectCard(k);
-				g.removeFromHand(k);
 			}
 		} else {
 			for(Card k : g.getHand()) {
 				sep.addToHand(k);
-				g.removeFromHand(k);
 			}
 		}
 		
+		g.getHand().clear();
 		deadPlayers.add(g);
 		sprawdzKoniec();
 	}	

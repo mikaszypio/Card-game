@@ -45,7 +45,8 @@ public class sklep extends Card{
 		for(int x = 0; x<ile; x++) {
 			//karta wybrana = kontakt.wybiezKarte(karty);
 			//w tym momencie automatycznie wybiera si�, kto jak� kart� dostanie. Po ogarni�ciu clasy kontakt b�dzie mo�na korzysta� z jej funkcji by gracze wybierali
-			Card wybrana = karty.get(0);
+			//Card wybrana = karty.get(0);
+			Card wybrana = interactions.selectCard(karty, gracze.get(aktualny).getId());
 			karty.remove(wybrana);
 			gracze.get(aktualny).addToHand(wybrana);
 			if(aktualny<(ile-1)) {

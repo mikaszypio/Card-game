@@ -7,8 +7,8 @@ public enum InteractionType {
 	DESTROYCARD (4),
 	ENDOFTURN (5),
 	FORCEEND (6),
-	REJECTCARD (7),
-	TARGETSELECTION (8);
+	TARGETSELECTION (7),
+	USECOUNTERCARD (8);
 	
 	private final int value;
 	private InteractionType(int value) {

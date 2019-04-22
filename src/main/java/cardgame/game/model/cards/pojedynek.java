@@ -1,7 +1,6 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.Interactions;
-import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
 import java.util.List;
@@ -35,17 +34,17 @@ public class pojedynek extends Card{
 		boolean toczySie = true;
 		while(toczySie==true) {
 			if(odbito==true) {
-				if(wyzywajacy.testCard("bang", "Pojedynek", deck)==true) {
+				if(wyzywajacy.testCard("bang", "Pojedynek", deck, interactions)) {
 					odbito=false;
 				}else {
-					wyzywajacy.hurt(1, deck);
+					wyzywajacy.hurt(1, deck, interactions);
 					toczySie=false;
 				}
 			}else {
-				if(cel.testCard("bang", "Pojedynek", deck)==true) {
+				if(cel.testCard("bang", "Pojedynek", deck, interactions)) {
 					odbito=true;
 				}else {
-					cel.hurt(1, deck);
+					cel.hurt(1, deck, interactions);
 					toczySie=false;
 				}
 			}

@@ -32,7 +32,7 @@ public class gatling extends Card{
 		Player aktualny = currentPlayer;
 		for(Player g : gracze) {
 			if(g!=aktualny) {
-				g.postrzel(deck);
+				g.postrzel(deck, interactions);
 			}
 		}		
 		return true;

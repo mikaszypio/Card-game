@@ -14,6 +14,12 @@ public class Interaction implements Serializable {
 	@JsonProperty("selection")
 	private int selection;
 	
+	@JsonProperty("counterCard")
+	private String counterCard;
+	
+	@JsonProperty("source")
+	private String source;
+	
 	public Interaction() {
 		
 	}
@@ -30,6 +36,13 @@ public class Interaction implements Serializable {
 		this.selection = selection;
 	}
 	
+	public Interaction(long playerId, String counterCard, String source, InteractionType type) {
+		this.playerId = playerId;
+		this.counterCard = counterCard;
+		this.source = source;
+		this.type = type;
+	}
+	
 	public long getPlayerId(){
 		return playerId;
 	}
@@ -42,6 +55,14 @@ public class Interaction implements Serializable {
 		return selection;
 	}
 	
+	public String getCounterCard() {
+		return counterCard;
+	}
+	
+	public String getSource() {
+		return source;
+	}
+	
 	public void setPlayerId(long playerId) {
 		this.playerId = playerId;
 	}
@@ -52,5 +73,13 @@ public class Interaction implements Serializable {
 	
 	public void setSelection(int selection) {
 		this.selection = selection;
+	}
+	
+	public void setCounterCard(String counterCard) {
+		this.counterCard = counterCard;
+	}
+	
+	public void setSource(String source) {
+		this.source = source;
 	}
 }

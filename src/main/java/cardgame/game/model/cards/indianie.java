@@ -30,9 +30,9 @@ public class indianie extends Card{
 		Player currentPlayer, Interactions interactions) {
 		List<Player> gracze = players;
 		for(Player g : gracze) {
-			boolean czy = g.testCard("bang", "Indianie", deck);
+			boolean czy = g.testCard("bang", "Indianie", deck, interactions);
 			if(czy==false) {
-				g.hurt(1, deck);
+				g.hurt(1, deck, interactions);
 			}
 		}	
 		return true;

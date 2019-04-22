@@ -1,7 +1,6 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.Interactions;
-import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
 import java.util.List;
@@ -45,7 +44,7 @@ public class pudlo extends Card{
 				System.out.print("Nie dostrzelisz");
 				return false;
 			}else {
-				cel.postrzel(deck);
+				cel.postrzel(deck, interactions);
 				return true;
 			}
 		}else {

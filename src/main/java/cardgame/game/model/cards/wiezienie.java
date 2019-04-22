@@ -1,7 +1,6 @@
 package cardgame.game.model.cards;
 
 import cardgame.game.Interactions;
-import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
 import java.util.List;

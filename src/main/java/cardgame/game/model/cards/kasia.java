@@ -1,8 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.Game;
 import cardgame.game.Interactions;
-import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
 import java.util.List;
@@ -31,7 +29,7 @@ public class kasia extends Card{
 	public boolean zagraj(Deck deck, List<Player> players,
 		Player currentPlayer, Interactions interactions) {
 		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
-		String co = kontakt.coChceszZniszczyc();
+		String co = interactions.selectTargetCard(currentPlayer.getId());
 		if(co=="bron") { 
 			Equipment bron = cel.getWeapon();
 			cel.setWeapon(null);

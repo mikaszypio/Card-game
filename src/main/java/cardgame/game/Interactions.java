@@ -9,11 +9,10 @@ import cardgame.viewmodel.GameboardViewModel;
 import cardgame.viewmodel.PartialCard;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -29,10 +28,10 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 public class Interactions {
 	
 	private long sessionId;
-	private List<Interaction> interactions;
+	private final List<Interaction> interactions;
+	private final ObjectMapper objectMapper;
 	private String gameUrl;
 	private StompSession stompSession;
-	private final Gson gson;
 	
 	public Interactions(long sessionId) {
 		this.sessionId = sessionId;
@@ -44,32 +43,22 @@ public class Interactions {
 			e.printStackTrace();
 		}
 		
-		
-		gson = new Gson();
-	}
-	
-	public boolean selectAlternativeCardGetting() {
-		return false;
+		objectMapper= new ObjectMapper();
 	}
 	
 	public boolean broadcastViewModel(List<Player> players, int activePlayerIndex, Deck deck) {
 		boolean success = false;
 		for(Player player : players) {
-			PartialCard topRejectedCard = null;
-			if (!deck.withoutRejectedCards()) {
-				topRejectedCard = new PartialCard(deck.getRejectedCard(false));
+			PartialCard topPartialCard = null;
+			Card topRejectedCard = deck.getRejectedCard(false);
+			if(topRejectedCard != null) {
+				topPartialCard = new PartialCard(topRejectedCard);
 			}
 			
 			GameboardViewModel viewModel = new GameboardViewModel(players, activePlayerIndex,
-				(long) player.getId(), deck.getRejectedCardsSize(), topRejectedCard);
-			
-			try {
-				byte[] msg = gson.toJson(viewModel).getBytes(StandardCharsets.UTF_8);
-				stompSession.send(gameUrl + "/" + (long)player.getId(), msg);
-				success = true;
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+				(long) player.getId(), deck.getRejectedCardsSize(), topPartialCard);
+			sendMessage(viewModel, player.getId());
+			success = true;
 		}
 		
 		return success;
@@ -77,7 +66,9 @@ public class Interactions {
 	
 	private Interaction getMessage(InteractionType type, long playerId) {
 		if(!interactions.isEmpty()) {
+			interactions.size();
 			for(Interaction interaction : interactions) {
+				System.out.println(type + " | " + interaction.getType());
 				if(interaction.getPlayerId() == playerId
 					&& type == interaction.getType()) {
 					interactions.remove(interaction);
@@ -102,6 +93,19 @@ public class Interactions {
 		return session;
 	}
 	
+	public boolean getCardsAlternativeWay(long playerId, List<Player> players) {
+		System.out.println("Getting cards alternative way: (0-whatever)");
+		
+		
+		sendMessage(InteractionType.ALTERNATIVEGET, playerId);
+		
+		Interaction test = new Interaction(playerId, InteractionType.ALTERNATIVEGET, -1);
+		sendMessage(test, null);
+		
+		Interaction interaction = waitForInteraction(InteractionType.ALTERNATIVEGET, playerId);
+		return interaction.getSelection() != 0;
+	}
+	
 	public Card selectCard(List<Card> cardsInHand, long playerId) {
 		//
 		cardsInHand.forEach((card) -> {
@@ -109,20 +113,14 @@ public class Interactions {
 		});
 		//
 		
-		Interaction interaction = null;
-		byte[] msg = gson.toJson(InteractionType.CARDSELECTION).getBytes(StandardCharsets.UTF_8);
-		stompSession.send(gameUrl + "/" + playerId, msg);
+		sendMessage(InteractionType.CARDSELECTION, playerId);
 
 		//
 		Interaction testInteraction = new Interaction(playerId, InteractionType.CARDSELECTION, -1);
-		msg = gson.toJson(testInteraction).getBytes(StandardCharsets.UTF_8);
-		System.out.println("Wysyłam na: " + gameUrl);
-		stompSession.send(gameUrl, msg);
+		sendMessage(testInteraction, null);
 		//
 
-		while(interaction == null) {
-			interaction = getMessage(InteractionType.CARDSELECTION, playerId);
-		}
+		Interaction interaction = waitForInteraction(InteractionType.CARDSELECTION, playerId);
 		
 		if (interaction.getSelection() == -1) {
 			return null;
@@ -134,7 +132,31 @@ public class Interactions {
 			}
 		}
 		
+		System.out.println("Zagrano");
+		
 		return null;
+	}
+	
+	public String selectTargetCard(long playerId) {
+		String response;
+		sendMessage(InteractionType.DESTROYCARD, playerId);
+		
+		Interaction testInteraction = new Interaction(playerId, InteractionType.DESTROYCARD, -1);
+		sendMessage(testInteraction, null);
+		
+		Interaction interaction = waitForInteraction(InteractionType.DESTROYCARD, playerId);
+		
+		// if(wynik=="R") { return "reka"; }		
+		// if(wynik=="B") { return "bron"; }	
+		// if(wynik=="D") { return "dodatek"; }	
+		switch(interaction.getSelection()) {
+			case 1: response = "reka"; break;
+			case 2: response = "bron"; break;
+			case 3: response = "dodatek"; break;
+			default: response = selectTargetCard(playerId); break;
+		}
+		
+		return response;
 	}
 	
 	public Player selectTargetPlayer(Player activePlayer, List<Player> players) {
@@ -142,33 +164,24 @@ public class Interactions {
 		//
 		players.forEach((player) -> {
 			if (activePlayer != player) {
-				System.out.println(player.getId() + " " + player.getNickname());
+				String playerString = player.getId() + " " + "player.getNickname()";
+				if(player.getHand().isEmpty()) {
+					playerString += " no cards!";
+				}
+				
+				System.out.println(playerString);
 			}
 		});
 		//
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		
-		Interaction interaction = null;
-		byte[] msg = null;
-		try {
-			msg = objectMapper.writeValueAsBytes(InteractionType.TARGETSELECTION);
-		} catch (JsonProcessingException ex) {
-			Logger.getLogger(Interactions.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		
-		stompSession.send(gameUrl + "/" + playerId, msg);
+		sendMessage(InteractionType.TARGETSELECTION, playerId);
 		
 		//
 		Interaction testInteraction = new Interaction(playerId, InteractionType.TARGETSELECTION, -1);
-		msg = gson.toJson(testInteraction).getBytes(StandardCharsets.UTF_8);
-		stompSession.send(gameUrl, msg);
+		sendMessage(testInteraction, null);
 		//
 		
-		while(interaction == null) {
-			interaction = getMessage(InteractionType.TARGETSELECTION, playerId);
-		}
-		
+		Interaction interaction = waitForInteraction(InteractionType.TARGETSELECTION, playerId);
 		if (interaction.getSelection() == -1) {
 			return null;
 		}
@@ -180,5 +193,61 @@ public class Interactions {
 		}
 		
 		return null;
+	}
+	
+	private boolean sendMessage(Object object, Long playerId) {
+		byte[] msg;
+		String url;
+		if (playerId != null) {
+			url = gameUrl + "/" + playerId;
+		} else{
+			url = gameUrl;
+		}
+		
+		try {
+			msg = objectMapper.writeValueAsBytes(object);
+			stompSession.send(url, msg);
+			System.out.println("Wysłano: " + url);
+		} catch(JsonProcessingException ex) {
+			Logger.getLogger(Interactions.class.getName()).log(Level.SEVERE, null, ex);
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public boolean useCounterCard(Player activePlayer, String cardName, String source) {
+		boolean response = true;
+		long playerId = activePlayer.getId();
+		Interaction interaction = new Interaction(playerId, cardName, source, InteractionType.USECOUNTERCARD);
+		sendMessage(interaction, playerId);
+		sendMessage(interaction, null);
+//		stompSession.send(gameUrl + "/" + playerId, msg);
+//		stompSession.send(gameUrl, msg);
+		System.out.println(interaction.getCounterCard() + " " + interaction.getSource());
+		interaction = waitForInteraction(InteractionType.USECOUNTERCARD, playerId);
+		if(interaction.getSelection() == 0) {
+			response = false;
+		}
+		
+		return response;
+	}
+	
+	private Interaction waitForInteraction(InteractionType type, long playerId) {
+		Interaction interaction = null;
+		
+		System.out.println("Awaiting!");
+		while(interaction == null) {
+			try {
+				TimeUnit.SECONDS.sleep(1);
+				if (interactions.isEmpty()) System.out.println("Size: " + interactions.size());
+				interaction = getMessage(type, playerId);
+			} catch (InterruptedException ex) {
+				Logger.getLogger(Interactions.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		
+		System.out.println("Out of the loop");
+		return interaction;
 	}
 }

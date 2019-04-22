@@ -1,8 +1,6 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.Game;
 import cardgame.game.Interactions;
-import cardgame.game.kontakt;
 import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
 import java.util.List;
@@ -39,7 +37,7 @@ public class panika extends Card{
 			System.out.print("Nie si�gniesz");
 			return false;
 		}else {
-			String co = kontakt.coChceszZniszczyc();
+			String co = interactions.selectTargetCard(currentPlayer.getId());
 			if(co=="bron") { 
 				Equipment bron = cel.getWeapon();
 				cel.setWeapon(null);
