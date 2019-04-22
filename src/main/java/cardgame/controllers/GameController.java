@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class GameController {
 	
-	Scanner scanner = new Scanner(System.in);
+	//Scanner scanner = new Scanner(System.in);
 	
 	// This channels should be used to game -> user forwarding
 	@MessageMapping("/activegame/{gameId}/{playerId}")
@@ -31,12 +31,12 @@ public class GameController {
 	@SendTo("/game/{gameId}")
 	public Interaction interactionMessage(@DestinationVariable int gameId,
 		Interaction interaction) throws Exception {
-		System.out.println(interaction.getType());
-		int selection = -1;
-		String string = scanner.nextLine();
-		selection = Integer.parseInt(string);
+		//System.out.println(interaction.getType());
+		//int selection = -1;
+		//String string = scanner.nextLine();
+		//selection = Integer.parseInt(string);
 		
-		interaction.setSelection(selection);
+		//interaction.setSelection(selection);
 		System.out.println("Wybrano: " + interaction.getSelection());
 		
 		return interaction;

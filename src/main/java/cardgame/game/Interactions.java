@@ -99,8 +99,8 @@ public class Interactions {
 		
 		sendMessage(InteractionType.ALTERNATIVEGET, playerId);
 		
-		Interaction test = new Interaction(playerId, InteractionType.ALTERNATIVEGET, -1);
-		sendMessage(test, null);
+		//Interaction test = new Interaction(playerId, InteractionType.ALTERNATIVEGET, -1);
+		//sendMessage(test, null);
 		
 		Interaction interaction = waitForInteraction(InteractionType.ALTERNATIVEGET, playerId);
 		return interaction.getSelection() != 0;
@@ -108,16 +108,16 @@ public class Interactions {
 	
 	public Card selectCard(List<Card> cardsInHand, long playerId) {
 		//
-		cardsInHand.forEach((card) -> {
-			System.out.println(card.dajID() + card.dajNazwe());
-		});
+		//cardsInHand.forEach((card) -> {
+		//	System.out.println(card.dajID() + card.dajNazwe());
+		//});
 		//
 		
 		sendMessage(InteractionType.CARDSELECTION, playerId);
 
 		//
-		Interaction testInteraction = new Interaction(playerId, InteractionType.CARDSELECTION, -1);
-		sendMessage(testInteraction, null);
+		//Interaction testInteraction = new Interaction(playerId, InteractionType.CARDSELECTION, -1);
+		//sendMessage(testInteraction, null);
 		//
 
 		Interaction interaction = waitForInteraction(InteractionType.CARDSELECTION, playerId);
@@ -141,8 +141,8 @@ public class Interactions {
 		String response;
 		sendMessage(InteractionType.DESTROYCARD, playerId);
 		
-		Interaction testInteraction = new Interaction(playerId, InteractionType.DESTROYCARD, -1);
-		sendMessage(testInteraction, null);
+		//Interaction testInteraction = new Interaction(playerId, InteractionType.DESTROYCARD, -1);
+		//sendMessage(testInteraction, null);
 		
 		Interaction interaction = waitForInteraction(InteractionType.DESTROYCARD, playerId);
 		
@@ -164,7 +164,7 @@ public class Interactions {
 		//
 		players.forEach((player) -> {
 			if (activePlayer != player) {
-				String playerString = player.getId() + " " + "player.getNickname()";
+				String playerString = player.getId() + " " + player.getNickname();
 				if(player.getHand().isEmpty()) {
 					playerString += " no cards!";
 				}
@@ -177,8 +177,8 @@ public class Interactions {
 		sendMessage(InteractionType.TARGETSELECTION, playerId);
 		
 		//
-		Interaction testInteraction = new Interaction(playerId, InteractionType.TARGETSELECTION, -1);
-		sendMessage(testInteraction, null);
+		//Interaction testInteraction = new Interaction(playerId, InteractionType.TARGETSELECTION, -1);
+		//sendMessage(testInteraction, null);
 		//
 		
 		Interaction interaction = waitForInteraction(InteractionType.TARGETSELECTION, playerId);
@@ -207,7 +207,7 @@ public class Interactions {
 		try {
 			msg = objectMapper.writeValueAsBytes(object);
 			stompSession.send(url, msg);
-			System.out.println("Wysłano: " + url);
+			//System.out.println("Wysłano: " + url);
 		} catch(JsonProcessingException ex) {
 			Logger.getLogger(Interactions.class.getName()).log(Level.SEVERE, null, ex);
 			return false;
@@ -221,9 +221,7 @@ public class Interactions {
 		long playerId = activePlayer.getId();
 		Interaction interaction = new Interaction(playerId, cardName, source, InteractionType.USECOUNTERCARD);
 		sendMessage(interaction, playerId);
-		sendMessage(interaction, null);
-//		stompSession.send(gameUrl + "/" + playerId, msg);
-//		stompSession.send(gameUrl, msg);
+		//sendMessage(interaction, null);
 		System.out.println(interaction.getCounterCard() + " " + interaction.getSource());
 		interaction = waitForInteraction(InteractionType.USECOUNTERCARD, playerId);
 		if(interaction.getSelection() == 0) {
@@ -240,14 +238,14 @@ public class Interactions {
 		while(interaction == null) {
 			try {
 				TimeUnit.SECONDS.sleep(1);
-				if (interactions.isEmpty()) System.out.println("Size: " + interactions.size());
+				//if (interactions.isEmpty()) System.out.println("Size: " + interactions.size());
 				interaction = getMessage(type, playerId);
 			} catch (InterruptedException ex) {
 				Logger.getLogger(Interactions.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 		
-		System.out.println("Out of the loop");
+		//System.out.println("Out of the loop");
 		return interaction;
 	}
 }
