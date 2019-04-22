@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-page">
+	<div class="container">
+		<div class="login-navbar nav-bar">
+			<div><a class="nav-link" href="lobby.html">< Strona Główna</a></div>
+		</div>
+		<h1>Logowanie</h1>
+		<form  id="loginForm" action="/login" method="post">
+			<div class="form-group">
+				<label for="login">Login</label>
+				<input type="text" id="login" class="long" name="login" required>
+			</div>
+
+			<div class="form-group">
+				<label for="password">Hasło</label>
+				<input type="password" id="password" class="long" name="password" required>
+			</div>
+
+			<button class="nav-btn" type="submit" name="submit">Wyślij</button>
+		</form>
+		<div class="register-note">
+			<span class="note">Nie masz jeszcze konta? <a class="nav-link" href="register.html">Zarejestruj się!</a></span>
+		</div>
+
+	</div>
+</body>
+</html>

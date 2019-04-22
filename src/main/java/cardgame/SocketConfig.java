@@ -8,16 +8,17 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class DummySocketConfig implements WebSocketMessageBrokerConfigurer {
+public class SocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/chat");
+		config.enableSimpleBroker("/chat", "/game", "/user", "/room", "/topic");
 		config.setApplicationDestinationPrefixes("/app");
 	}
 	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("card-game-websocket").withSockJS();
-	}
+		
+		registry.addEndpoint("chat-socket", "game-socket", "user-socket", "room-socket").withSockJS();
+	}	
 }

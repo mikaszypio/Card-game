@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/gameboard.css">
+	<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/gameboard.js"></script>
+</head>
+<body class="room-page">
+	<div class="container">
+		<div class="room-navbar nav-bar">
+			<div class="title-bar">
+				<h2>Pokój 21</h2>
+			</div>
+			<div><a class="nav-btn">Wyjdź</a></div>
+		</div>
+		<div class="room-content">
+			<div class="left-col">
+				<div id="gameboard">
+					<div id="gb-timer">15</div>
+					<div id="gb-preview"></div>
+					<div id="gb-players"></div>
+					<div id="gb-hand"></div>
+					<div id="gb-stack"></div>
+					<div id="gb-deck"></div>
+				</div>
+			</div>
+			<div class="chat">
+				<div class="chat-list">
+					<div class="chat-msg">
+						<span class="chat-msg-username">Player1</span><span class="chat-msg-text">Hejo</span>
+					</div>
+					<div class="chat-msg">
+						<span class="chat-msg-username">Player3</span><span class="chat-msg-text">Co tam</span>
+					</div>
+					<div class="chat-msg">
+						<span class="chat-msg-username">Player3</span><span class="chat-msg-text">Pozdrawiam cieplutko i sprawdzam czy tekst sie miesci</span>
+					</div>
+				</div>
+				<div class="chat-input">
+					<textarea placeholder="Wyślij wiadomość" maxlength="255"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/gameboard.js"></script>
+	<!-- Przyciski do testowania -->
+	<input id = "btt1" type = "button" value = "Dodaj karte" />
+	<input id = "btt2" type = "button" value = "Usuń karte" />
+	<input id = "btt3" type = "button" value = "Zmień ture randomowo" />
+	<input id = "btt4" type = "button" value = "Celuj w gracza" />
+	<!-- ====================== -->
+</body>
+</html>

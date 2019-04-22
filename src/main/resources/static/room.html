@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+</head>
+<body class="room-page">
+	<div class="container">
+		<div class="room-navbar nav-bar">
+			<div class="title-bar"></div>
+			<div><a class="nav-btn" href="lobby.html">Wyjdź</a></div>
+		</div>
+		<div class="room-content">
+			<div class="left-col">
+				<div class="players-list"></div>
+				<div class="nav-bottom">
+					<a class="nav-btn disabled">Start</a>
+					<a class="nav-btn">Start</a>
+				</div>
+			</div>
+			<div class="chat">
+				<div class="chat-list">
+					<div class="chat-msg">
+						<span class="chat-msg-username">Player1</span><span class="chat-msg-text">Hejo</span>
+					</div>
+					<div class="chat-msg">
+						<span class="chat-msg-username">Player3</span><span class="chat-msg-text">Co tam</span>
+					</div>
+					<div class="chat-msg">
+						<span class="chat-msg-username">Player3</span><span class="chat-msg-text">Pozdrawiam cieplutko i sprawdzam czy tekst sie miesci</span>
+					</div>
+				</div>
+				<div class="chat-input">
+					<input type="text" id="msg" class="form-control" placeholder="Nowa widomosc">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/room.js"></script>
+</body>
+</html>
