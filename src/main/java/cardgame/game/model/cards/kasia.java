@@ -1,50 +1,53 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.Gra;
-import cardgame.game.kontakt;
-import cardgame.game.model.Gracz;
+import cardgame.game.Interactions;
+import cardgame.game.model.Deck;
+import cardgame.game.model.Player;
 import java.util.List;
 
 public class kasia extends Card{
 	
-	public kasia(int id, String naz, int num, String col, Gra g) {
+	public kasia(int id, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
 		opis = "Brak opisu";
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public kasia(int id, String obraz, String opek, String naz, int num, String col, Gra g) {
+	public kasia(int id, String obraz, String opek, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
 		opis = opek;
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public boolean zagraj() {
-		Gracz cel = kontakt.wybiezCel(gra);
-		String co = kontakt.coChceszZniszczyc();
+	@Override
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
+		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
+		String co = interactions.selectTargetCard(currentPlayer.getId());
 		if(co=="bron") { 
-			Equipment bron = cel.dajBron();
-			cel.ustawBron(null);
-			gra.odzuc(bron);
+			Equipment bron = cel.getWeapon();
+			cel.setWeapon(null);
+			//gra.odzuc(bron);
+			deck.rejectCard(bron);
 		}
 		if(co=="dodatek") { 
-			Equipment doda = cel.dajDodatek();
-			cel.ustawDodatek(null);
-			gra.odzuc(doda);
+			Equipment doda = cel.getSupportItem();
+			cel.setSupportItem(null);
+			//gra.odzuc(doda);
+			deck.rejectCard(doda);
 		}
 		if(co=="karta") {
-			List<Card> reka = cel.dajReke();
-			Card odrzucona = kontakt.wybiezKarte(reka);
+			List<Card> reka = cel.getHand();
+			Card odrzucona = interactions.selectCard(reka, currentPlayer.getId());
 			reka.remove(odrzucona);
-			gra.odzuc(odrzucona);		
+			//gra.odzuc(odrzucona);
+			deck.rejectCard(odrzucona);
 		}
 		return true;
 	}

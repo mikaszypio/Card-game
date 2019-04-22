@@ -1,49 +1,50 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.Gra;
-import cardgame.game.kontakt;
-import cardgame.game.model.Gracz;
+import cardgame.game.Interactions;
+import cardgame.game.model.Deck;
+import cardgame.game.model.Player;
+import java.util.List;
 
 public class pojedynek extends Card{
 	
-	public pojedynek(int id, String naz, int num, String col, Gra g) {
+	public pojedynek(int id, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
 		opis = "Brak opisu";
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public pojedynek(int id, String obraz, String opek, String naz, int num, String col, Gra g) {
+	public pojedynek(int id, String obraz, String opek, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
 		opis = opek;
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public boolean zagraj() {
-		Gracz cel = kontakt.wybiezCel(gra);
-		Gracz wyzywajacy = gra.dajAktualnegoGracza();
+	@Override
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
+		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
+		Player wyzywajacy = currentPlayer;
 		boolean odbito = false;
 		boolean toczySie = true;
 		while(toczySie==true) {
 			if(odbito==true) {
-				if(wyzywajacy.testKarty("bang", "Pojedynek")==true) {
+				if(wyzywajacy.testCard("bang", "Pojedynek", deck, interactions)) {
 					odbito=false;
 				}else {
-					wyzywajacy.zran(1);
+					wyzywajacy.hurt(1, deck, interactions);
 					toczySie=false;
 				}
 			}else {
-				if(cel.testKarty("bang", "Pojedynek")==true) {
+				if(cel.testCard("bang", "Pojedynek", deck, interactions)) {
 					odbito=true;
 				}else {
-					cel.zran(1);
+					cel.hurt(1, deck, interactions);
 					toczySie=false;
 				}
 			}

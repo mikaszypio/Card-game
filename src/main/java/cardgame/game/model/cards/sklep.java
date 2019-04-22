@@ -1,40 +1,42 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.Gra;
-import cardgame.game.model.Gracz;
+import cardgame.game.Interactions;
+import cardgame.game.model.Deck;
+import cardgame.game.model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
 public class sklep extends Card{
 	
-	public sklep(int id, String naz, int num, String col, Gra g) {
+	public sklep(int id, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
 		opis = "Brak opisu";
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public sklep(int id, String obraz, String opek, String naz, int num, String col, Gra g) {
+	public sklep(int id, String obraz, String opek, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
 		opis = opek;
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public boolean zagraj() {
-		int ile = gra.dajIleGraczy();
+	@Override
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
+		int ile = players.size();
 		List<Card> karty = new ArrayList<Card>();
-		List<Gracz> gracze = gra.dajGraczy();
-		int aktualny = gra.dajNumerAktualnegoGracza();
+		List<Player> gracze = players;
+		//int aktualny = gra.dajNumerAktualnegoGracza();
+		int aktualny = players.indexOf(currentPlayer);
 		
 		for(int x = 0; x<ile; x++) {
-			Card k = gra.dobiez();
+			Card k = deck.getCard();
 			karty.add(k);
 		}
 		
@@ -43,9 +45,10 @@ public class sklep extends Card{
 		for(int x = 0; x<ile; x++) {
 			//karta wybrana = kontakt.wybiezKarte(karty);
 			//w tym momencie automatycznie wybiera si�, kto jak� kart� dostanie. Po ogarni�ciu clasy kontakt b�dzie mo�na korzysta� z jej funkcji by gracze wybierali
-			Card wybrana = karty.get(0);
+			//Card wybrana = karty.get(0);
+			Card wybrana = interactions.selectCard(karty, gracze.get(aktualny).getId());
 			karty.remove(wybrana);
-			gracze.get(aktualny).doReki(wybrana);
+			gracze.get(aktualny).addToHand(wybrana);
 			if(aktualny<(ile-1)) {
 				aktualny++;
 			}else {

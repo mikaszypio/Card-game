@@ -1,10 +1,11 @@
 package cardgame.controllers;
 
-import cardgame.game.Gra;
-import cardgame.game.model.Gracz;
+import cardgame.game.Game;
+import cardgame.game.model.Player;
 import cardgame.model.ChatMessage;
-import cardgame.viewmodel.GameboardViewModel;
+import cardgame.model.Interaction;
 import java.util.ArrayList;
+import java.util.Scanner;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -13,35 +14,46 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class GameController {
 	
-	@MessageMapping("/activegames/{gameId}/{playerId}")
+	//Scanner scanner = new Scanner(System.in);
+	
+	// This channels should be used to game -> user forwarding
+	@MessageMapping("/activegame/{gameId}/{playerId}")
 	@SendTo("/game/{gameId}/{playerId}")
-	public String message(@DestinationVariable int gameId, 
+	public String directMessage(@DestinationVariable int gameId, 
 		@DestinationVariable int playerId,
 		String inGameMessage) throws Exception {
 
 		return inGameMessage;
 	}
 	
-	@MessageMapping("/activegames/start")
+	// This channels should be used to user -> game forwarding
+	@MessageMapping("/activegame/{gameId}")
+	@SendTo("/game/{gameId}")
+	public Interaction interactionMessage(@DestinationVariable int gameId,
+		Interaction interaction) throws Exception {
+		//System.out.println(interaction.getType());
+		//int selection = -1;
+		//String string = scanner.nextLine();
+		//selection = Integer.parseInt(string);
+		
+		//interaction.setSelection(selection);
+		System.out.println("Wybrano: " + interaction.getSelection());
+		
+		return interaction;
+	}
+	
+	@MessageMapping("/game/start")
 	public void start(ChatMessage message) {
-		Gracz gracz1 = new Gracz("Ja", (long) 1);
-		Gracz gracz2 = new Gracz("On", (long) 2);
-		Gracz gracz3 = new Gracz("Ona", (long) 3);
-		Gracz gracz4 = new Gracz("Ono", (long) 4);
-		ArrayList<Gracz> list = new ArrayList<>();
+		Player gracz1 = new Player("Ja", (long) 1);
+		Player gracz2 = new Player("On", (long) 2);
+		Player gracz3 = new Player("Ona", (long) 3);
+		Player gracz4 = new Player("Ono", (long) 4);
+		ArrayList<Player> list = new ArrayList<>();
 		list.add(gracz1);
 		list.add(gracz2);
 		list.add(gracz3);
 		list.add(gracz4);
-		Gra gra = new Gra(list, 1);
+		Game gra = new Game(list, 1);
 		gra.start();
-	}
-	
-	@SendTo("/game/{gameId}/{playerId}")
-	public GameboardViewModel sendViewModel(@DestinationVariable int gameId, 
-		@DestinationVariable int playerId,
-		GameboardViewModel viewModel) throws Exception {
-
-		return viewModel;
 	}
 }

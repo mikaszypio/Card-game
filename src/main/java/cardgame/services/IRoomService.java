@@ -2,7 +2,7 @@ package cardgame.services;
 
 import java.util.List;
 
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import cardgame.model.Room;
 import cardgame.model.User;
 
@@ -14,6 +14,6 @@ public interface IRoomService {
 	public void leaveRoom(User user);
 	public Room save(Room room);
 	public void startGame();
-	public Gracz userToPlayer(User user);
-	public List<Gracz> listOfPlayers(Room room);
+	public Player userToPlayer(User user);
+	public List<Player> listOfPlayers(Room room);
 }

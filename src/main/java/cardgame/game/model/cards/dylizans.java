@@ -1,34 +1,36 @@
 package cardgame.game.model.cards;
 
-import cardgame.game.Gra;
-import cardgame.game.model.Gracz;
+import cardgame.game.Interactions;
+import cardgame.game.model.Deck;
+import cardgame.game.model.Player;
+import java.util.List;
 
 public class dylizans extends Card{
 	
-	public dylizans(int id, String naz, int num, String col, Gra g) {
+	public dylizans(int id, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = "Brak obrazu";
 		opis = "Brak opisu";
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public dylizans(int id, String obraz, String opek, String naz, int num, String col, Gra g) {
+	public dylizans(int id, String obraz, String opek, String naz, int num, String col) {
 		ID=id;
 		nazwa=naz;
 		obrazek = obraz;
 		opis = opek;
 		numer=num;
 		kolor=col;
-		gra=g;
 	}
 	
-	public boolean zagraj() {
-		Gracz g = gra.dajAktualnegoGracza();
-		g.dobiezKarte();
-		g.dobiezKarte();
+	@Override
+	public boolean zagraj(Deck deck, List<Player> players,
+		Player currentPlayer, Interactions interactions) {
+		Player g = currentPlayer;
+		g.getExtraCard(deck);
+		g.getExtraCard(deck);
 		return true;
 	}
 }

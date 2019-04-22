@@ -1,6 +1,6 @@
 package cardgame.viewmodel;
 
-import cardgame.game.model.Gracz;
+import cardgame.game.model.Player;
 import cardgame.game.model.cards.Card;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,44 +13,44 @@ public class GameboardViewModel {
 	private int stackSize;
 	private PartialCard lastOfStack;
 	
-	public GameboardViewModel(List<Gracz> players, int active, long playerId, int stackSize, PartialCard lastOfStack) {
+	public GameboardViewModel(List<Player> players, int active, long playerId, int stackSize, PartialCard lastOfStack) {
 		
 		this.stackSize = stackSize;
 		this.lastOfStack = lastOfStack;
 		
-		Gracz receiver = null;
-		for(Gracz player : players) {
-			if ((long)player.dajId() == playerId) {
+		Player receiver = null;
+		for(Player player : players) {
+			if ((long)player.getId() == playerId) {
 				receiver = player;
 				break;
 			}
 		}
 		
-		List<Gracz> playersBeforeReceiver = null;
+		List<Player> playersBeforeReceiver = null;
 		if (players.indexOf(receiver) > 0) {
 			playersBeforeReceiver = players.subList(0, players.indexOf(receiver));
 		}
 		
-		List<Gracz> playersAfterReceiver = players.subList(players.indexOf(receiver), players.size());
+		List<Player> playersAfterReceiver = players.subList(players.indexOf(receiver), players.size());
 		this.players = new ArrayList<>();
 		
-		for(Gracz player : playersAfterReceiver) {
+		for(Player player : playersAfterReceiver) {
 			
 			PartialPlayer partial = new PartialPlayer(player);
 			this.players.add(partial);
 		}
 		
 		if (playersBeforeReceiver != null) {
-			for(Gracz player : playersBeforeReceiver) {
+			for(Player player : playersBeforeReceiver) {
 			
 				PartialPlayer partial = new PartialPlayer(player);
 				this.players.add(partial);
 			}
 		}
 		
-		this.turnId = players.get(active).dajId();
+		this.turnId = players.get(active).getId();
 		hand = new ArrayList<>();
-		for(Card card : players.get(0).dajReke()) {
+		for(Card card : players.get(0).getHand()) {
 			hand.add(new PartialCard(card));
 		}
 	}
