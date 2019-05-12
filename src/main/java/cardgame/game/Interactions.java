@@ -1,8 +1,8 @@
 package cardgame.game;
 
-import cardgame.game.model.Deck;
-import cardgame.game.model.Player;
+import cardgame.game.model.*;
 import cardgame.game.model.cards.Card;
+import cardgame.model.CardNotification;
 import cardgame.model.Interaction;
 import cardgame.model.InteractionType;
 import cardgame.viewmodel.GameboardViewModel;
@@ -40,10 +40,10 @@ public class Interactions {
 		try {
 			stompSession = createStompSession();
 		} catch(InterruptedException | ExecutionException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		
-		objectMapper= new ObjectMapper();
+		objectMapper = new ObjectMapper();
 	}
 	
 	public boolean broadcastViewModel(List<Player> players, int activePlayerIndex, Deck deck) {
@@ -68,7 +68,7 @@ public class Interactions {
 		if(!interactions.isEmpty()) {
 			interactions.size();
 			for(Interaction interaction : interactions) {
-				System.out.println(type + " | " + interaction.getType());
+				//System.out.println(type + " | " + interaction.getType());
 				if(interaction.getPlayerId() == playerId
 					&& type == interaction.getType()) {
 					interactions.remove(interaction);
@@ -93,10 +93,19 @@ public class Interactions {
 		return session;
 	}
 	
+	public boolean getNewCardsNotify(List<Card> cards, long id) {
+		List<PartialCard> partialCards = new ArrayList<>();
+		for(Card c : cards) {
+			partialCards.add(new PartialCard(c));
+		}
+		
+		CardNotification notification = new CardNotification(id, partialCards);
+		return sendMessage(notification, id);
+	}
+	
 	public boolean getCardsAlternativeWay(long playerId, List<Player> players) {
-		System.out.println("Getting cards alternative way: (0-whatever)");
-		
-		
+		// System.out.println("\nGetting cards alternative way: (0-false)\n");
+			
 		sendMessage(InteractionType.ALTERNATIVEGET, playerId);
 		
 		//Interaction test = new Interaction(playerId, InteractionType.ALTERNATIVEGET, -1);
@@ -108,10 +117,12 @@ public class Interactions {
 	
 	public Card selectCard(List<Card> cardsInHand, long playerId) {
 		//
+		//System.out.println("\n");
+		//System.out.println("!: " + playerId);
 		//cardsInHand.forEach((card) -> {
 		//	System.out.println(card.dajID() + card.dajNazwe());
 		//});
-		//
+		//System.out.println("!\n");
 		
 		sendMessage(InteractionType.CARDSELECTION, playerId);
 
@@ -132,7 +143,7 @@ public class Interactions {
 			}
 		}
 		
-		System.out.println("Zagrano");
+		//System.out.println("Zagrano");
 		
 		return null;
 	}
@@ -161,18 +172,22 @@ public class Interactions {
 	
 	public Player selectTargetPlayer(Player activePlayer, List<Player> players) {
 		long playerId = activePlayer.getId();
-		//
 		players.forEach((player) -> {
 			if (activePlayer != player) {
-				String playerString = player.getId() + " " + player.getNickname();
+				String playerString = players.indexOf(player) + ". " + player.getId() + ". " + player.getNickname();
 				if(player.getHand().isEmpty()) {
-					playerString += " no cards!";
+					playerString += ": no cards!";
+				}
+				if(player.getWeapon() != null) {
+					playerString += " 2. Weapon ";
+				}
+				if(player.getSupportItem()!= null) {
+					playerString += " 2. Support Item ";
 				}
 				
-				System.out.println(playerString);
+				//System.out.println(playerString);
 			}
 		});
-		//
 		
 		sendMessage(InteractionType.TARGETSELECTION, playerId);
 		
@@ -207,7 +222,6 @@ public class Interactions {
 		try {
 			msg = objectMapper.writeValueAsBytes(object);
 			stompSession.send(url, msg);
-			//System.out.println("Wysłano: " + url);
 		} catch(JsonProcessingException ex) {
 			Logger.getLogger(Interactions.class.getName()).log(Level.SEVERE, null, ex);
 			return false;
@@ -222,7 +236,7 @@ public class Interactions {
 		Interaction interaction = new Interaction(playerId, cardName, source, InteractionType.USECOUNTERCARD);
 		sendMessage(interaction, playerId);
 		//sendMessage(interaction, null);
-		System.out.println(interaction.getCounterCard() + " " + interaction.getSource());
+		//System.out.println("\n>" + interaction.getCounterCard() + " " + interaction.getSource());
 		interaction = waitForInteraction(InteractionType.USECOUNTERCARD, playerId);
 		if(interaction.getSelection() == 0) {
 			response = false;
@@ -233,19 +247,15 @@ public class Interactions {
 	
 	private Interaction waitForInteraction(InteractionType type, long playerId) {
 		Interaction interaction = null;
-		
-		System.out.println("Awaiting!");
 		while(interaction == null) {
 			try {
 				TimeUnit.SECONDS.sleep(1);
-				//if (interactions.isEmpty()) System.out.println("Size: " + interactions.size());
 				interaction = getMessage(type, playerId);
 			} catch (InterruptedException ex) {
 				Logger.getLogger(Interactions.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 		
-		//System.out.println("Out of the loop");
 		return interaction;
 	}
 }

@@ -141,21 +141,19 @@ public class Game extends Thread {
 	}
 	
 	private void checkDeaths() {
-		List<Player> deadOnes = new ArrayList<>();
-		for(Player player : players) {
+		Player akt = players.get(activePlayerIndex);
+		for(int i = players.size() - 1; i >= 0; i--) {
+			Player player = players.get(i);
 			if(player.getHitPoints() < 1) {
-				//makeDead(player);
-				deadOnes.add(player);
+				makeDead(player);
+				players.remove(player);
 			}
+			
+			activePlayerIndex = players.indexOf(akt);
 		}
-		
-		deadOnes.forEach((p) -> { makeDead(p); players.remove(p); });
 	}
 	
 	private void makeDead(Player g) {
-		Player akt = players.get(activePlayerIndex);
-		//players.remove(g);
-		activePlayerIndex = players.indexOf(akt);
 		if(g.getWeapon()!=null) {
 			g.addToHand(g.getWeapon());
 			g.setWeapon(null);
