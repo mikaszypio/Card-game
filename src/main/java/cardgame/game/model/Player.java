@@ -168,51 +168,57 @@ public class Player {
 			
 			supportItem = equipment;
 		}
+		
+		reka.remove(equipment);
 	}
 	
 	//wywoywane na pocztku tury
 	public void getCards(Deck deck, List<Player> players, Interactions interactions) {	
 		boolean czy;
+		List<Card> newCards = new ArrayList<>();
 		switch(hero.dajNazwe()) {
 			case "Pedro Ramirez":
 				czy = interactions.getCardsAlternativeWay(id, players);
 				if(czy == true) {
 					Card k = deck.getRejectedCard();
 					if(k == null) {
-						reka.add(deck.getCard());
-						reka.add(deck.getCard());
+						newCards.add(deck.getCard());
+						newCards.add(deck.getCard());
 					} else {
-						addToHand(k);
-						reka.add(deck.getCard());
+						//addToHand(k);
+						newCards.add(k);
+						newCards.add(deck.getCard());
 					}
 				} else {
-					reka.add(deck.getCard());
-					reka.add(deck.getCard());
+					newCards.add(deck.getCard());
+					newCards.add(deck.getCard());
 				}
 				
 				break;
 			case "Black Jack":
-				reka.add(deck.getCard());
+				newCards.add(deck.getCard());
 				Card k = deck.getCard();
 				if(k.dajKolor().equals("kier") || k.dajKolor().equals("karo")) {
-					reka.add(deck.getCard());
+					newCards.add(deck.getCard());
 				}
 				
-				addToHand(k);
+				//addToHand(k);
+				newCards.add(k);
 				break;
 			case "Jesse Jones":
 				czy = interactions.getCardsAlternativeWay(id, players);
 				if(czy==true) {
 					Player cel = interactions.selectTargetPlayer(this, players);
-					List<Card> reka = cel.getHand();
+					List<Card> rekaCelu = cel.getHand();
 					Random rand = new Random();
-					Card wynik = reka.get(rand.nextInt(reka.size()));
-					reka.remove(wynik);
-					addToHand(wynik);
-					reka.add(deck.getCard());
-				}else {
-					reka.add(deck.getCard());
-					reka.add(deck.getCard());
+					Card wynik = rekaCelu.get(rand.nextInt(rekaCelu.size()));
+					rekaCelu.remove(wynik);
+					//addToHand(wynik);
+					newCards.add(wynik);
+					newCards.add(deck.getCard());
+				} else {
+					newCards.add(deck.getCard());
+					newCards.add(deck.getCard());
 				}				
 				break;
 			case "Kit Carlson":
@@ -220,19 +226,26 @@ public class Player {
 				wyciogniete.add(deck.getCard());
 				wyciogniete.add(deck.getCard());
 				wyciogniete.add(deck.getCard());
-				System.out.println("Wycigne te trzy karty-wybierz ktrej z nich nie chcesz");
+				//System.out.println("Wycigne te trzy karty-wybierz ktrej z nich nie chcesz");
 				Card smiec = interactions.selectCard(wyciogniete, id);
 				wyciogniete.remove(smiec);
 				//gra.naSzczyt(smiec);
 				deck.toTop(smiec);
+				interactions.getNewCardsNotify(wyciogniete, id);
 				for(Card ka : wyciogniete) {
-					addToHand(ka);
+					//addToHand(ka);
+					newCards.add(ka);
 				}
 			default:
-				reka.add(deck.getCard());
-				reka.add(deck.getCard());
+				newCards.add(deck.getCard());
+				newCards.add(deck.getCard());
 				break;
-		}			
+		}
+		
+		interactions.getNewCardsNotify(newCards, id);
+		for(Card card : newCards) {
+			reka.add(card);
+		}
 	}
 
 	//wywoywane na koniec tury
