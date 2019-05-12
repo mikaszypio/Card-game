@@ -8,7 +8,8 @@ public enum InteractionType {
 	ENDOFTURN (5),
 	FORCEEND (6),
 	TARGETSELECTION (7),
-	USECOUNTERCARD (8);
+	USECOUNTERCARD (8),
+	CARDGETNOTIFY (9);
 	
 	private final int value;
 	private InteractionType(int value) {
