@@ -44,11 +44,12 @@ public class bang extends Card {
 			System.out.print("Nie dostrzelisz");
 			return false;
 		} else {
-			if(name=="Slab Zabojca") {
+			if(name.equals("Slab Zabojca")) {
 				cel.postrzelBardziej(deck, interactions);
 			}else {
 				cel.postrzel(deck, interactions);
 			}
+			strzelec.setShotStatus(true);
 			return true;
 		}
 	}
