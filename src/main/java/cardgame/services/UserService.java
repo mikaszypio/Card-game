@@ -2,8 +2,8 @@ package cardgame.services;
 
 import cardgame.model.Role;
 import cardgame.model.User;
-import cardgame.repositories.RoleRepository;
-import cardgame.repositories.UserRepository;
+import cardgame.repositories.IRoleRepository;
+import cardgame.repositories.IUserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -15,13 +15,14 @@ import org.springframework.stereotype.Service;
 public class UserService implements IUserService {
 	
 	@Autowired
-	RoleRepository roleRepository;
+	IRoleRepository roleRepository;
 	
 	@Autowired
-	UserRepository userRepository;
+	IUserRepository userRepository;
 
 	@Override
 	public User createAnon() {
+		
 		Role role = roleRepository.findById(3).get();
 		List<User> anons = userRepository.findAllTemporaryUsers(Sort.by("username").ascending());
 		int number = anons.size() + 1;
@@ -51,6 +52,7 @@ public class UserService implements IUserService {
 	
 	@Override
 	public User getUnregistered() {
+		
 		List<User> unregistered = userRepository.findTemporaryUsers(Sort.by("lastUsed").ascending());
 		if (!unregistered.isEmpty()) {
 			User anon = unregistered.get(0);
@@ -64,6 +66,7 @@ public class UserService implements IUserService {
 	}
 	
 	public float recalculateScore(User user) {
+		
 		return (float) user.getGamesWon() / user.getGames() * 100;
 	}
 
@@ -117,6 +120,7 @@ public class UserService implements IUserService {
 	
 	@Override
 	public User findFreeAnon() {
+		
 		User unregistered = getUnregistered();
 		if (unregistered == null) {
 			unregistered = createAnon();
@@ -124,7 +128,6 @@ public class UserService implements IUserService {
 		
 		unregistered.setLastUsed(LocalDateTime.now());
 		userRepository.save(unregistered);
-		
 		return unregistered;
 	}
 }

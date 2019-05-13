@@ -9,11 +9,12 @@ import cardgame.model.User;
 public interface IRoomService {
 
 	public boolean checkReadiness(Room room);
+	public List<Room> getActiveRooms();
 	public Room getEmptyRoom(String name);
 	public void joinRoom(User user, Room room);
 	public void leaveRoom(User user);
 	public Room save(Room room);
 	public void startGame();
 	public Player userToPlayer(User user);
-	public List<Player> listOfPlayers(Room room);
+	public List<Player> createListOfPlayers(Room room);
 }

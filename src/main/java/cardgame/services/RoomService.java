@@ -4,9 +4,8 @@ import cardgame.game.Game;
 import cardgame.game.model.Player;
 import cardgame.model.Room;
 import cardgame.model.User;
-import cardgame.repositories.RoomRepository;
-import cardgame.repositories.UserRepository;
-
+import cardgame.repositories.IRoomRepository;
+import cardgame.repositories.IUserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -17,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class RoomService implements IRoomService {
 
 	@Autowired
-	RoomRepository roomRepository;
+	IRoomRepository roomRepository;
 	
 	@Autowired
-	UserRepository userRepository;
+	IUserRepository userRepository;
 	
 	@Override
 	public boolean checkReadiness(Room room) {
@@ -28,9 +27,10 @@ public class RoomService implements IRoomService {
 		return room.getReadiness() == getRoomUsers(room).size();
 	}
 	
+	@Override
 	public List<Room> getActiveRooms() {
-		return roomRepository.findByActive(true);
 		
+		return roomRepository.findByActive(true);
 	}
 	
 	@Override
@@ -91,17 +91,20 @@ public class RoomService implements IRoomService {
 	
 	@Override
 	public Player userToPlayer(User user) {
+		
 		Player player = new Player(user.getUsername(), user.getUserId());
 		return player;
 	}
 	
 	@Override
-	public List<Player> listOfPlayers(Room room){
+	public List<Player> createListOfPlayers(Room room){
+		
 		List<Player> playersList = new ArrayList<>();
 		List<User> usersList = getRoomUsers(room);
-		for(User user : usersList) {
+		usersList.forEach((user) -> {
 			playersList.add(userToPlayer(user));
-		}
+		});
+		
 		return playersList;
 	}
 }

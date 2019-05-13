@@ -2,8 +2,8 @@ package cardgame.controllers;
 
 import cardgame.model.Role;
 import cardgame.model.User;
-import cardgame.repositories.UserRepository;
-import cardgame.services.UserService;
+import cardgame.repositories.IUserRepository;
+import cardgame.services.IUserService;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
 	
 	@Autowired
-	UserRepository userRepository;
+	IUserRepository userRepository;
 	
 	@Autowired
-	UserService userService;
+	IUserService userService;
 	
 	public User getUserDetails(Long id) {
 		
@@ -38,8 +38,8 @@ public class UserController {
 	
 	@PostMapping("/login")
 	public String logIn(String login, String password, HttpSession session) {
+		
 		User user = userRepository.findByUsername(login);
-
 		if (user != null) {
 			Long userId = user.getUserId();
 			Role role = user.getRole();
@@ -60,6 +60,7 @@ public class UserController {
 	
 	@PostMapping("/logout")
 	public String logOut(HttpSession session) {
+		
 		session.invalidate();
 		return Integer.toString(-1);
 	}
@@ -67,6 +68,7 @@ public class UserController {
 	@GetMapping("/session")
 	@ResponseBody
 	public String getSession(HttpSession session) {
+		
 		String userId = (String) session.getAttribute("userId");
 		if(userId != null && !userId.isEmpty()) {
 			return userId;
@@ -81,14 +83,15 @@ public class UserController {
 	@PostMapping("/register")
 	public String registerUser(String login, String password, HttpSession session) 
 		throws Exception {
-		Long userId = 0L;
+		
+		Long userId;
 		try {
 			userService.createUser(login, password);
 			User user = userRepository.findByUsername(login);
 			userId = user.getUserId();
 			session.setAttribute("userId", Long.toString(userId));
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			//return "redirect:register.html";
 			return "0";
 		}

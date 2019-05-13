@@ -1,17 +1,17 @@
 package cardgame.controllers;
 
 import cardgame.model.User;
-import cardgame.repositories.UserRepository;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import cardgame.repositories.IUserRepository;
 
 @Controller
 public class ExperimentalController {
 	
 	@Autowired
-	UserRepository userRepository;
+	IUserRepository userRepository;
 	
 	public boolean CheckCredentials(User user) throws Exception {
 		
