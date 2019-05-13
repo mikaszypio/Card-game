@@ -1,6 +1,7 @@
 package cardgame.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,6 +36,9 @@ public class User implements Serializable {
 	@JoinColumn(name = "room_id")
 	private Room room;
 	
+	@Column(name = "last_used", nullable = false)
+	private LocalDateTime lastUsed;
+	
 	public User() {
 		
 	}
@@ -43,13 +47,14 @@ public class User implements Serializable {
 		this.username = username;
 	}
 	
-	public User(String username, String password, Role role) {
+	public User(String username, String password, Role role, LocalDateTime lastUsed) {
 		this.username = username;
 		this.password = password;
 		games = 0;
 		gamesWon = 0;
 		score = (float) 0.0;
 		this.role = role;
+		this.lastUsed = lastUsed;
 	}
 	
 	public Long getUserId() {
@@ -84,6 +89,10 @@ public class User implements Serializable {
 		return room;
 	}
 	
+	public LocalDateTime getLastUsed() {
+		return lastUsed;
+	}
+	
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
@@ -114,5 +123,9 @@ public class User implements Serializable {
 	
 	public void setRoom(Room room) {
 		this.room = room;
+	}
+	
+	public void setLastUsed(LocalDateTime lastUsed) {
+		this.lastUsed = lastUsed;
 	}
 }

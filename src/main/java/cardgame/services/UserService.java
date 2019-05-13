@@ -4,6 +4,7 @@ import cardgame.model.Role;
 import cardgame.model.User;
 import cardgame.repositories.RoleRepository;
 import cardgame.repositories.UserRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class UserService implements IUserService {
 		Role role = roleRepository.findById(3).get();
 		List<User> anons = userRepository.findAllTemporaryUsers(Sort.by("username").ascending());
 		int number = anons.size() + 1;
-		User anon = new User("anon" + number, "pass" + number, role);
+		User anon = new User("anon" + number, "pass" + number, role, LocalDateTime.now());
 		return userRepository.save(anon);
 	}
 	
@@ -32,7 +33,7 @@ public class UserService implements IUserService {
 	public User createUser(String username, String password) {
 		
 		Role role = roleRepository.findById(2).get();
-		User user = new User(username, password, role);
+		User user = new User(username, password, role, LocalDateTime.now());
 		return userRepository.save(user);
 	}
 
@@ -50,9 +51,13 @@ public class UserService implements IUserService {
 	
 	@Override
 	public User getUnregistered() {
-		List<User> unregistered = userRepository.findTemporaryUsers(Sort.by("username").ascending());
+		List<User> unregistered = userRepository.findTemporaryUsers(Sort.by("lastUsed").ascending());
 		if (!unregistered.isEmpty()) {
-			return unregistered.get(0);
+			User anon = unregistered.get(0);
+			LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+			if (anon.getLastUsed().isBefore(yesterday)) {
+				return anon;
+			}
 		}
 		
 		return null;
@@ -116,6 +121,9 @@ public class UserService implements IUserService {
 		if (unregistered == null) {
 			unregistered = createAnon();
 		}
+		
+		unregistered.setLastUsed(LocalDateTime.now());
+		userRepository.save(unregistered);
 		
 		return unregistered;
 	}
