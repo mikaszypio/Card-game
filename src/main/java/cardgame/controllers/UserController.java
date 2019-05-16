@@ -1,6 +1,7 @@
 package cardgame.controllers;
 
 import cardgame.model.Role;
+import cardgame.model.SessionData;
 import cardgame.model.User;
 import cardgame.repositories.IUserRepository;
 import cardgame.services.IUserService;
@@ -37,25 +38,29 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public String logIn(String login, String password, HttpSession session) {
+	@ResponseBody
+	public SessionData logIn(String login, String password, HttpSession session) {
 		
 		User user = userRepository.findByUsername(login);
 		if (user != null) {
 			Long userId = user.getUserId();
+			String username = user.getUsername();
 			Role role = user.getRole();
 			
 			// Will be used to disable login as annon
 			int roleId = role.getRoleId();
 			
 			if(password.equals(user.getPassword())) {
+				SessionData sessionData = new SessionData(userId, username);
 				session.setAttribute("userId", Long.toString(userId));
+				session.setAttribute("username", username);
 				//return "redirect:lobby.html";
-				return userId.toString();
+				return sessionData;
 			}
 		}
 		
 		//return "redirect:login.html";
-		return "0";
+		return null;
 	}
 	
 	@PostMapping("/logout")
@@ -67,41 +72,53 @@ public class UserController {
 	
 	@GetMapping("/session")
 	@ResponseBody
-	public String getSession(HttpSession session) {
+	public SessionData getSession(HttpSession session) {
 		
+		SessionData sessionData;
 		String userId = (String) session.getAttribute("userId");
 		if(userId != null && !userId.isEmpty()) {
-			return userId;
+			String username = (String) session.getAttribute("username");
+			sessionData = new SessionData(Long.getLong(userId), username);
+			return sessionData;
 		}
 		
 		User anon = userService.findFreeAnon();
 		Long anonId = anon.getUserId();
+		String username = anon.getUsername();
+		sessionData = new SessionData(anonId, username);
 		session.setAttribute("userId", Long.toString(anonId));
-		return anonId.toString();
+		session.setAttribute("username", username);
+		return sessionData;
 	}
 	
 	@PostMapping("/register")
-	public String registerUser(String login, String password, HttpSession session) 
+	@ResponseBody
+	public SessionData registerUser(String login, String password, HttpSession session) 
 		throws Exception {
 		
 		Long userId;
+		String username;
+		SessionData sessionData;
 		try {
 			userService.createUser(login, password);
 			User user = userRepository.findByUsername(login);
 			userId = user.getUserId();
+			username = user.getUsername();
+			sessionData = new SessionData(userId, username);
 			session.setAttribute("userId", Long.toString(userId));
+			session.setAttribute("username", username);
 		} catch (Exception e) {
 			// e.printStackTrace();
 			//return "redirect:register.html";
-			return "0";
+			return null;
 		}
 		
 		if (userId != 0){
 			//return "redirect:lobby.html";
-			return userId.toString();
+			return sessionData;
 		}
 		
 		//return "redirect:register.html";
-		return "0";
+		return null;
 	}
 }
