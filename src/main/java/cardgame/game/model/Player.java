@@ -231,7 +231,7 @@ public class Player {
 				wyciogniete.remove(smiec);
 				//gra.naSzczyt(smiec);
 				deck.toTop(smiec);
-				interactions.getNewCardsNotify(wyciogniete, id);
+				interactions.sendNewCardsNotification(wyciogniete, id);
 				for(Card ka : wyciogniete) {
 					//addToHand(ka);
 					newCards.add(ka);
@@ -242,7 +242,7 @@ public class Player {
 				break;
 		}
 		
-		interactions.getNewCardsNotify(newCards, id);
+		interactions.sendNewCardsNotification(newCards, id);
 		for(Card card : newCards) {
 			reka.add(card);
 		}

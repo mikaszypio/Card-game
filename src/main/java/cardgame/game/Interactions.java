@@ -64,6 +64,7 @@ public class Interactions {
 		return success;
 	}
 	
+	//TO DO: Move this method to handler?
 	private Interaction getMessage(InteractionType type, long playerId) {
 		if(!interactions.isEmpty()) {
 			interactions.size();
@@ -93,25 +94,18 @@ public class Interactions {
 		return session;
 	}
 	
-	public boolean getNewCardsNotify(List<Card> cards, long id) {
+	public boolean sendNewCardsNotification(List<Card> cards, long id) {
 		List<PartialCard> partialCards = new ArrayList<>();
-		for(Card c : cards) {
-			partialCards.add(new PartialCard(c));
-		}
-		
+		cards.forEach((c) -> { partialCards.add(new PartialCard(c)); });
 		CardNotification notification = new CardNotification(id, partialCards);
 		return sendMessage(notification, id);
 	}
 	
 	public boolean getCardsAlternativeWay(long playerId, List<Player> players) {
 		// System.out.println("\nGetting cards alternative way: (0-false)\n");
-			
-		sendMessage(InteractionType.ALTERNATIVEGET, playerId);
-		
-		//Interaction test = new Interaction(playerId, InteractionType.ALTERNATIVEGET, -1);
-		//sendMessage(test, null);
-		
-		Interaction interaction = waitForInteraction(InteractionType.ALTERNATIVEGET, playerId);
+		Interaction interaction = new Interaction(playerId, InteractionType.ALTERNATIVEGET, -1);
+		sendMessage(interaction, playerId);
+		interaction = waitForInteraction(InteractionType.ALTERNATIVEGET, playerId);
 		return interaction.getSelection() != 0;
 	}
 	
@@ -123,15 +117,9 @@ public class Interactions {
 		//	System.out.println(card.dajID() + card.dajNazwe());
 		//});
 		//System.out.println("!\n");
-		
-		sendMessage(InteractionType.CARDSELECTION, playerId);
-
-		//
-		//Interaction testInteraction = new Interaction(playerId, InteractionType.CARDSELECTION, -1);
-		//sendMessage(testInteraction, null);
-		//
-
-		Interaction interaction = waitForInteraction(InteractionType.CARDSELECTION, playerId);
+		Interaction interaction = new Interaction(playerId, InteractionType.CARDSELECTION, -1);
+		sendMessage(interaction, playerId);
+		interaction = waitForInteraction(InteractionType.CARDSELECTION, playerId);
 		
 		if (interaction.getSelection() == -1) {
 			return null;
@@ -143,23 +131,14 @@ public class Interactions {
 			}
 		}
 		
-		//System.out.println("Zagrano");
-		
 		return null;
 	}
 	
 	public String selectTargetCard(long playerId) {
 		String response;
-		sendMessage(InteractionType.DESTROYCARD, playerId);
-		
-		//Interaction testInteraction = new Interaction(playerId, InteractionType.DESTROYCARD, -1);
-		//sendMessage(testInteraction, null);
-		
-		Interaction interaction = waitForInteraction(InteractionType.DESTROYCARD, playerId);
-		
-		// if(wynik=="R") { return "reka"; }		
-		// if(wynik=="B") { return "bron"; }	
-		// if(wynik=="D") { return "dodatek"; }	
+		Interaction interaction = new Interaction(playerId, InteractionType.DESTROYCARD, -1);
+		sendMessage(interaction, playerId);
+		interaction = waitForInteraction(InteractionType.DESTROYCARD, playerId);
 		switch(interaction.getSelection()) {
 			case 1: response = "reka"; break;
 			case 2: response = "bron"; break;
@@ -172,31 +151,26 @@ public class Interactions {
 	
 	public Player selectTargetPlayer(Player activePlayer, List<Player> players) {
 		long playerId = activePlayer.getId();
-		players.forEach((player) -> {
-			if (activePlayer != player) {
-				String playerString = players.indexOf(player) + ". " + player.getId() + ". " + player.getNickname();
-				if(player.getHand().isEmpty()) {
-					playerString += ": no cards!";
-				}
-				if(player.getWeapon() != null) {
-					playerString += " 2. Weapon ";
-				}
-				if(player.getSupportItem()!= null) {
-					playerString += " 2. Support Item ";
-				}
-				
-				//System.out.println(playerString);
-			}
-		});
+//		players.forEach((player) -> {
+//			if (activePlayer != player) {
+//				String playerString = players.indexOf(player) + ". " + player.getId() + ". " + player.getNickname();
+//				if(player.getHand().isEmpty()) {
+//					playerString += ": no cards!";
+//				}
+//				if(player.getWeapon() != null) {
+//					playerString += " 2. Weapon ";
+//				}
+//				if(player.getSupportItem()!= null) {
+//					playerString += " 2. Support Item ";
+//				}
+//				
+//				//System.out.println(playerString);
+//			}
+//		});
 		
-		sendMessage(InteractionType.TARGETSELECTION, playerId);
-		
-		//
-		//Interaction testInteraction = new Interaction(playerId, InteractionType.TARGETSELECTION, -1);
-		//sendMessage(testInteraction, null);
-		//
-		
-		Interaction interaction = waitForInteraction(InteractionType.TARGETSELECTION, playerId);
+		Interaction interaction = new Interaction(playerId, InteractionType.TARGETSELECTION, -1);
+		sendMessage(interaction, playerId);
+		interaction = waitForInteraction(InteractionType.TARGETSELECTION, playerId);
 		if (interaction.getSelection() == -1) {
 			return null;
 		}
@@ -235,8 +209,6 @@ public class Interactions {
 		long playerId = activePlayer.getId();
 		Interaction interaction = new Interaction(playerId, cardName, source, InteractionType.USECOUNTERCARD);
 		sendMessage(interaction, playerId);
-		//sendMessage(interaction, null);
-		//System.out.println("\n>" + interaction.getCounterCard() + " " + interaction.getSource());
 		interaction = waitForInteraction(InteractionType.USECOUNTERCARD, playerId);
 		if(interaction.getSelection() == 0) {
 			response = false;
