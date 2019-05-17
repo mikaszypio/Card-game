@@ -46,19 +46,21 @@ public class panika extends Card{
 				Equipment bron = cel.getWeapon();
 				cel.setWeapon(null);
 				strzelec.addToHand(bron);
-			}
-			if("dodatek".equals(co)) { 
+			} else if("dodatek".equals(co)) { 
 				Equipment doda = cel.getSupportItem();
 				cel.setSupportItem(null);
 				strzelec.addToHand(doda);
-			}
-			if("karta".equals(co)) {
+			} else if("karta".equals(co)) {
 				List<Card> reka = cel.getHand();
 				Random rand = new Random();
 				Card wynik = reka.get(rand.nextInt(reka.size()));
 				reka.remove(wynik);
 				strzelec.addToHand(wynik);		
+			} else {
+				return false;
 			}
+			
+			
 			return true;
 		}
 	}

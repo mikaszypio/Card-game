@@ -39,20 +39,21 @@ public class kasia extends Card{
 			cel.setWeapon(null);
 			//gra.odzuc(bron);
 			deck.rejectCard(bron);
-		}
-		if("dodatek".equals(co)) { 
+		} else if("dodatek".equals(co)) { 
 			Equipment doda = cel.getSupportItem();
 			cel.setSupportItem(null);
 			//gra.odzuc(doda);
 			deck.rejectCard(doda);
-		}
-		if("karta".equals(co)) {
+		} else if("karta".equals(co)) {
 			List<Card> reka = cel.getHand();
 			Card odrzucona = interactions.selectCard(reka, currentPlayer.getId());
 			reka.remove(odrzucona);
 			//gra.odzuc(odrzucona);
 			deck.rejectCard(odrzucona);
+		} else {
+			return false;
 		}
+		
 		return true;
 	}
 
