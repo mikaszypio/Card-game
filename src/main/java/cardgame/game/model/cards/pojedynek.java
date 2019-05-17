@@ -29,6 +29,10 @@ public class pojedynek extends Card{
 	public boolean zagraj(Deck deck, List<Player> players,
 		Player currentPlayer, Interactions interactions) {
 		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
+		if(cel == null) {
+			return false;
+		}
+		
 		Player wyzywajacy = currentPlayer;
 		boolean odbito = false;
 		boolean toczySie = true;

@@ -29,20 +29,24 @@ public class kasia extends Card{
 	public boolean zagraj(Deck deck, List<Player> players,
 		Player currentPlayer, Interactions interactions) {
 		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
+		if(cel == null) {
+			return false;
+		}
+		
 		String co = interactions.selectTargetCard(currentPlayer.getId());
-		if(co=="bron") { 
+		if("bron".equals(co)) { 
 			Equipment bron = cel.getWeapon();
 			cel.setWeapon(null);
 			//gra.odzuc(bron);
 			deck.rejectCard(bron);
 		}
-		if(co=="dodatek") { 
+		if("dodatek".equals(co)) { 
 			Equipment doda = cel.getSupportItem();
 			cel.setSupportItem(null);
 			//gra.odzuc(doda);
 			deck.rejectCard(doda);
 		}
-		if(co=="karta") {
+		if("karta".equals(co)) {
 			List<Card> reka = cel.getHand();
 			Card odrzucona = interactions.selectCard(reka, currentPlayer.getId());
 			reka.remove(odrzucona);

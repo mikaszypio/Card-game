@@ -31,24 +31,30 @@ public class pudlo extends Card{
 		Player strzelec = currentPlayer;
 		Hero p = strzelec.getHero();
 		String name = p.dajNazwe();
-		if(name=="Calamity Janet") {
+		if("Calamity Janet".equals(name)) {
 			if(strzelec.hasShot()==true)
 				if(strzelec.isMultipleShooter()==false) {
 				System.out.print("Nie mo�esz strzela� ponownie");
 				return false;				
 			}
+			
 			Player cel = interactions.selectTargetPlayer(currentPlayer, players);
+			if(cel == null) {
+				return false;
+			}
+			
 			int dystans = policzDystans(strzelec, cel, players);
 			int zasieg = strzelec.zasieg() - cel.modZasiegu();
 			if(dystans>zasieg) {
 				System.out.print("Nie dostrzelisz");
 				return false;
-			}else {
+			} else {
 				cel.postrzel(deck, interactions);
+				cel.setShotStatus(true);
 				return true;
 			}
-		}else {
-			return false;
 		}
+		
+		return false;
 	}
 }

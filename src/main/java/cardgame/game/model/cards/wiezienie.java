@@ -29,6 +29,10 @@ public class wiezienie extends Card{
 	public boolean zagraj(Deck deck, List<Player> players,
 		Player currentPlayer, Interactions interactions) {
 		Player g = interactions.selectTargetPlayer(currentPlayer, players);
+		if(g == null) {
+			return false;
+		}
+		
 		g.setInJail();
 		return true;
 	}

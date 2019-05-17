@@ -29,6 +29,10 @@ public class bang extends Card {
 	public boolean zagraj(Deck deck, List<Player> players,
 		Player currentPlayer, Interactions interactions) {	
 		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
+		if(cel == null) {
+			return false;
+		}
+		
 		Player strzelec = currentPlayer;
 		Hero p = strzelec.getHero();
 		String name = p.dajNazwe();

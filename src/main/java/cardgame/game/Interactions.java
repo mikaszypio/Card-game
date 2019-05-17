@@ -140,7 +140,7 @@ public class Interactions {
 		sendMessage(interaction, playerId);
 		interaction = waitForInteraction(InteractionType.DESTROYCARD, playerId);
 		switch(interaction.getSelection()) {
-			case 1: response = "reka"; break;
+			case 1: response = "karta"; break;
 			case 2: response = "bron"; break;
 			case 3: response = "dodatek"; break;
 			default: response = selectTargetCard(playerId); break;

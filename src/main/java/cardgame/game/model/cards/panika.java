@@ -30,25 +30,29 @@ public class panika extends Card{
 	public boolean zagraj(Deck deck, List<Player> players,
 		Player currentPlayer, Interactions interactions) {
 		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
+		if(cel == null) {
+			return false;
+		}
+		
 		Player strzelec = currentPlayer;
 		int dystans = policzDystans(strzelec, cel, players);
 		int zasieg = strzelec.zasiegCzysty() - cel.modZasiegu();
 		if(dystans>zasieg) {
 			System.out.print("Nie si�gniesz");
 			return false;
-		}else {
+		} else {
 			String co = interactions.selectTargetCard(currentPlayer.getId());
-			if(co=="bron") { 
+			if("bron".equals(co)) { 
 				Equipment bron = cel.getWeapon();
 				cel.setWeapon(null);
 				strzelec.addToHand(bron);
 			}
-			if(co=="dodatek") { 
+			if("dodatek".equals(co)) { 
 				Equipment doda = cel.getSupportItem();
 				cel.setSupportItem(null);
 				strzelec.addToHand(doda);
 			}
-			if(co=="karta") {
+			if("karta".equals(co)) {
 				List<Card> reka = cel.getHand();
 				Random rand = new Random();
 				Card wynik = reka.get(rand.nextInt(reka.size()));
