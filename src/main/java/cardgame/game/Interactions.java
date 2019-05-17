@@ -69,7 +69,6 @@ public class Interactions {
 		if(!interactions.isEmpty()) {
 			interactions.size();
 			for(Interaction interaction : interactions) {
-				//System.out.println(type + " | " + interaction.getType());
 				if(interaction.getPlayerId() == playerId
 					&& type == interaction.getType()) {
 					interactions.remove(interaction);
@@ -143,6 +142,7 @@ public class Interactions {
 			case 1: response = "karta"; break;
 			case 2: response = "bron"; break;
 			case 3: response = "dodatek"; break;
+			case -1: response = null; break;
 			default: response = selectTargetCard(playerId); break;
 		}
 		

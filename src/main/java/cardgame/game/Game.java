@@ -106,6 +106,8 @@ public class Game extends Thread {
 				nextPlayer.setDynamite();
 			} else if(player.getHitPoints() < 1) {
 				makeDead(player);
+				activePlayerIndex--;
+				return;
 			}
 		}
 		
@@ -114,8 +116,6 @@ public class Game extends Thread {
 			isFree = player.checkPrison(deck);
 		}
 		
-		//boolean czy = g.sprawdzWiezienie();
-		//if(czy == true) {
 		if(isFree) {
 			player.getCards(deck, players, interactions);
 			boolean isPlaying = true;
@@ -129,7 +129,6 @@ public class Game extends Thread {
 					boolean result = card.zagraj(deck, players, player, interactions);
 					if(result) {
 						players.get(activePlayerIndex).removeFromHand(card);
-						//odzuc(k);
 						deck.rejectCard(card);
 						checkDeaths();
 					}
@@ -150,6 +149,10 @@ public class Game extends Thread {
 			}
 			
 			activePlayerIndex = players.indexOf(akt);
+		}
+		
+		if(players.size() == 1) {
+			sprawdzKoniec();
 		}
 	}
 	
@@ -183,7 +186,6 @@ public class Game extends Thread {
 		
 		g.getHand().clear();
 		deadPlayers.add(g);
-		sprawdzKoniec();
 	}	
 	
 	private void sprawdzKoniec() {
@@ -251,22 +253,22 @@ public class Game extends Thread {
 	private List<Hero> createHeros() {
 		List<Hero> heros = new ArrayList<>();
 		
-		heros.add(new Hero(1, 4, "Bart Cassady"));  //done
-		heros.add(new Hero(2, 4, "Black Jack"));  //done
-		heros.add(new Hero(3, 4, "Calamity Janet"));  //done
+		heros.add(new Hero(1, 4, "Bart Cassady"));
+		heros.add(new Hero(2, 4, "Black Jack"));
+		heros.add(new Hero(3, 4, "Calamity Janet"));
 		//heros.add(new Hero(4, 3, "El Gringo"));  //gdy oberwie, zabiera kart� z �apy tego, co go zrani� (nie dzia�a przy wybuchu dynamitu)
-		heros.add(new Hero(5, 4, "Jesse Jones"));  //done
-		heros.add(new Hero(6, 4, "Jourdonnais"));  //done
-		heros.add(new Hero(7, 4, "Kit Carlson"));  //done
+		heros.add(new Hero(5, 4, "Jesse Jones"));
+		heros.add(new Hero(6, 4, "Jourdonnais"));
+		heros.add(new Hero(7, 4, "Kit Carlson"));
 		//heros.add(new Hero(8, 4, "Lusky Duke"));  //sprawdza pokera dwa razy
-		heros.add(new Hero(9, 3, "Paul Regret"));  //done
-		heros.add(new Hero(10, 4, "Pedro Ramirez"));  //done
-		heros.add(new Hero(11, 4, "Rose Doolan"));  //done
+		heros.add(new Hero(9, 3, "Paul Regret"));
+		heros.add(new Hero(10, 4, "Pedro Ramirez"));
+		heros.add(new Hero(11, 4, "Rose Doolan"));
 		//heros.add(new Hero(12, 4, "Sid Ketchum"));  //W DOWOLNYM MOMENCIE mo�e spali� dwie karty z �apy by wylezy� 1hp.
-		heros.add(new Hero(13, 4, "Slab Zabojca"));  //done
+		heros.add(new Hero(13, 4, "Slab Zabojca"));
 		//heros.add(new Hero(14, 4, "Suzy Lafayette"));  //gdy ma pust� r�k�, dobieta kart� z talii
-		heros.add(new Hero(15, 4, "Sam Sep"));  //done
-		heros.add(new Hero(16, 4, "Willy the Kid"));  //done
+		heros.add(new Hero(15, 4, "Sam Sep"));
+		heros.add(new Hero(16, 4, "Willy the Kid"));
 		
 		return heros;
 	}

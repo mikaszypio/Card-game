@@ -5,52 +5,53 @@ import cardgame.game.model.Deck;
 import cardgame.game.model.Player;
 import java.util.List;
 
-public class bang extends Card {
-	
-	public bang(int id, String naz, int num, String col) {
-		ID=id;
-		nazwa=naz;
+public class Bang extends Card {
+
+	public Bang(int id, String naz, int num, String col) {
+		ID = id;
+		nazwa = naz;
 		obrazek = "Brak obrazu";
 		opis = "Brak opisu";
-		numer=num;
-		kolor=col;
+		numer = num;
+		kolor = col;
 	}
-	
-	public bang(int id, String obraz, String opek, String naz, int num, String col) {
-		ID=id;
-		nazwa=naz;
+
+	public Bang(int id, String obraz, String opek, String naz, int num, String col) {
+		ID = id;
+		nazwa = naz;
 		obrazek = obraz;
 		opis = opek;
-		numer=num;
-		kolor=col;
+		numer = num;
+		kolor = col;
 	}
-	
+
 	@Override
 	public boolean zagraj(Deck deck, List<Player> players,
-		Player currentPlayer, Interactions interactions) {	
+		Player currentPlayer, Interactions interactions) {
 		Player cel = interactions.selectTargetPlayer(currentPlayer, players);
-		if(cel == null) {
+		if (cel == null) {
 			return false;
 		}
-		
+
 		Player strzelec = currentPlayer;
 		Hero p = strzelec.getHero();
 		String name = p.dajNazwe();
-		if(strzelec.hasShot()==true)
-			if(strzelec.isMultipleShooter()==false && name!="Willy the Kid") {
-			System.out.print("Nie mo�esz strzela� ponownie");
-			return false;				
+		if (strzelec.hasShot() == true) {
+			if (strzelec.isMultipleShooter() == false && !"Willy the Kid".equals(name)) {
+				System.out.print("Nie mo�esz strzela� ponownie");
+				return false;
+			}
 		}
-		
+
 		int dystans = policzDystans(strzelec, cel, players);
 		int zasieg = strzelec.zasieg() - cel.modZasiegu();
-		if(dystans>zasieg) {
+		if (dystans > zasieg) {
 			System.out.print("Nie dostrzelisz");
 			return false;
 		} else {
-			if(name.equals("Slab Zabojca")) {
+			if (name.equals("Slab Zabojca")) {
 				cel.postrzelBardziej(deck, interactions);
-			}else {
+			} else {
 				cel.postrzel(deck, interactions);
 			}
 			strzelec.setShotStatus(true);

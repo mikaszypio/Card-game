@@ -67,31 +67,31 @@ public class Deck {
 	
 	private List<Card> addBangs() {
 		List<Card> bangs = new ArrayList<>();
-		bangs.add(new bang(21, "bang", 12, "kier"));
-		bangs.add(new bang(22, "bang", 13, "kier"));
-		bangs.add(new bang(23, "bang", 14, "kier"));
-		bangs.add(new bang(24, "bang", 2, "karo"));
-		bangs.add(new bang(25, "bang", 3, "karo"));
-		bangs.add(new bang(26, "bang", 4, "karo"));
-		bangs.add(new bang(27, "bang", 5, "karo"));
-		bangs.add(new bang(28, "bang", 6, "karo"));
-		bangs.add(new bang(29, "bang", 7, "karo"));
-		bangs.add(new bang(30, "bang", 8, "karo"));
-		bangs.add(new bang(31, "bang", 9, "karo"));
-		bangs.add(new bang(32, "bang", 10, "karo"));
-		bangs.add(new bang(33, "bang", 11, "karo"));
-		bangs.add(new bang(34, "bang", 12, "karo"));		
-		bangs.add(new bang(35, "bang", 13, "karo"));		
-		bangs.add(new bang(36, "bang", 14, "karo"));		
-		bangs.add(new bang(37, "bang", 14, "pik"));		
-		bangs.add(new bang(38, "bang", 2, "trefl"));		
-		bangs.add(new bang(39, "bang", 3, "trefl"));		
-		bangs.add(new bang(40, "bang", 4, "trefl"));		
-		bangs.add(new bang(41, "bang", 5, "trefl"));		
-		bangs.add(new bang(42, "bang", 6, "trefl"));		
-		bangs.add(new bang(43, "bang", 7, "trefl"));		
-		bangs.add(new bang(44, "bang", 8, "trefl"));		
-		bangs.add(new bang(45, "bang", 9, "trefl"));
+		bangs.add(new Bang(21, "bang", 12, "kier"));
+		bangs.add(new Bang(22, "bang", 13, "kier"));
+		bangs.add(new Bang(23, "bang", 14, "kier"));
+		bangs.add(new Bang(24, "bang", 2, "karo"));
+		bangs.add(new Bang(25, "bang", 3, "karo"));
+		bangs.add(new Bang(26, "bang", 4, "karo"));
+		bangs.add(new Bang(27, "bang", 5, "karo"));
+		bangs.add(new Bang(28, "bang", 6, "karo"));
+		bangs.add(new Bang(29, "bang", 7, "karo"));
+		bangs.add(new Bang(30, "bang", 8, "karo"));
+		bangs.add(new Bang(31, "bang", 9, "karo"));
+		bangs.add(new Bang(32, "bang", 10, "karo"));
+		bangs.add(new Bang(33, "bang", 11, "karo"));
+		bangs.add(new Bang(34, "bang", 12, "karo"));		
+		bangs.add(new Bang(35, "bang", 13, "karo"));		
+		bangs.add(new Bang(36, "bang", 14, "karo"));		
+		bangs.add(new Bang(37, "bang", 14, "pik"));		
+		bangs.add(new Bang(38, "bang", 2, "trefl"));		
+		bangs.add(new Bang(39, "bang", 3, "trefl"));		
+		bangs.add(new Bang(40, "bang", 4, "trefl"));		
+		bangs.add(new Bang(41, "bang", 5, "trefl"));		
+		bangs.add(new Bang(42, "bang", 6, "trefl"));		
+		bangs.add(new Bang(43, "bang", 7, "trefl"));		
+		bangs.add(new Bang(44, "bang", 8, "trefl"));		
+		bangs.add(new Bang(45, "bang", 9, "trefl"));
 		return bangs;
 	}
 	
@@ -159,8 +159,8 @@ public class Deck {
 	
 	private List<Card> addShops() {
 		List<Card> shops = new ArrayList<>();
-		shops.add(new sklep(74, "generalstore", 12, "pik"));			
-		shops.add(new sklep(75, "generalstore", 9, "trefl"));
+		shops.add(new Shop(74, "generalstore", 12, "pik"));			
+		shops.add(new Shop(75, "generalstore", 9, "trefl"));
 		return shops;
 	}
 	
